@@ -8,7 +8,7 @@ import { Event } from '@db/schema';
 
 interface EventCardProps {
   event: Event;
-  onUpdate: (id: number, title: string) => void;
+  onUpdate: (updates: Partial<Event> & { id: number }) => void;
 }
 
 export function EventCard({ event, onUpdate }: EventCardProps) {
@@ -41,7 +41,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Event title"
                 />
-                <Button onClick={() => onUpdate(event.id, title)}>
+                <Button onClick={() => onUpdate({ id: event.id, title })}>
                   Save Changes
                 </Button>
               </div>

@@ -28,18 +28,29 @@ export function TimeGrid() {
             {timeSlots.map((slot) => (
               <Card 
                 key={`${day}-${slot.time}`}
-                className={`p-2 min-h-[60px] ${
-                  slot.isBreak ? 'bg-gray-100' : 'bg-white'
+                className={`p-2 ${
+                  slot.isTransition 
+                    ? 'min-h-[30px] bg-gray-50 border-dashed border-gray-200' 
+                    : 'min-h-[60px] bg-white'
                 }`}
               >
-                <div className="text-xs text-gray-500">{slot.time}</div>
-                {events
+                <div className={`flex items-center gap-2 ${
+                  slot.isTransition ? 'text-[10px] text-gray-400' : 'text-xs text-gray-500'
+                }`}>
+                  {slot.isTransition && (
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
+                    </svg>
+                  )}
+                  {slot.label}
+                </div>
+                {!slot.isTransition && events
                   .filter(e => e.day === day && !e.inHoldingArea)
                   .map(event => (
                     <EventCard 
                       key={event.id} 
                       event={event}
-                      onUpdate={updateEvent}
+                      onUpdate={(id, updates) => updateEvent({ id, ...updates })}
                     />
                   ))}
               </Card>

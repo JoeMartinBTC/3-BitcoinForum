@@ -9,16 +9,18 @@ export function generateTimeSlots() {
     const timeString = startTime.format('HH:mm');
     const minutes = startTime.minutes();
     
-    // Add break slots at :25 and :55
-    const isBreak = minutes === 25 || minutes === 55;
+    // Mark transition periods at :25 and :55
+    const isTransition = minutes === 25 || minutes === 55;
     
     slots.push({
       time: timeString,
-      isBreak,
-      duration: isBreak ? 5 : 25,
+      isBreak: isTransition,
+      isTransition,
+      duration: isTransition ? 5 : 25,
+      label: isTransition ? 'Transition Period' : timeString
     });
 
-    startTime.add(isBreak ? 5 : 25, 'minutes');
+    startTime.add(isTransition ? 5 : 25, 'minutes');
   }
 
   return slots;
