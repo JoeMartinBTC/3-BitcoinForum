@@ -50,7 +50,7 @@ export function TimeGrid() {
                     <EventCard 
                       key={event.id} 
                       event={event}
-                      onUpdate={(id, updates) => updateEvent({ id, ...updates })}
+                      onUpdate={updateEvent}
                     />
                   ))}
               </Card>
