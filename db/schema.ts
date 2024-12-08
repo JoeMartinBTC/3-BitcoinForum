@@ -13,7 +13,11 @@ export const events = pgTable("events", {
   inHoldingArea: boolean("in_holding_area").default(true).notNull()
 });
 
-export const insertEventSchema = createInsertSchema(events);
+export const insertEventSchema = createInsertSchema(events).transform((data) => ({
+  ...data,
+  startTime: new Date(data.startTime),
+  endTime: new Date(data.endTime)
+}));
 export const selectEventSchema = createSelectSchema(events);
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type Event = z.infer<typeof selectEventSchema>;

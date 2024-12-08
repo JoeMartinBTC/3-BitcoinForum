@@ -22,10 +22,17 @@ export function registerRoutes(app: Express) {
       res.json(newEvent[0]);
     } catch (error) {
       console.error('Event creation failed:', error);
-      res.status(500).json({ 
-        error: "Failed to create event",
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ 
+          error: "Invalid event data",
+          details: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+        });
+      } else {
+        res.status(500).json({ 
+          error: "Failed to create event",
+          details: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
     }
   });
 
