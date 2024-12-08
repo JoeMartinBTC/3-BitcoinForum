@@ -50,16 +50,9 @@ export function TimeGrid() {
     }),
   }));
 
-  const setRefs = (el: HTMLDivElement | null) => {
-    if (el) {
-      gridRef.current = el;
-      drop(el);
-    }
-  };
-
   return (
     <div 
-      ref={setRefs}
+      ref={node => drop(node)}
       className="grid grid-cols-3 gap-4"
     >
       {[1, 2, 3].map((day) => (
