@@ -26,8 +26,8 @@ export function HoldingArea() {
       title: newEventTitle,
       inHoldingArea: true,
       day: 1,
-      startTime: now.toISOString(),
-      endTime: new Date(now.getTime() + 25 * 60000).toISOString(), // 25 minutes later
+      startTime: now,  // Send Date object directly
+      endTime: new Date(now.getTime() + 25 * 60000), // Send Date object directly
     });
     setNewEventTitle('');
   };

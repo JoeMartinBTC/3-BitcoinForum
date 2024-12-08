@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events } from "@db/schema";
+import { events, insertEventSchema } from "@db/schema";
 import { eq } from "drizzle-orm";
 
 export function registerRoutes(app: Express) {
