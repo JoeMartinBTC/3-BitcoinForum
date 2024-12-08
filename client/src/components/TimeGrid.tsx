@@ -12,7 +12,41 @@ export function TimeGrid() {
     accept: 'EVENT',
     drop: (item: any, monitor) => {
       const dropPos = monitor.getClientOffset();
-      // Calculate time slot from position and update event
+      if (!dropPos) return;
+
+      const gridElement = drop.current;
+      if (!gridElement) return;
+
+      const rect = gridElement.getBoundingClientRect();
+      const relativeY = dropPos.y - rect.top;
+      const slotHeight = 60; // Regular slot height
+      const slots = generateTimeSlots();
+      
+      // Calculate day based on x position
+      const relativeX = dropPos.x - rect.left;
+      const dayWidth = rect.width / 3;
+      const day = Math.floor(relativeX / dayWidth) + 1;
+      
+      // Calculate time slot based on y position
+      const slotIndex = Math.floor(relativeY / slotHeight);
+      const slot = slots[slotIndex];
+      
+      if (slot && !slot.isTransition) {
+        const [hours, minutes] = slot.time.split(':').map(Number);
+        const startTime = new Date();
+        startTime.setHours(hours, minutes, 0, 0);
+        
+        const endTime = new Date(startTime);
+        endTime.setMinutes(endTime.getMinutes() + 25);
+        
+        updateEvent({
+          id: item.id,
+          day,
+          startTime,
+          endTime,
+          inHoldingArea: false
+        });
+      }
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
