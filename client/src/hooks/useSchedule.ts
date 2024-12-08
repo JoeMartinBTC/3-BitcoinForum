@@ -11,17 +11,21 @@ export function useSchedule() {
 
   const createEventMutation = useMutation({
     mutationFn: (newEvent: Partial<Event>) => {
-      // Convert dates to ISO strings for API
       const payload = {
         ...newEvent,
-        startTime: newEvent.startTime instanceof Date ? newEvent.startTime.toISOString() : newEvent.startTime,
-        endTime: newEvent.endTime instanceof Date ? newEvent.endTime.toISOString() : newEvent.endTime,
+        startTime: newEvent.startTime?.toISOString(),
+        endTime: newEvent.endTime?.toISOString(),
       };
       return fetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      }).then(res => res.json());
+      }).then(res => {
+        if (!res.ok) {
+          return res.json().then(err => Promise.reject(err));
+        }
+        return res.json();
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
