@@ -13,7 +13,7 @@ export function TimeGrid() {
   const gridRef = useRef<HTMLDivElement>(null);
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'EVENT',
-    drop: (item: Event, monitor) => {
+    drop: (item: { id: number } & Event, monitor) => {
       const dropPos = monitor.getClientOffset();
       if (!dropPos) return;
 
@@ -42,8 +42,9 @@ export function TimeGrid() {
         const endTime = new Date(startTime);
         endTime.setMinutes(endTime.getMinutes() + 25);
         
+        // Ensure id is included in the update
         updateEvent({
-          id: item.id,
+          id: item.id,  // This should now be properly typed
           day,
           startTime,
           endTime,
