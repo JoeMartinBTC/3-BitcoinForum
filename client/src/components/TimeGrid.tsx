@@ -24,8 +24,8 @@ export function TimeGrid() {
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
       
-      // Calculate slot index first
-      const slotIndex = Math.floor(relativeY / 60); // Default to regular slot height
+      // Use timeUtils for slot calculation
+      const slotIndex = Math.floor(relativeY / 60);
       const slot = timeSlots[slotIndex];
       
       if (slot && !slot.isTransition) {
@@ -42,6 +42,14 @@ export function TimeGrid() {
           startTime,
           endTime,
           inHoldingArea: false
+        });
+
+        // Add console log for debugging
+        console.log('Event dropped:', {
+          day,
+          slotIndex,
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString()
         });
       }
     },
