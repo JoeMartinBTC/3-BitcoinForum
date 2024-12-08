@@ -17,10 +17,15 @@ export function registerRoutes(app: Express) {
   // Create new event
   app.post("/api/events", async (req, res) => {
     try {
-      const newEvent = await db.insert(events).values(req.body).returning();
+      const eventData = insertEventSchema.parse(req.body);
+      const newEvent = await db.insert(events).values(eventData).returning();
       res.json(newEvent[0]);
     } catch (error) {
-      res.status(500).json({ error: "Failed to create event" });
+      console.error('Event creation failed:', error);
+      res.status(500).json({ 
+        error: "Failed to create event",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 

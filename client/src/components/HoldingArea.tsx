@@ -21,12 +21,13 @@ export function HoldingArea() {
   }));
 
   const handleCreateEvent = () => {
+    const now = new Date();
     createEvent({
       title: newEventTitle,
       inHoldingArea: true,
       day: 1,
-      startTime: new Date(),
-      endTime: new Date(),
+      startTime: now.toISOString(),
+      endTime: new Date(now.getTime() + 25 * 60000).toISOString(), // 25 minutes later
     });
     setNewEventTitle('');
   };
