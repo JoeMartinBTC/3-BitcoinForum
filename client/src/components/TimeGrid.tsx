@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
-import { generateTimeSlots } from "../lib/timeUtils";
+import { generateTimeSlots, calculateTimeSlot } from "../lib/timeUtils";
 import type { Event } from '@db/schema';
 
 export function TimeGrid() {
@@ -24,8 +24,7 @@ export function TimeGrid() {
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
       
-      // Use timeUtils for slot calculation
-      const slotIndex = Math.floor(relativeY / 60);
+      const slotIndex = calculateTimeSlot(dropPos.y, rect.top, 60);
       const slot = timeSlots[slotIndex];
       
       if (slot && !slot.isTransition) {
@@ -36,21 +35,23 @@ export function TimeGrid() {
         const endTime = new Date(startTime);
         endTime.setMinutes(endTime.getMinutes() + 25);
         
-        updateEvent({
-          id: item.id,
-          day,
-          startTime,
-          endTime,
-          inHoldingArea: false
-        });
+        if (hours >= 10 && hours < 22) { // Ensure within valid time range
+          updateEvent({
+            id: item.id,
+            day,
+            startTime,
+            endTime,
+            inHoldingArea: false
+          });
 
-        // Add console log for debugging
-        console.log('Event dropped:', {
-          day,
-          slotIndex,
-          startTime: startTime.toISOString(),
-          endTime: endTime.toISOString()
-        });
+          // Add console log for debugging
+          console.log('Event dropped:', {
+            day,
+            slotIndex,
+            startTime: startTime.toISOString(),
+            endTime: endTime.toISOString()
+          });
+        }
       }
     },
     collect: (monitor) => ({
