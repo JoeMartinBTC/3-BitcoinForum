@@ -1,20 +1,23 @@
 import { useDrop } from 'react-dnd';
+import { useRef } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
 import { generateTimeSlots } from "../lib/timeUtils";
+import type { Event } from '@db/schema';
 
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
 
+  const gridRef = useRef<HTMLDivElement>(null);
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'EVENT',
-    drop: (item: any, monitor) => {
+    drop: (item: Event, monitor) => {
       const dropPos = monitor.getClientOffset();
       if (!dropPos) return;
 
-      const gridElement = drop.current;
+      const gridElement = gridRef.current;
       if (!gridElement) return;
 
       const rect = gridElement.getBoundingClientRect();
@@ -54,7 +57,10 @@ export function TimeGrid() {
   }));
 
   return (
-    <div ref={drop} className="grid grid-cols-3 gap-4">
+    <div ref={(element) => {
+      gridRef.current = element;
+      drop(element);
+    }} className="grid grid-cols-3 gap-4">
       {[1, 2, 3].map((day) => (
         <div key={day} className="space-y-2">
           <h3 className="text-lg font-semibold text-center">Day {day}</h3>
