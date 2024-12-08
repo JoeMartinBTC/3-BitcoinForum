@@ -57,10 +57,10 @@ export function TimeGrid() {
   }));
 
   return (
-    <div ref={(element) => {
-      gridRef.current = element;
-      drop(element);
-    }} className="grid grid-cols-3 gap-4">
+    <div 
+      ref={drop}
+      className="grid grid-cols-3 gap-4"
+    >
       {[1, 2, 3].map((day) => (
         <div key={day} className="space-y-2">
           <h3 className="text-lg font-semibold text-center">Day {day}</h3>
