@@ -24,7 +24,9 @@ export function TimeGrid() {
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
       
-      const slot = timeSlots[Math.floor(relativeY / (slot?.isTransition ? 30 : 60))];
+      // Calculate slot index first
+      const slotIndex = Math.floor(relativeY / 60); // Default to regular slot height
+      const slot = timeSlots[slotIndex];
       
       if (slot && !slot.isTransition) {
         const [hours, minutes] = slot.time.split(':').map(Number);
@@ -48,12 +50,16 @@ export function TimeGrid() {
     }),
   }));
 
+  const setRefs = (el: HTMLDivElement | null) => {
+    if (el) {
+      gridRef.current = el;
+      drop(el);
+    }
+  };
+
   return (
     <div 
-      ref={(el) => {
-        gridRef.current = el;
-        drop(el);
-      }}
+      ref={setRefs}
       className="grid grid-cols-3 gap-4"
     >
       {[1, 2, 3].map((day) => (
