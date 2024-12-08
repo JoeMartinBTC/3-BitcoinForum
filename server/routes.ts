@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { db } from "../db";
 import { events, insertEventSchema } from "@db/schema";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 export function registerRoutes(app: Express) {
   // Get all events
@@ -25,7 +26,7 @@ export function registerRoutes(app: Express) {
       if (error instanceof z.ZodError) {
         res.status(400).json({ 
           error: "Invalid event data",
-          details: error.errors.map(e => ({ path: e.path.join('.'), message: e.message }))
+          details: error.errors
         });
       } else {
         res.status(500).json({ 
