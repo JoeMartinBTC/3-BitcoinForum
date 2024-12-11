@@ -14,43 +14,46 @@ export function TimeGrid() {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'EVENT',
     drop: (item: { id: number } & Event, monitor) => {
+      console.log('Drop event started');
       const dropPos = monitor.getClientOffset();
-      if (!dropPos || !gridRef.current) return;
+      if (!dropPos || !gridRef.current) {
+        console.log('Missing drop position or grid reference');
+        return;
+      }
 
       const rect = gridRef.current.getBoundingClientRect();
       const relativeX = dropPos.x - rect.left;
-      const relativeY = dropPos.y - rect.top;
-      
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
       
       const slotIndex = calculateTimeSlot(dropPos.y, rect.top, 60);
-      const slot = timeSlots[slotIndex];
+      console.log('Calculated slot index:', slotIndex);
       
-      if (slot && !slot.isTransition) {
-        const [hours, minutes] = slot.time.split(':').map(Number);
-        const startTime = new Date();
-        startTime.setHours(hours, minutes, 0, 0);
-        
-        const endTime = new Date(startTime);
-        endTime.setMinutes(endTime.getMinutes() + 25);
-        
-        if (hours >= 10 && hours < 22) { // Ensure within valid time range
-          updateEvent({
-            id: item.id,
-            day,
-            startTime,
-            endTime,
-            inHoldingArea: false
-          });
+      if (slotIndex >= 0 && slotIndex < timeSlots.length) {
+        const slot = timeSlots[slotIndex];
+        if (!slot.isTransition) {
+          const [hours, minutes] = slot.time.split(':').map(Number);
+          if (hours >= 10 && hours < 22) {
+            const startTime = new Date();
+            startTime.setHours(hours, minutes, 0, 0);
+            const endTime = new Date(startTime);
+            endTime.setMinutes(endTime.getMinutes() + 25);
 
-          // Add console log for debugging
-          console.log('Event dropped:', {
-            day,
-            slotIndex,
-            startTime: startTime.toISOString(),
-            endTime: endTime.toISOString()
-          });
+            console.log('Updating event:', {
+              id: item.id,
+              day,
+              slot: slot.time,
+              startTime: startTime.toISOString()
+            });
+
+            updateEvent({
+              id: item.id,
+              day,
+              startTime,
+              endTime,
+              inHoldingArea: false
+            });
+          }
         }
       }
     },
@@ -61,8 +64,11 @@ export function TimeGrid() {
 
   return (
     <div 
-      ref={node => drop(node)}
-      className="grid grid-cols-3 gap-4"
+      ref={node => {
+        drop(node);
+        if (node) gridRef.current = node;
+      }}
+      className={`grid grid-cols-3 gap-4 min-h-[600px] ${isOver ? 'bg-gray-50' : ''}`}
     >
       {[1, 2, 3].map((day) => (
         <div key={day} className="space-y-2">
