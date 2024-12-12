@@ -40,14 +40,30 @@ export function registerRoutes(app: Express) {
   // Update event
   app.put("/api/events/:id", async (req, res) => {
     try {
+      // Convert date strings to Date objects
+      const updateData = {
+        ...req.body,
+        startTime: req.body.startTime ? new Date(req.body.startTime) : undefined,
+        endTime: req.body.endTime ? new Date(req.body.endTime) : undefined
+      };
+
       const updatedEvent = await db
         .update(events)
-        .set(req.body)
+        .set(updateData)
         .where(eq(events.id, parseInt(req.params.id)))
         .returning();
+
+      if (!updatedEvent.length) {
+        return res.status(404).json({ error: "Event not found" });
+      }
+
       res.json(updatedEvent[0]);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update event" });
+      console.error('Event update failed:', error);
+      res.status(500).json({ 
+        error: "Failed to update event",
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
