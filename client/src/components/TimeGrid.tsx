@@ -15,27 +15,41 @@ export function TimeGrid() {
     accept: 'EVENT',
     drop: (item: Event, monitor) => {
       const dropPos = monitor.getClientOffset();
-      const initialClientOffset = monitor.getInitialClientOffset();
-      
-      if (!dropPos || !initialClientOffset || !gridRef.current) {
+      if (!dropPos || !gridRef.current) {
         console.error('Drop error: Missing position data or grid reference');
         return;
       }
 
       const rect = gridRef.current.getBoundingClientRect();
-      const gridScrollTop = gridRef.current.scrollTop;
-      const windowScrollTop = window.scrollY;
       
       // Calculate day (1-3) based on horizontal position
       const dayWidth = rect.width / 3;
       const relativeX = dropPos.x - rect.left;
       const day = Math.min(Math.max(Math.floor(relativeX / dayWidth) + 1, 1), 3);
-      
-      // Calculate time slot considering scrolling
-      const totalSlotHeight = 90; // 60px for regular slot + 30px for transition
-      const relativeY = (dropPos.y + windowScrollTop - rect.top);
-      const slotIndex = Math.floor(relativeY / totalSlotHeight);
-      
+
+      // Calculate slot index considering the grid's scroll position
+      const slotHeight = 90; // Combined height of regular (60px) and transition (30px) slots
+      const gridTop = rect.top;
+      const totalScrollY = window.scrollY;
+      const relativeY = dropPos.y + totalScrollY - gridTop;
+      const slotIndex = Math.floor(relativeY / slotHeight);
+
+      console.log('Drop position debug:', {
+        dropPos,
+        rect: {
+          top: rect.top,
+          left: rect.left,
+          width: rect.width
+        },
+        scroll: totalScrollY,
+        calculated: {
+          relativeX,
+          relativeY,
+          day,
+          slotIndex
+        }
+      });
+
       // Validate slot index
       if (slotIndex < 0 || slotIndex >= timeSlots.length) {
         console.error('Drop error: Invalid slot index:', slotIndex);
@@ -68,7 +82,7 @@ export function TimeGrid() {
       
       // Add 25 minutes for end time
       const endTime = new Date(startTime);
-      endTime.setMinutes(minutes + 25);
+      endTime.setMinutes(endTime.getMinutes() + 25);
 
       console.log('Drop validated:', {
         eventId: item.id,
@@ -104,7 +118,7 @@ export function TimeGrid() {
   return (
     <div 
       ref={setRefs}
-      className={`grid grid-cols-3 gap-4 ${isOver ? 'bg-gray-50' : ''}`}
+      className={`grid grid-cols-3 gap-4 overflow-visible ${isOver ? 'bg-gray-50' : ''}`}
     >
       {[1, 2, 3].map((day) => (
         <div key={day} className="space-y-2">
@@ -135,12 +149,9 @@ export function TimeGrid() {
                     
                     const eventTime = new Date(e.startTime);
                     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
-                    const slotTime = new Date();
-                    slotTime.setHours(slotHours, slotMinutes, 0, 0);
                     
-                    // Compare hours and minutes
-                    return eventTime.getHours() === slotTime.getHours() && 
-                           eventTime.getMinutes() === slotTime.getMinutes();
+                    return eventTime.getHours() === slotHours && 
+                           eventTime.getMinutes() === slotMinutes;
                   })
                   .map(event => (
                     <EventCard 
