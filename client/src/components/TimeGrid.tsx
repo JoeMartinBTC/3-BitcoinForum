@@ -1,9 +1,9 @@
 import { useDrop } from 'react-dnd';
-import { useRef } from 'react';
+import { useRef, MutableRefObject } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
-import { generateTimeSlots, calculateTimeSlot } from "../lib/timeUtils";
+import { generateTimeSlots } from "../lib/timeUtils";
 import type { Event } from '@db/schema';
 
 export function TimeGrid() {
@@ -11,43 +11,54 @@ export function TimeGrid() {
   const timeSlots = generateTimeSlots();
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const [{ isOver }, dropRef] = useDrop({
+  const [{ isOver }, drop] = useDrop({
     accept: 'EVENT',
     drop: (item: Event, monitor) => {
       const dropPos = monitor.getClientOffset();
-      if (!dropPos || !gridRef.current) return;
+      const initialClientOffset = monitor.getInitialClientOffset();
+      
+      if (!dropPos || !initialClientOffset || !gridRef.current) return;
 
       const rect = gridRef.current.getBoundingClientRect();
-      console.log('Drop position:', dropPos);
-      console.log('Grid rect:', rect);
-
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Calculate relative position considering scroll
       const relativeX = dropPos.x - rect.left;
+      const relativeY = (dropPos.y + scrollTop) - (rect.top + scrollTop);
+      
+      // Calculate day (1-3)
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
-
-      const slotHeight = 60; // Regular slot height
-      const relativeY = dropPos.y - rect.top;
+      
+      // Calculate time slot
+      const slotHeight = 60;
       const slotIndex = Math.floor(relativeY / slotHeight);
-
-      console.log('Calculated position:', {
+      
+      console.log('Drop calculations:', {
         relativeX,
         relativeY,
         day,
         slotIndex,
+        scrollTop,
         totalSlots: timeSlots.length
       });
 
+      // Validate slot index
       if (slotIndex >= 0 && slotIndex < timeSlots.length) {
         const slot = timeSlots[slotIndex];
+        
+        // Only allow drops in non-transition slots
         if (!slot.isTransition) {
           const [hours, minutes] = slot.time.split(':').map(Number);
-          const startTime = new Date();
-          startTime.setHours(hours, minutes, 0, 0);
           
-          const endTime = new Date(startTime);
-          endTime.setMinutes(endTime.getMinutes() + 25);
-          
+          // Only allow drops within valid time range (10:00-22:00)
           if (hours >= 10 && hours < 22) {
+            const startTime = new Date();
+            startTime.setHours(hours, minutes, 0, 0);
+            
+            const endTime = new Date(startTime);
+            endTime.setMinutes(endTime.getMinutes() + 25);
+            
             console.log('Updating event:', {
               id: item.id,
               day,
@@ -72,15 +83,17 @@ export function TimeGrid() {
     })
   });
 
-  // Combine refs
-  const combinedRef = (element: HTMLDivElement | null) => {
-    gridRef.current = element;
-    dropRef(element);
+  // Combine refs safely
+  const setRefs = (el: HTMLDivElement | null) => {
+    if (el) {
+      (gridRef as MutableRefObject<HTMLDivElement | null>).current = el;
+      drop(el);
+    }
   };
 
   return (
     <div 
-      ref={combinedRef}
+      ref={setRefs}
       className={`grid grid-cols-3 gap-4 ${isOver ? 'bg-gray-50' : ''}`}
     >
       {[1, 2, 3].map((day) => (
@@ -93,7 +106,7 @@ export function TimeGrid() {
                 className={`p-2 ${
                   slot.isTransition 
                     ? 'min-h-[30px] bg-gray-50 border-dashed border-gray-200' 
-                    : 'min-h-[60px] bg-white'
+                    : 'min-h-[60px] bg-white hover:bg-gray-50 transition-colors'
                 }`}
               >
                 <div className={`flex items-center gap-2 ${
@@ -111,9 +124,9 @@ export function TimeGrid() {
                     if (e.inHoldingArea) return false;
                     if (e.day !== day) return false;
                     const eventTime = new Date(e.startTime);
-                    const slotTime = slot.time.split(':').map(Number);
-                    return eventTime.getHours() === slotTime[0] && 
-                           eventTime.getMinutes() === slotTime[1];
+                    const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
+                    return eventTime.getHours() === slotHours && 
+                           eventTime.getMinutes() === slotMinutes;
                   })
                   .map(event => (
                     <EventCard 
