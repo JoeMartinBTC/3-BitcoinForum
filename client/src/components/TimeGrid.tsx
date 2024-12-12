@@ -73,9 +73,14 @@ export function TimeGrid() {
     }),
   }));
 
+  const setRefs = (el: HTMLDivElement | null) => {
+    gridRef.current = el;
+    drop(el);
+  };
+
   return (
     <div 
-      ref={node => drop(node)}
+      ref={setRefs}
       className="grid grid-cols-3 gap-4"
     >
       {[1, 2, 3].map((day) => (
