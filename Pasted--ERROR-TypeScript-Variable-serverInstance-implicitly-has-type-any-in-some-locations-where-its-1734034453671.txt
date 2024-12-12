@@ -1,0 +1,70 @@
+
+ ERROR(TypeScript)  Variable 'serverInstance' implicitly has type 'any' in some locations where its type cannot be determined.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:89:7
+
+    87 |   let retries = 0;
+    88 |   const maxRetries = 10;
+  > 89 |   let serverInstance;
+       |       ^^^^^^^^^^^^^^
+    90 |   
+    91 |   const startServer = async (port: number) => {
+    92 |     return new Promise((resolve, reject) => {
+
+ ERROR(TypeScript)  'serverInstance' is of type 'unknown'.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:114:7
+
+    112 |       
+    113 |       // Setup cleanup handlers
+  > 114 |       serverInstance.on("close", () => {
+        |       ^^^^^^^^^^^^^^
+    115 |         log("Server closed");
+    116 |       });
+    117 |       
+
+ ERROR(TypeScript)  'serverInstance' is of type 'unknown'.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:118:7
+
+    116 |       });
+    117 |       
+  > 118 |       serverInstance.on("error", (err: Error) => {
+        |       ^^^^^^^^^^^^^^
+    119 |         log(`Server error: ${err.message}`);
+    120 |         if (serverInstance) {
+    121 |           serverInstance.close();
+
+ ERROR(TypeScript)  Variable 'serverInstance' implicitly has an 'any' type.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:120:13
+
+    118 |       serverInstance.on("error", (err: Error) => {
+    119 |         log(`Server error: ${err.message}`);
+  > 120 |         if (serverInstance) {
+        |             ^^^^^^^^^^^^^^
+    121 |           serverInstance.close();
+    122 |         }
+    123 |       });
+
+ ERROR(TypeScript)  Variable 'serverInstance' implicitly has an 'any' type.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:143:9
+
+    141 |   // Handle cleanup on shutdown
+    142 |   const cleanup = () => {
+  > 143 |     if (serverInstance) {
+        |         ^^^^^^^^^^^^^^
+    144 |       serverInstance.close(() => {
+    145 |         log('Server closed');
+    146 |         process.exit(0);
+
+ ERROR(TypeScript)  Property 'on' does not exist on type '{}'.
+ FILE  /home/runner/EventSchedulerPro/server/index.ts:164:20
+
+    162 |
+    163 |   if (serverInstance) {
+  > 164 |     serverInstance.on("error", (err: Error) => {
+        |                    ^^
+    165 |       log(`Server error: ${err.message}`);
+    166 |       cleanup();
+    167 |     });
+
+[TypeScript] Found 6 errors. Watching for file changes.
+08:14:05 PM [express] GET /api/events 304 in 758ms :: [{"id":3,"title":"adad","description":null,"day…
+08:14:06 PM [express] GET /api/events 304 in 31ms :: [{"id":3,"title":"adad","description":null,"day"…

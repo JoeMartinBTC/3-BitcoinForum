@@ -1,7 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic } from "./vite";
-import { createServer } from "http";
+import { createServer, Server } from "http";
 
 function log(message: string) {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -86,9 +86,9 @@ app.use((req, res, next) => {
   const startPort = 5000;
   let retries = 0;
   const maxRetries = 10;
-  let serverInstance;
+  let serverInstance: Server | undefined;
   
-  const startServer = async (port: number) => {
+  const startServer = async (port: number): Promise<Server> => {
     return new Promise((resolve, reject) => {
       try {
         const instance = server.listen(port, "0.0.0.0", () => {
@@ -110,20 +110,20 @@ app.use((req, res, next) => {
       const port = await findAvailablePort(startPort + retries);
       serverInstance = await startServer(port);
       
-      // Setup cleanup handlers
-      serverInstance.on("close", () => {
-        log("Server closed");
-      });
-      
-      serverInstance.on("error", (err: Error) => {
-        log(`Server error: ${err.message}`);
-        if (serverInstance) {
-          serverInstance.close();
-        }
-      });
-      
-      // Successfully started
-      break;
+      if (serverInstance) {
+        // Setup cleanup handlers
+        serverInstance.on("close", () => {
+          log("Server closed");
+        });
+        
+        serverInstance.on("error", (err: Error) => {
+          log(`Server error: ${err.message}`);
+          serverInstance?.close();
+        });
+        
+        // Successfully started
+        break;
+      }
     } catch (err) {
       log(`Failed to start on port ${startPort + retries}: ${err}`);
       retries++;
@@ -140,7 +140,7 @@ app.use((req, res, next) => {
 
   // Handle cleanup on shutdown
   const cleanup = () => {
-    if (serverInstance) {
+    if (serverInstance && serverInstance.listening) {
       serverInstance.close(() => {
         log('Server closed');
         process.exit(0);
@@ -150,20 +150,24 @@ app.use((req, res, next) => {
     }
   };
 
-  process.on('SIGTERM', () => {
-    log('Received SIGTERM signal, shutting down gracefully');
-    cleanup();
-  });
-
-  process.on('SIGINT', () => {
-    log('Received SIGINT signal, shutting down gracefully');
-    cleanup();
-  });
-
-  if (serverInstance) {
-    serverInstance.on("error", (err: Error) => {
-      log(`Server error: ${err.message}`);
+  const setupCleanupHandlers = () => {
+    process.on('SIGTERM', () => {
+      log('Received SIGTERM signal, shutting down gracefully');
       cleanup();
     });
-  }
+
+    process.on('SIGINT', () => {
+      log('Received SIGINT signal, shutting down gracefully');
+      cleanup();
+    });
+
+    if (serverInstance) {
+      serverInstance.on("error", (err: Error) => {
+        log(`Server error: ${err.message}`);
+        cleanup();
+      });
+    }
+  };
+
+  setupCleanupHandlers();
 })();
