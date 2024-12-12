@@ -106,20 +106,14 @@ export function TimeGrid() {
         return;
       }
 
-      // Create Date objects for start and end times
+      // Create Date objects for start and end times, preserving today's date
       const now = new Date();
-      const startTime = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        hours,
-        minutes,
-        0,
-        0
-      );
+      const startTime = new Date();
+      startTime.setHours(hours, minutes, 0, 0);
       
       // Add 25 minutes for end time
-      const endTime = new Date(startTime.getTime() + 25 * 60000);
+      const endTime = new Date(startTime);
+      endTime.setMinutes(startTime.getMinutes() + 25);
 
       console.log('Drop validated:', {
         eventId: item.id,
@@ -195,38 +189,16 @@ export function TimeGrid() {
                     if (e.inHoldingArea || e.day !== day) return false;
                     
                     try {
-                      // Parse event time
+                      // Get hours and minutes from event time
                       const eventTime = new Date(e.startTime);
-                      if (isNaN(eventTime.getTime())) {
-                        console.error('Invalid event time for event:', e.id);
-                        return false;
-                      }
+                      const eventHours = eventTime.getHours();
+                      const eventMinutes = eventTime.getMinutes();
                       
-                      // Parse slot time
+                      // Get hours and minutes from slot time
                       const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
-                      if (isNaN(slotHours) || isNaN(slotMinutes)) {
-                        console.error('Invalid slot time format:', slot.time);
-                        return false;
-                      }
                       
-                      // Create a comparable time for the slot
-                      const slotTime = new Date();
-                      slotTime.setHours(slotHours, slotMinutes, 0, 0);
-                      
-                      // Normalize event time for comparison
-                      const normalizedEventTime = new Date(eventTime);
-                      normalizedEventTime.setSeconds(0, 0);
-                      
-                      // Compare the times using timestamp comparison
-                      const timeMatch = normalizedEventTime.getTime() === slotTime.getTime();
-                      
-                      if (!timeMatch) {
-                        console.debug('Time mismatch for event:', {
-                          eventId: e.id,
-                          eventTime: normalizedEventTime.toISOString(),
-                          slotTime: slotTime.toISOString(),
-                        });
-                      }
+                      // Simple hour and minute comparison
+                      const timeMatch = eventHours === slotHours && eventMinutes === slotMinutes;
                       
                       return timeMatch;
                     } catch (error) {
