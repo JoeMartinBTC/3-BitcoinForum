@@ -18,39 +18,53 @@ export function TimeGrid() {
       if (!dropPos || !gridRef.current) return;
 
       const rect = gridRef.current.getBoundingClientRect();
+      console.log('Drop position:', dropPos);
+      console.log('Grid rect:', rect);
+
       const relativeX = dropPos.x - rect.left;
-      const relativeY = dropPos.y - rect.top;
-      
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
-      
-      const slotIndex = calculateTimeSlot(dropPos.y, rect.top, 60);
-      const slot = timeSlots[slotIndex];
-      
-      if (slot && !slot.isTransition) {
-        const [hours, minutes] = slot.time.split(':').map(Number);
-        const startTime = new Date();
-        startTime.setHours(hours, minutes, 0, 0);
-        
-        const endTime = new Date(startTime);
-        endTime.setMinutes(endTime.getMinutes() + 25);
-        
-        if (hours >= 10 && hours < 22) { // Ensure within valid time range
-          updateEvent({
-            id: item.id,
-            day,
-            startTime,
-            endTime,
-            inHoldingArea: false
-          });
 
-          // Add console log for debugging
-          console.log('Event dropped:', {
-            day,
-            slotIndex,
-            startTime: startTime.toISOString(),
-            endTime: endTime.toISOString()
-          });
+      // Calculate slot based on relative position
+      const slotHeight = 60; // Regular slot height
+      const relativeY = dropPos.y - rect.top;
+      const slotIndex = Math.floor(relativeY / slotHeight);
+      
+      console.log('Calculated position:', {
+        relativeX,
+        relativeY,
+        day,
+        slotIndex,
+        totalSlots: timeSlots.length
+      });
+
+      if (slotIndex >= 0 && slotIndex < timeSlots.length) {
+        const slot = timeSlots[slotIndex];
+        if (!slot.isTransition) {
+          const [hours, minutes] = slot.time.split(':').map(Number);
+          const startTime = new Date();
+          startTime.setHours(hours, minutes, 0, 0);
+          
+          const endTime = new Date(startTime);
+          endTime.setMinutes(endTime.getMinutes() + 25);
+          
+          if (hours >= 10 && hours < 22) {
+            console.log('Updating event:', {
+              id: item.id,
+              day,
+              time: slot.time,
+              startTime: startTime.toISOString(),
+              endTime: endTime.toISOString()
+            });
+
+            updateEvent({
+              id: item.id,
+              day,
+              startTime,
+              endTime,
+              inHoldingArea: false
+            });
+          }
         }
       }
     },
