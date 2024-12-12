@@ -14,42 +14,38 @@ export function TimeGrid() {
   const [{ isOver }, drop] = useDrop({
     accept: 'EVENT',
     drop: (item: Event, monitor) => {
-      console.log('Drop starting with item:', item);
       const dropPos = monitor.getClientOffset();
       const gridElement = gridRef.current;
       
       if (!dropPos || !gridElement) {
-        console.error('Drop error: Missing position data or grid reference');
+        console.log('Drop error: Missing position data or grid reference');
         return;
       }
 
-      console.log('Drop position:', dropPos);
+      // Get grid dimensions
       const rect = gridElement.getBoundingClientRect();
-      console.log('Grid rectangle:', rect);
-      
       const dayWidth = rect.width / 3;
-      const slotHeight = 90; // 60px for regular slot + 30px for transition
+      const totalGridHeight = timeSlots.length * 30; // Each slot is 30px (including transitions)
       
-      // Calculate the day based on horizontal position
+      // Calculate day (1-3)
       const relativeX = dropPos.x - rect.left;
       const day = Math.min(Math.max(Math.floor(relativeX / dayWidth) + 1, 1), 3);
       
-      // Calculate the slot based on vertical position
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const relativeY = dropPos.y + scrollTop - rect.top;
-      const slotIndex = Math.floor(relativeY / slotHeight);
+      // Calculate slot index
+      const relativeY = dropPos.y - rect.top;
+      const slotIndex = Math.floor((relativeY / totalGridHeight) * timeSlots.length);
       
-      console.log('Calculated position:', {
+      console.log('Drop calculations:', {
         relativeX,
         relativeY,
         day,
         slotIndex,
-        scrollTop
+        totalSlots: timeSlots.length
       });
 
       // Validate slot index
       if (slotIndex < 0 || slotIndex >= timeSlots.length) {
-        console.error('Drop error: Invalid slot index:', slotIndex);
+        console.log('Drop error: Invalid slot index:', slotIndex);
         return;
       }
 
@@ -57,7 +53,7 @@ export function TimeGrid() {
       
       // Prevent dropping in transition slots
       if (targetSlot.isTransition) {
-        console.warn('Drop rejected: Cannot drop in transition slot');
+        console.log('Drop rejected: Cannot drop in transition slot');
         return;
       }
 
@@ -68,6 +64,13 @@ export function TimeGrid() {
       
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
+
+      console.log('Updating event:', {
+        id: item.id,
+        day,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString()
+      });
 
       // Update the event with new position
       updateEvent({
