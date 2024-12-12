@@ -18,6 +18,10 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    end: (item, monitor) => {
+      const didDrop = monitor.didDrop();
+      console.log('Drag ended:', { didDrop, item });
+    },
   }));
 
   const [title, setTitle] = useState(event.title);

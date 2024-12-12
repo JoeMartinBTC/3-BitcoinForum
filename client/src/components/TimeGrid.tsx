@@ -11,9 +11,10 @@ export function TimeGrid() {
   const timeSlots = generateTimeSlots();
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop({
     accept: 'EVENT',
     drop: (item: Event, monitor) => {
+      console.log('Drop starting with item:', item);
       const dropPos = monitor.getClientOffset();
       const gridElement = gridRef.current;
       
@@ -22,7 +23,10 @@ export function TimeGrid() {
         return;
       }
 
+      console.log('Drop position:', dropPos);
       const rect = gridElement.getBoundingClientRect();
+      console.log('Grid rectangle:', rect);
+      
       const dayWidth = rect.width / 3;
       const slotHeight = 90; // 60px for regular slot + 30px for transition
       
@@ -31,16 +35,16 @@ export function TimeGrid() {
       const day = Math.min(Math.max(Math.floor(relativeX / dayWidth) + 1, 1), 3);
       
       // Calculate the slot based on vertical position
-      const scrollTop = window.scrollY;
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const relativeY = dropPos.y + scrollTop - rect.top;
       const slotIndex = Math.floor(relativeY / slotHeight);
       
-      console.log('Drop calculation:', {
-        dropPos,
-        rect,
-        scroll: scrollTop,
-        relative: { x: relativeX, y: relativeY },
-        calculated: { day, slotIndex }
+      console.log('Calculated position:', {
+        relativeX,
+        relativeY,
+        day,
+        slotIndex,
+        scrollTop
       });
 
       // Validate slot index
@@ -74,19 +78,23 @@ export function TimeGrid() {
         inHoldingArea: false
       });
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
+    collect: monitor => ({
+      isOver: monitor.isOver()
     })
-  }), []);
+  });
 
   return (
     <div 
       ref={drop}
-      className="relative w-full"
+      className="relative w-full min-h-[600px] border-2 rounded-lg transition-colors duration-200"
+      style={{
+        borderColor: isOver ? 'rgb(59, 130, 246)' : 'transparent',
+        backgroundColor: isOver ? 'rgba(59, 130, 246, 0.1)' : 'transparent'
+      }}
     >
       <div
         ref={gridRef}
-        className={`grid grid-cols-3 gap-4 ${isOver ? 'bg-gray-50' : ''}`}
+        className="grid grid-cols-3 gap-4"
       >
         {[1, 2, 3].map((day) => (
           <div key={day} className="space-y-2">
