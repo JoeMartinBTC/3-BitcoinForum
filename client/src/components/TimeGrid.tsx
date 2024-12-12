@@ -15,12 +15,13 @@ export function TimeGrid() {
     accept: 'EVENT',
     drop: (item: Event, monitor) => {
       const dropPos = monitor.getClientOffset();
-      const initialClientOffset = monitor.getInitialClientOffset();
-      
-      if (!dropPos || !initialClientOffset || !gridRef.current) return;
+      if (!dropPos || !gridRef.current) {
+        console.log('Missing drop position or grid reference');
+        return;
+      }
 
       const rect = gridRef.current.getBoundingClientRect();
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       
       // Calculate relative position considering scroll
       const relativeX = dropPos.x - rect.left;
@@ -40,43 +41,57 @@ export function TimeGrid() {
         day,
         slotIndex,
         scrollTop,
-        totalSlots: timeSlots.length
+        totalSlots: timeSlots.length,
+        gridTop: rect.top,
+        gridHeight: rect.height
       });
 
       // Validate slot index
-      if (slotIndex >= 0 && slotIndex < timeSlots.length) {
-        const slot = timeSlots[slotIndex];
-        
-        // Only allow drops in non-transition slots
-        if (!slot.isTransition) {
-          const [hours, minutes] = slot.time.split(':').map(Number);
-          
-          // Only allow drops within valid time range (10:00-22:00)
-          if (hours >= 10 && hours < 22) {
-            const startTime = new Date();
-            startTime.setHours(hours, minutes, 0, 0);
-            
-            const endTime = new Date(startTime);
-            endTime.setMinutes(endTime.getMinutes() + 25);
-            
-            console.log('Updating event:', {
-              id: item.id,
-              day,
-              time: slot.time,
-              startTime: startTime.toISOString(),
-              endTime: endTime.toISOString()
-            });
-
-            updateEvent({
-              id: item.id,
-              day,
-              startTime,
-              endTime,
-              inHoldingArea: false
-            });
-          }
-        }
+      if (slotIndex < 0 || slotIndex >= timeSlots.length) {
+        console.log('Invalid slot index:', slotIndex);
+        return;
       }
+
+      const slot = timeSlots[slotIndex];
+      if (slot.isTransition) {
+        console.log('Cannot drop in transition slot');
+        return;
+      }
+
+      const [hours, minutes] = slot.time.split(':').map(Number);
+      if (hours < 10 || hours >= 22) {
+        console.log('Outside valid time range');
+        return;
+      }
+
+      // Create Date objects in the local timezone
+      const today = new Date();
+      const startTime = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        hours,
+        minutes,
+        0
+      );
+      
+      const endTime = new Date(startTime.getTime() + 25 * 60000);
+      
+      console.log('Updating event:', {
+        id: item.id,
+        day,
+        time: slot.time,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString()
+      });
+
+      updateEvent({
+        id: item.id,
+        day,
+        startTime,
+        endTime,
+        inHoldingArea: false
+      });
     },
     collect: (monitor) => ({
       isOver: monitor.isOver()
