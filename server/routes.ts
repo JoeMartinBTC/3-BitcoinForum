@@ -40,22 +40,63 @@ export function registerRoutes(app: Express) {
   // Update event
   app.put("/api/events/:id", async (req, res) => {
     try {
-      // Convert date strings to Date objects
-      const updateData = {
-        ...req.body,
-        startTime: req.body.startTime ? new Date(req.body.startTime) : undefined,
-        endTime: req.body.endTime ? new Date(req.body.endTime) : undefined
-      };
+      const eventId = parseInt(req.params.id);
+      if (isNaN(eventId)) {
+        return res.status(400).json({ error: "Invalid event ID" });
+      }
+
+      // Validate day value
+      if (req.body.day !== undefined && ![1, 2, 3].includes(req.body.day)) {
+        return res.status(400).json({ error: "Day must be 1, 2, or 3" });
+      }
+
+      // Convert and validate dates
+      let updateData: any = { ...req.body };
+      
+      if (req.body.startTime) {
+        const startTime = new Date(req.body.startTime);
+        if (isNaN(startTime.getTime())) {
+          return res.status(400).json({ error: "Invalid start time" });
+        }
+        updateData.startTime = startTime;
+      }
+
+      if (req.body.endTime) {
+        const endTime = new Date(req.body.endTime);
+        if (isNaN(endTime.getTime())) {
+          return res.status(400).json({ error: "Invalid end time" });
+        }
+        updateData.endTime = endTime;
+      }
+
+      // Ensure both times are set if one is provided
+      if ((updateData.startTime && !updateData.endTime) || (!updateData.startTime && updateData.endTime)) {
+        return res.status(400).json({ error: "Both start and end times must be provided together" });
+      }
+
+      // Validate time range if both times are provided
+      if (updateData.startTime && updateData.endTime) {
+        const diffMinutes = (updateData.endTime - updateData.startTime) / (1000 * 60);
+        if (diffMinutes !== 25) {
+          return res.status(400).json({ error: "Event duration must be exactly 25 minutes" });
+        }
+      }
 
       const updatedEvent = await db
         .update(events)
         .set(updateData)
-        .where(eq(events.id, parseInt(req.params.id)))
+        .where(eq(events.id, eventId))
         .returning();
 
       if (!updatedEvent.length) {
         return res.status(404).json({ error: "Event not found" });
       }
+
+      console.log('Successfully updated event:', {
+        id: eventId,
+        updates: updateData,
+        result: updatedEvent[0]
+      });
 
       res.json(updatedEvent[0]);
     } catch (error) {

@@ -84,12 +84,86 @@ app.use((req, res, next) => {
 
   // Find and use first available port starting from 5000
   const startPort = 5000;
-  const port = await findAvailablePort(startPort);
+  let retries = 0;
+  const maxRetries = 10;
+  let serverInstance;
   
-  server.listen(port, "0.0.0.0", () => {
-    log(`serving on port ${port}`);
-  }).on("error", (err: Error) => {
-    log(`Failed to start server: ${err.message}`);
-    process.exit(1);
+  const startServer = async (port: number) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const instance = server.listen(port, "0.0.0.0", () => {
+          log(`serving on port ${port}`);
+          resolve(instance);
+        });
+
+        instance.on("error", (err: Error) => {
+          reject(err);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  while (retries < maxRetries) {
+    try {
+      const port = await findAvailablePort(startPort + retries);
+      serverInstance = await startServer(port);
+      
+      // Setup cleanup handlers
+      serverInstance.on("close", () => {
+        log("Server closed");
+      });
+      
+      serverInstance.on("error", (err: Error) => {
+        log(`Server error: ${err.message}`);
+        if (serverInstance) {
+          serverInstance.close();
+        }
+      });
+      
+      // Successfully started
+      break;
+    } catch (err) {
+      log(`Failed to start on port ${startPort + retries}: ${err}`);
+      retries++;
+      
+      if (retries >= maxRetries) {
+        log(`Failed to find available port after ${maxRetries} attempts`);
+        process.exit(1);
+      }
+      
+      // Wait briefly before trying next port
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+
+  // Handle cleanup on shutdown
+  const cleanup = () => {
+    if (serverInstance) {
+      serverInstance.close(() => {
+        log('Server closed');
+        process.exit(0);
+      });
+    } else {
+      process.exit(0);
+    }
+  };
+
+  process.on('SIGTERM', () => {
+    log('Received SIGTERM signal, shutting down gracefully');
+    cleanup();
   });
+
+  process.on('SIGINT', () => {
+    log('Received SIGINT signal, shutting down gracefully');
+    cleanup();
+  });
+
+  if (serverInstance) {
+    serverInstance.on("error", (err: Error) => {
+      log(`Server error: ${err.message}`);
+      cleanup();
+    });
+  }
 })();
