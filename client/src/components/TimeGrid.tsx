@@ -9,11 +9,11 @@ import type { Event } from '@db/schema';
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-
   const gridRef = useRef<HTMLDivElement>(null);
-  const [{ isOver }, drop] = useDrop(() => ({
+
+  const [{ isOver }, dropRef] = useDrop({
     accept: 'EVENT',
-    drop: (item: { id: number } & Event, monitor) => {
+    drop: (item: Event, monitor) => {
       const dropPos = monitor.getClientOffset();
       if (!dropPos || !gridRef.current) return;
 
@@ -25,11 +25,10 @@ export function TimeGrid() {
       const dayWidth = rect.width / 3;
       const day = Math.floor(relativeX / dayWidth) + 1;
 
-      // Calculate slot based on relative position
       const slotHeight = 60; // Regular slot height
       const relativeY = dropPos.y - rect.top;
       const slotIndex = Math.floor(relativeY / slotHeight);
-      
+
       console.log('Calculated position:', {
         relativeX,
         relativeY,
@@ -69,19 +68,20 @@ export function TimeGrid() {
       }
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
+      isOver: monitor.isOver()
+    })
+  });
 
-  const setRefs = (el: HTMLDivElement | null) => {
-    gridRef.current = el;
-    drop(el);
+  // Combine refs
+  const combinedRef = (element: HTMLDivElement | null) => {
+    gridRef.current = element;
+    dropRef(element);
   };
 
   return (
     <div 
-      ref={setRefs}
-      className="grid grid-cols-3 gap-4"
+      ref={combinedRef}
+      className={`grid grid-cols-3 gap-4 ${isOver ? 'bg-gray-50' : ''}`}
     >
       {[1, 2, 3].map((day) => (
         <div key={day} className="space-y-2">
@@ -107,7 +107,14 @@ export function TimeGrid() {
                   {slot.label}
                 </div>
                 {!slot.isTransition && events
-                  .filter(e => e.day === day && !e.inHoldingArea)
+                  .filter(e => {
+                    if (e.inHoldingArea) return false;
+                    if (e.day !== day) return false;
+                    const eventTime = new Date(e.startTime);
+                    const slotTime = slot.time.split(':').map(Number);
+                    return eventTime.getHours() === slotTime[0] && 
+                           eventTime.getMinutes() === slotTime[1];
+                  })
                   .map(event => (
                     <EventCard 
                       key={event.id} 
