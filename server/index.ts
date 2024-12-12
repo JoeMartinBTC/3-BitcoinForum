@@ -69,10 +69,27 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client
-  const PORT = 5000;
-  server.listen(PORT, "0.0.0.0", () => {
-    log(`serving on port ${PORT}`);
+  // Try to find an available port starting from 5000
+  async function findAvailablePort(startPort: number): Promise<number> {
+    return new Promise((resolve) => {
+      const testServer = createServer();
+      testServer.listen(startPort, "0.0.0.0", () => {
+        testServer.close(() => resolve(startPort));
+      });
+      testServer.on("error", () => {
+        resolve(findAvailablePort(startPort + 1));
+      });
+    });
+  }
+
+  // Find and use first available port starting from 5000
+  const startPort = 5000;
+  const port = await findAvailablePort(startPort);
+  
+  server.listen(port, "0.0.0.0", () => {
+    log(`serving on port ${port}`);
+  }).on("error", (err: Error) => {
+    log(`Failed to start server: ${err.message}`);
+    process.exit(1);
   });
 })();
