@@ -21,12 +21,26 @@ function TimeSlot({
     accept: 'EVENT',
     canDrop: () => !slot.isTransition,
     drop: (item: Event) => {
+      // Create a new Date object for today
+      const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      const startTime = new Date();
+      
+      // Set the time while maintaining today's date
+      const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
       
+      // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
+
+      console.log('Dropping event:', {
+        id: item.id,
+        title: item.title,
+        day,
+        slot: slot.time,
+        startTime: startTime.toISOString(),
+        endTime: endTime.toISOString()
+      });
 
       updateEvent({
         id: item.id,
@@ -55,15 +69,19 @@ function TimeSlot({
   return (
     <Card 
       ref={drop}
-      className={`p-2 transition-all ${
+      className={`p-2 transition-all relative ${
         slot.isTransition 
-          ? 'h-[30px] bg-gray-50 border-dashed border-gray-200' 
-          : 'h-[60px] bg-white hover:bg-gray-50'
+          ? 'h-[30px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
+          : 'h-[60px] bg-white hover:bg-gray-50 cursor-pointer'
       } ${
         isOver && canDrop
-          ? 'border-2 border-primary bg-primary/10'
+          ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
           : canDrop
-          ? 'border border-primary/50'
+          ? 'border border-primary/50 hover:border-primary'
+          : ''
+      } ${
+        !canDrop && isOver
+          ? 'border-2 border-destructive/50 bg-destructive/10'
           : ''
       }`}
     >
