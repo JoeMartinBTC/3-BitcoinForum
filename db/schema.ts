@@ -10,7 +10,9 @@ export const events = pgTable("events", {
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time").notNull(),
   isBreak: boolean("is_break").default(false).notNull(),
-  inHoldingArea: boolean("in_holding_area").default(true).notNull()
+  inHoldingArea: boolean("in_holding_area").default(true).notNull(),
+  templateId: text("template_id").notNull().default('lecture'),
+  color: text("color").notNull().default("bg-blue-100")
 });
 
 export const insertEventSchema = createInsertSchema(events, {
