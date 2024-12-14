@@ -85,8 +85,8 @@ function TimeSlot({
           : ''
       }`}
     >
-      <div className="flex gap-2 h-full">
-        <div className={`w-16 flex items-center ${
+      <div className="flex h-full">
+        <div className={`w-16 flex items-center px-2 ${
           slot.isTransition ? 'text-[10px] text-gray-400' : 'text-xs text-gray-500'
         }`}>
           {slot.isTransition ? (
