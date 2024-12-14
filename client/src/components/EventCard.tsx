@@ -45,6 +45,16 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
             {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
             <span className="font-medium truncate">{event.title}</span>
           </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="px-2 hover:bg-red-100"
+            onClick={() => fetch(`/api/events/${event.id}`, { method: 'DELETE' })
+              .then(() => window.location.reload())
+            }
+          >
+            ✕
+          </Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm">Edit</Button>
