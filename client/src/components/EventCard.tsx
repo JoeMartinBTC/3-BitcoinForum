@@ -1,3 +1,4 @@
+
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -60,42 +61,43 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-6 px-1.5">✎</Button>
               </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Edit Event</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 pt-4">
-                <div className="grid grid-cols-2 gap-2">
-                  {EVENT_TEMPLATES.map((t) => {
-                    const TemplateIcon = t.icon ? ICONS[t.icon as keyof typeof ICONS] : null;
-                    return (
-                      <Button
-                        key={t.id}
-                        variant={event.templateId === t.id ? "default" : "outline"}
-                        className={`p-4 h-auto flex flex-col items-center gap-2 ${t.color}`}
-                        onClick={() => onUpdate({ 
-                          id: event.id, 
-                          templateId: t.id,
-                          color: t.color
-                        })}
-                      >
-                        {TemplateIcon && <TemplateIcon className="h-6 w-6" />}
-                        <span>{t.title}</span>
-                      </Button>
-                    );
-                  })}
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Edit Event</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4 pt-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    {EVENT_TEMPLATES.map((t) => {
+                      const TemplateIcon = t.icon ? ICONS[t.icon as keyof typeof ICONS] : null;
+                      return (
+                        <Button
+                          key={t.id}
+                          variant={event.templateId === t.id ? "default" : "outline"}
+                          className={`p-4 h-auto flex flex-col items-center gap-2 ${t.color}`}
+                          onClick={() => onUpdate({ 
+                            id: event.id, 
+                            templateId: t.id,
+                            color: t.color
+                          })}
+                        >
+                          {TemplateIcon && <TemplateIcon className="h-6 w-6" />}
+                          <span>{t.title}</span>
+                        </Button>
+                      );
+                    })}
+                  </div>
+                  <Input 
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Event title"
+                  />
+                  <Button onClick={() => onUpdate({ id: event.id, title })}>
+                    Save Changes
+                  </Button>
                 </div>
-                <Input 
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Event title"
-                />
-                <Button onClick={() => onUpdate({ id: event.id, title })}>
-                  Save Changes
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </Card>
     </div>
