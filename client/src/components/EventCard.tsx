@@ -40,7 +40,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} ml-[4.5rem] w-[calc(100%-5rem)] h-[52px]`}>
+      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px]`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
