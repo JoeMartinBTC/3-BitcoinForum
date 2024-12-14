@@ -1,3 +1,4 @@
+
 import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -15,9 +16,6 @@ export const events = pgTable("events", {
   color: text("color").notNull().default("bg-blue-100")
 });
 
-export const insertEventSchema = createInsertSchema(events, {
-  startTime: z.string().transform(str => new Date(str)),
-
 export const speakers = pgTable("speakers", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
@@ -26,13 +24,16 @@ export const speakers = pgTable("speakers", {
   eventId: integer("event_id").references(() => events.id),
 });
 
-export const insertSpeakerSchema = createInsertSchema(speakers);
-export const selectSpeakerSchema = createSelectSchema(speakers);
-export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
-export type Speaker = z.infer<typeof selectSpeakerSchema>;
-
+export const insertEventSchema = createInsertSchema(events, {
+  startTime: z.string().transform(str => new Date(str)),
   endTime: z.string().transform(str => new Date(str))
 });
+
+export const insertSpeakerSchema = createInsertSchema(speakers);
+export const selectSpeakerSchema = createSelectSchema(speakers);
 export const selectEventSchema = createSelectSchema(events);
+
 export type InsertEvent = z.infer<typeof insertEventSchema>;
 export type Event = z.infer<typeof selectEventSchema>;
+export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
+export type Speaker = z.infer<typeof selectSpeakerSchema>;
