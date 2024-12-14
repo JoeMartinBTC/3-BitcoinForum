@@ -6,11 +6,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
-import { BookOpen, Tool, Coffee, Users } from 'lucide-react';
+import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
 
 const ICONS = {
   'book-open': BookOpen,
-  'tool': Tool,
+  'tool': Wrench,
   'coffee': Coffee,
   'users': Users,
 };
