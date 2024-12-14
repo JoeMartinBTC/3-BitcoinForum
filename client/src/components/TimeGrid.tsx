@@ -86,7 +86,7 @@ function TimeSlot({
       }`}
     >
       <div className="flex h-full">
-        <div className={`w-16 flex items-center px-2 ${
+        <div className={`w-16 shrink-0 flex items-center px-2 ${
           slot.isTransition ? 'text-[10px] text-gray-400' : 'text-xs text-gray-500'
         }`}>
           {slot.isTransition ? (
@@ -96,7 +96,7 @@ function TimeSlot({
           ) : null}
           {slot.label}
         </div>
-        <div className="flex-1">
+        <div className="flex-1 relative">
           {!slot.isTransition && slotEvents.map(event => (
             <EventCard 
               key={event.id} 
