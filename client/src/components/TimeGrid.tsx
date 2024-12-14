@@ -96,15 +96,13 @@ function TimeSlot({
           ) : null}
           {slot.label}
         </div>
-        <div className="flex-1 relative">
+        <div className="flex-1">
           {!slot.isTransition && slotEvents.map(event => (
-            <div className="absolute inset-0">
-              <EventCard 
-                key={event.id} 
-                event={event}
+            <EventCard 
+              key={event.id} 
+              event={event}
               onUpdate={updateEvent}
             />
-            </div>
           ))}
         </div>
       </div>
