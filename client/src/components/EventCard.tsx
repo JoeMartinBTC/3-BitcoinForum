@@ -57,7 +57,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
           </Button>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="sm">Edit</Button>
+              <Button variant="ghost" size="sm">✎</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
