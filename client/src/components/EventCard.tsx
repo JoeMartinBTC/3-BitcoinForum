@@ -1,3 +1,4 @@
+
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px] ml-10`}> {/* Added ml-10 for 10% left margin */}
+      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px]`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
