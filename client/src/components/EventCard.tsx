@@ -91,7 +91,11 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Event title"
                   />
-                  <Button onClick={() => onUpdate({ id: event.id, title })}>
+                  <Button onClick={() => {
+                    onUpdate({ id: event.id, title });
+                    const closeButton = document.querySelector('[aria-label="Close"]') as HTMLButtonElement;
+                    if (closeButton) closeButton.click();
+                  }}>
                     Save Changes
                   </Button>
                 </div>
