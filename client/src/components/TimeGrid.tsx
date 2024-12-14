@@ -71,8 +71,8 @@ function TimeSlot({
       ref={drop}
       className={`p-1 transition-all relative ${
         slot.isTransition 
-          ? 'h-[20px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
-          : 'h-[50px] bg-white hover:bg-gray-50 cursor-pointer'
+          ? 'h-[30px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
+          : 'h-[60px] bg-white hover:bg-gray-50 cursor-pointer'
       } ${
         isOver && canDrop
           ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
