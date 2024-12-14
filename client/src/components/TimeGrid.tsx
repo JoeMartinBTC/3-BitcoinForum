@@ -85,23 +85,27 @@ function TimeSlot({
           : ''
       }`}
     >
-      <div className={`flex items-center gap-2 ${
-        slot.isTransition ? 'text-[10px] text-gray-400' : 'text-xs text-gray-500'
-      }`}>
-        {slot.isTransition ? (
-          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
-          </svg>
-        ) : null}
-        {slot.label}
+      <div className="flex gap-2 h-full">
+        <div className={`w-16 flex items-center ${
+          slot.isTransition ? 'text-[10px] text-gray-400' : 'text-xs text-gray-500'
+        }`}>
+          {slot.isTransition ? (
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
+            </svg>
+          ) : null}
+          {slot.label}
+        </div>
+        <div className="flex-1">
+          {!slot.isTransition && slotEvents.map(event => (
+            <EventCard 
+              key={event.id} 
+              event={event}
+              onUpdate={updateEvent}
+            />
+          ))}
+        </div>
       </div>
-      {!slot.isTransition && slotEvents.map(event => (
-        <EventCard 
-          key={event.id} 
-          event={event}
-          onUpdate={updateEvent}
-        />
-      ))}
     </Card>
   );
 }
