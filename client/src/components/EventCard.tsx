@@ -4,7 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
@@ -91,13 +92,11 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Event title"
                   />
-                  <Button onClick={() => {
-                    onUpdate({ id: event.id, title });
-                    const closeButton = document.querySelector('[aria-label="Close"]') as HTMLButtonElement;
-                    if (closeButton) closeButton.click();
-                  }}>
-                    Save Changes
-                  </Button>
+                  <DialogPrimitive.Close asChild>
+                    <Button onClick={() => onUpdate({ id: event.id, title })}>
+                      Save Changes
+                    </Button>
+                  </DialogPrimitive.Close>
                 </div>
               </DialogContent>
             </Dialog>
