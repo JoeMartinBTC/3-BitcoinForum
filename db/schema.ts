@@ -17,6 +17,20 @@ export const events = pgTable("events", {
 
 export const insertEventSchema = createInsertSchema(events, {
   startTime: z.string().transform(str => new Date(str)),
+
+export const speakers = pgTable("speakers", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: text("name").notNull(),
+  bio: text("bio"),
+  topic: text("topic").notNull(),
+  eventId: integer("event_id").references(() => events.id),
+});
+
+export const insertSpeakerSchema = createInsertSchema(speakers);
+export const selectSpeakerSchema = createSelectSchema(speakers);
+export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
+export type Speaker = z.infer<typeof selectSpeakerSchema>;
+
   endTime: z.string().transform(str => new Date(str))
 });
 export const selectEventSchema = createSelectSchema(events);

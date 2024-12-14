@@ -13,6 +13,14 @@ export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
 export const EVENT_TEMPLATES: EventTemplate[] = [
   {
+    id: 'speaker',
+    title: 'Speaker',
+    duration: 25,
+    color: 'bg-yellow-100',
+    description: 'Guest speaker session',
+    icon: 'users'
+  },
+  {
     id: 'lecture',
     title: 'Lecture',
     duration: 25,
