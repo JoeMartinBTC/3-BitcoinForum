@@ -88,7 +88,7 @@ function TimeSlot({
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
-  const slotEvents = events.filter(event => {
+  const slotEvents = (events || []).filter(event => {
     if (event.inHoldingArea || event.day !== day) return false;
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);

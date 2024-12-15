@@ -73,7 +73,7 @@ export function HoldingArea() {
       </Dialog>
 
       <div className="space-y-2">
-        {events
+        {(events || [])
           .filter(e => e.inHoldingArea)
           .map(event => (
             <EventCard 
