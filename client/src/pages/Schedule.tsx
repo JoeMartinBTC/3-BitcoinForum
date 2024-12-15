@@ -10,9 +10,10 @@ export default function Schedule() {
     filename: 'event-schedule.pdf',
     method: 'open',
     page: {
-      format: 'A4',
+      format: 'A3',
       orientation: 'landscape',
-      margin: 20
+      margin: 10,
+      scale: 0.8
     },
     onBeforeGenerate: () => {
       const element = targetRef.current;

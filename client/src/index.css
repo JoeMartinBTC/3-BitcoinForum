@@ -1,19 +1,20 @@
 
 /* PDF Export Styles */
 .pdf-export {
-  font-size: 0.7rem !important;
-  transform: scale(1) !important;
+  font-size: 0.8rem !important;
+  transform: scale(0.9) !important;
   transform-origin: top left !important;
   width: 100% !important;
   max-width: 100% !important;
-  line-height: 1 !important;
+  line-height: 1.2 !important;
 }
 
 .pdf-export .h-[60px] {
-  height: 40px !important;
+  height: 45px !important;
   display: flex !important;
   align-items: center !important;
-  padding: 0.25rem !important;
+  padding: 0.5rem !important;
+  margin-bottom: 2px !important;
 }
 
 .pdf-export h1 {
