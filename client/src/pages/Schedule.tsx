@@ -1,6 +1,17 @@
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule'; // Assuming this hook exists and provides events data
@@ -84,12 +95,27 @@ export default function Schedule() {
               >
                 Export Excel
               </button>
-              <button
-                onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-              >
-                Clear All Events
-              </button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                    Clear All Events
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Clear All Events</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will remove all events from the schedule. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}>
+                      Clear Events
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </Card>
         </div>
