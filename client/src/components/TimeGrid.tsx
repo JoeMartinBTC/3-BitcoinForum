@@ -1,5 +1,5 @@
 import { useDrop } from 'react-dnd';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
