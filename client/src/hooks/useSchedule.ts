@@ -14,7 +14,8 @@ export function useSchedule() {
       const data = await res.json();
       return Array.isArray(data) ? data : [];
     },
-    initialData: [],
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const createEventMutation = useMutation({
