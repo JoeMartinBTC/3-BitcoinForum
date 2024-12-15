@@ -2,7 +2,9 @@
 import { Input } from "@/components/ui/input";
 import React, { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
-import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
+import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, 
+         Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone,
+         Rocket, ShoppingBag, Sun, Zap } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +24,22 @@ const ICONS = {
   'wrench': Wrench,
   'coffee': Coffee,
   'users': Users,
+  'calendar': Calendar,
+  'star': Star,
+  'video': Video,
+  'music': Music,
+  'briefcase': Briefcase,
+  'code': Code,
+  'gamepad': Gamepad,
+  'heart': Heart,
+  'image': Image,
+  'mail': Mail,
+  'map': Map,
+  'phone': Phone,
+  'rocket': Rocket,
+  'shopping': ShoppingBag,
+  'sun': Sun,
+  'zap': Zap
 };
 
 export function HoldingArea() {
