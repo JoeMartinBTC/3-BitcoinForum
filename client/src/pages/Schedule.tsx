@@ -12,8 +12,19 @@ export default function Schedule() {
     page: {
       format: 'A4',
       orientation: 'landscape',
-      margin: 5,
-      scale: 0.7
+      margin: 5
+    },
+    onBeforeGenerate: () => {
+      const element = targetRef.current;
+      if (element) {
+        element.classList.add('pdf-export');
+      }
+    },
+    onAfterGenerate: () => {
+      const element = targetRef.current;
+      if (element) {
+        element.classList.remove('pdf-export');
+      }
     }
   });
 

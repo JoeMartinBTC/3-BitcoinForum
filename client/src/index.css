@@ -1,6 +1,6 @@
 /* PDF Export Styles */
 .pdf-export {
-  font-size: 8px !important;
+  font-size: 6px !important;
   transform: scale(0.7) !important;
   transform-origin: top left !important;
   width: 100% !important;
