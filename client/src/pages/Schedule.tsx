@@ -8,18 +8,22 @@ import { usePDF } from "react-to-pdf";
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
     filename: 'event-schedule.pdf',
-    options: {
-      onBeforeGenerate: () => {
-        const element = targetRef.current;
-        if (element) {
-          element.classList.add('pdf-export');
-        }
-      },
-      onAfterGenerate: () => {
-        const element = targetRef.current;
-        if (element) {
-          element.classList.remove('pdf-export');
-        }
+    method: 'open',
+    page: {
+      format: 'A4',
+      orientation: 'landscape',
+      margin: 20
+    },
+    onBeforeGenerate: () => {
+      const element = targetRef.current;
+      if (element) {
+        element.classList.add('pdf-export');
+      }
+    },
+    onAfterGenerate: () => {
+      const element = targetRef.current;
+      if (element) {
+        element.classList.remove('pdf-export');
       }
     }
   });
