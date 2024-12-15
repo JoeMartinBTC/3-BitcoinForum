@@ -22,6 +22,14 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
     icon: 'users'
   },
   {
+    id: 'jack-mallers',
+    title: 'Jack Mallers',
+    duration: 25,
+    color: 'bg-amber-100',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
     id: 'lecture',
     title: 'Lecture',
     duration: 25,
