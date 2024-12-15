@@ -85,7 +85,7 @@ function TimeSlot({
       className={`p-1 transition-all relative ${
         slot.isTransition 
           ? 'h-[21px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
-          : 'h-[60px] bg-white hover:bg-gray-50 cursor-pointer'
+          : 'h-[60px] hover:bg-gray-50 cursor-pointer'
       } ${
         isOver && canDrop
           ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
@@ -96,7 +96,10 @@ function TimeSlot({
         !canDrop && isOver
           ? 'border-2 border-destructive/50 bg-destructive/10'
           : ''
-      } ${slotEvent?.color || ''}`}
+      }`}
+      style={{
+        backgroundColor: slotEvent?.color?.startsWith('#') ? slotEvent.color : 'white',
+      }}
       onContextMenu={(e) => {
         e.preventDefault();
         setShowColorPicker(true);
