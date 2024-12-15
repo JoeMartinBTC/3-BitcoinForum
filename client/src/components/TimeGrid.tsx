@@ -17,6 +17,9 @@ function TimeSlot({
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [slotColor, setSlotColor] = useState("#ffffff");
+
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
     canDrop: () => !slot.isTransition,
@@ -84,7 +87,28 @@ function TimeSlot({
           ? 'border-2 border-destructive/50 bg-destructive/10'
           : ''
       }`}
+      style={{ backgroundColor: slotColor }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        setShowColorPicker(true);
+      }}
     >
+      {showColorPicker && (
+        <div className="absolute top-0 right-0 z-50 p-2 bg-white rounded shadow-lg">
+          <input 
+            type="color" 
+            value={slotColor}
+            onChange={(e) => {
+              setSlotColor(e.target.value);
+              updateEvent({
+                id: slot.id,
+                backgroundColor: e.target.value
+              });
+              setShowColorPicker(false);
+            }}
+          />
+        </div>
+      )}
       <div className="flex h-full">
         <div className={`w-16 shrink-0 flex items-center px-2 ${
           slot.isTransition ? 'text-[6px] text-gray-400' : 'text-[8px] text-gray-500'
