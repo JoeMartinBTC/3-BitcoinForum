@@ -96,8 +96,7 @@ function TimeSlot({
         !canDrop && isOver
           ? 'border-2 border-destructive/50 bg-destructive/10'
           : ''
-      }`}
-      style={{ backgroundColor: slotColor }}
+      } ${slotEvent?.color || ''}`}
       onContextMenu={(e) => {
         e.preventDefault();
         setShowColorPicker(true);
