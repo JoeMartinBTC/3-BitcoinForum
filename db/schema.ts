@@ -14,7 +14,7 @@ export const events = pgTable("events", {
   inHoldingArea: boolean("in_holding_area").default(true).notNull(),
   templateId: text("template_id").notNull().default('lecture'),
   color: text("color").notNull().default("bg-blue-100"),
-  backgroundColor: text("background_color").default("#ffffff")
+  backgroundColor: text("background_color").notNull().default("#ffffff")
 });
 
 export const speakers = pgTable("speakers", {
