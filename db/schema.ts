@@ -13,13 +13,14 @@ export const events = pgTable("events", {
   isBreak: boolean("is_break").default(false).notNull(),
   inHoldingArea: boolean("in_holding_area").default(true).notNull(),
   templateId: text("template_id").notNull().default('lecture'),
-  color: text("color").notNull().default("bg-blue-100")
+  color: text("color").notNull().default("bg-blue-100"),
+  backgroundColor: text("background_color").notNull().default("#ffffff")
 });
 
 export const speakers = pgTable("speakers", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
-  bio: text("description"),
+  bio: text("bio"),
   topic: text("topic").notNull(),
   eventId: integer("event_id").references(() => events.id),
 });

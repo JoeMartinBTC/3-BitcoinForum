@@ -18,7 +18,10 @@ export function registerRoutes(app: Express) {
   // Create new event
   app.post("/api/events", async (req, res) => {
     try {
-      const eventData = insertEventSchema.parse(req.body);
+      const eventData = insertEventSchema.parse({
+        ...req.body,
+        backgroundColor: req.body.backgroundColor || "#ffffff"
+      });
       const newEvent = await db.insert(events).values(eventData).returning();
       res.json(newEvent[0]);
     } catch (error) {
