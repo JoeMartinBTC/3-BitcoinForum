@@ -73,8 +73,9 @@ export function HoldingArea() {
       </Dialog>
 
       <div className="space-y-2">
-        {events?.filter(e => e.inHoldingArea)
-          ?.map(event => (
+        {events
+          .filter(e => e.inHoldingArea)
+          .map(event => (
             <EventCard 
               key={event.id} 
               event={event}
