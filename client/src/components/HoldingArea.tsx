@@ -125,12 +125,17 @@ export function HoldingArea() {
                 </Select>
                 <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select color" />
+                    <SelectValue>
+                      <div className={`w-full h-6 rounded ${newTemplateColor}`} />
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {['bg-purple-100', 'bg-blue-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100', 'bg-orange-100'].map((color) => (
                       <SelectItem key={color} value={color}>
-                        <div className={`w-full h-6 rounded ${color}`} />
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded ${color}`} />
+                          <span>{color.replace('bg-', '').replace('-100', '')}</span>
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
