@@ -12,7 +12,7 @@ export const eventTemplateSchema = z.object({
 
 export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
-export const EVENT_TEMPLATES: EventTemplate[] = [
+export let EVENT_TEMPLATES: EventTemplate[] = [
   {
     id: 'roman-reher',
     title: 'Roman Reher',
