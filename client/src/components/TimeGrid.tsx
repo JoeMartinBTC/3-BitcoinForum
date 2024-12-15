@@ -71,7 +71,7 @@ function TimeSlot({
       ref={drop}
       className={`p-1 transition-all relative ${
         slot.isTransition 
-          ? 'h-[30px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
+          ? 'h-[21px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
           : 'h-[60px] bg-white hover:bg-gray-50 cursor-pointer'
       } ${
         isOver && canDrop
@@ -89,12 +89,14 @@ function TimeSlot({
         <div className={`w-16 shrink-0 flex items-center px-2 ${
           slot.isTransition ? 'text-[6px] text-gray-400' : 'text-[8px] text-gray-500'
         }`}>
-          {slot.isTransition ? (
-            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
-            </svg>
-          ) : null}
-          {slot.label}
+          <div className="flex items-center gap-1">
+            {slot.isTransition ? (
+              <svg className="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
+              </svg>
+            ) : null}
+            {slot.label}
+          </div>
         </div>
         <div className="flex-1 relative">
           {!slot.isTransition && slotEvents.map(event => (
