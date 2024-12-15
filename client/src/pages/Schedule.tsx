@@ -11,7 +11,8 @@ export default function Schedule() {
     page: {
       format: 'A4',
       orientation: 'landscape',
-      margin: 10
+      margin: 5,
+      scale: 0.7
     }
   });
 

@@ -2,52 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PDF Export Styles */
-.pdf-export {
-  font-size: 8px !important;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-.pdf-export .schedule-content {
-  line-height: 1.2 !important;
-  padding: 2px !important;
-}
-
-.pdf-export h1 {
-  font-size: 16px !important;
-  margin: 0 !important;
-  padding: 4px 0 !important;
-}
-
-.pdf-export h2 {
-  font-size: 14px !important;
-  margin: 0 !important;
-  padding: 2px 0 !important;
-}
-
-.pdf-export h3 {
-  font-size: 12px !important;
-  margin: 0 !important;
-  padding: 2px 0 !important;
-}
-
-.pdf-export .h-[60px] {
-  height: 50px !important;
-}
-
-.pdf-export .p-4 {
-  padding: 0.5rem !important;
-}
-
-.pdf-export .gap-4 {
-  gap: 0.5rem !important;
-}
-
-.pdf-export .mb-6 {
-  margin-bottom: 0.5rem !important;
-}
-
 .pdf-export {
   font-size: 0.5rem !important;
 }
