@@ -1,5 +1,6 @@
+
 import { useDrop } from 'react-dnd';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
@@ -13,7 +14,7 @@ function TimeSlot({
   updateEvent 
 }: { 
   day: number;
-  slot: ReturnType<typeof generateTimeSlots>[number];
+  slot: ReturnType<typeof generateTimeSlots>[number] & { backgroundColor?: string };
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
@@ -21,26 +22,12 @@ function TimeSlot({
     accept: 'EVENT',
     canDrop: () => !slot.isTransition,
     drop: (item: Event) => {
-      // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      
-      // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-      
-      // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
-
-      console.log('Dropping event:', {
-        id: item.id,
-        title: item.title,
-        day,
-        slot: slot.time,
-        startTime: startTime.toISOString(),
-        endTime: endTime.toISOString()
-      });
 
       updateEvent({
         id: item.id,
@@ -56,6 +43,51 @@ function TimeSlot({
     })
   });
 
+  const [showColorMenu, setShowColorMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [bgColor, setBgColor] = useState(slot.backgroundColor || 'bg-white');
+
+  const colors = [
+    { name: 'White', class: 'bg-white' },
+    { name: 'Blue', class: 'bg-blue-50' },
+    { name: 'Green', class: 'bg-green-50' },
+    { name: 'Yellow', class: 'bg-yellow-50' },
+    { name: 'Red', class: 'bg-red-50' },
+    { name: 'Purple', class: 'bg-purple-50' },
+    { name: 'Orange', class: 'bg-orange-50' },
+    { name: 'Pink', class: 'bg-pink-50' },
+    { name: 'Gray', class: 'bg-gray-50' }
+  ];
+
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuPosition({ x: e.clientX, y: e.clientY });
+    setShowColorMenu(true);
+  };
+
+  const handleColorSelect = async (colorClass: string) => {
+    setBgColor(colorClass);
+    slot.backgroundColor = colorClass;
+    setShowColorMenu(false);
+    // Here you would update the database
+    try {
+      const response = await fetch(`/api/slots/${day}/${slot.time}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ backgroundColor: colorClass })
+      });
+      if (!response.ok) throw new Error('Failed to update slot color');
+    } catch (error) {
+      console.error('Failed to update slot color:', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => setShowColorMenu(false);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   const slotEvents = events.filter(event => {
     if (event.inHoldingArea || event.day !== day) return false;
     const eventTime = new Date(event.startTime);
@@ -69,10 +101,11 @@ function TimeSlot({
   return (
     <Card 
       ref={drop}
+      onContextMenu={handleRightClick}
       className={`p-1 transition-all relative ${
         slot.isTransition 
           ? 'h-[21px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
-          : 'h-[60px] bg-white hover:bg-gray-50 cursor-pointer'
+          : `h-[60px] ${bgColor} hover:brightness-95 cursor-pointer`
       } ${
         isOver && canDrop
           ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
@@ -85,6 +118,23 @@ function TimeSlot({
           : ''
       }`}
     >
+      {showColorMenu && (
+        <div
+          className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-2"
+          style={{ left: menuPosition.x, top: menuPosition.y }}
+        >
+          <div className="grid grid-cols-3 gap-2">
+            {colors.map((color) => (
+              <button
+                key={color.name}
+                className={`w-8 h-8 rounded ${color.class} hover:ring-2 ring-black/5 transition-all`}
+                onClick={() => handleColorSelect(color.class)}
+                title={color.name}
+              />
+            ))}
+          </div>
+        </div>
+      )}
       <div className="flex h-full">
         <div className={`w-16 shrink-0 flex items-center px-2 ${
           slot.isTransition ? 'text-[6px] text-gray-400' : 'text-[8px] text-gray-500'
@@ -102,7 +152,6 @@ function TimeSlot({
           {!slot.isTransition && slotEvents.map(event => (
             <div key={event.id} className="-ml-[20%] w-[120%]">
               <EventCard 
-                key={event.id} 
                 event={event}
                 onUpdate={updateEvent}
               />
