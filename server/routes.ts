@@ -53,7 +53,7 @@ export function registerRoutes(app: Express) {
       // Convert and validate dates
       const updateData: any = { 
         ...req.body,
-        color: req.body.color || "#ffffff" 
+        backgroundColor: req.body.backgroundColor || "#ffffff" 
       };
       
       if (req.body.startTime) {

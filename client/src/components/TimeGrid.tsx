@@ -97,7 +97,7 @@ function TimeSlot({
           ? 'border-2 border-destructive/50 bg-destructive/10'
           : ''
       }`}
-      className={event?.color || ''}
+      style={{ backgroundColor: slotColor }}
       onContextMenu={(e) => {
         e.preventDefault();
         setShowColorPicker(true);
