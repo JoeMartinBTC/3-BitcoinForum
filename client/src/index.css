@@ -1,7 +1,7 @@
 /* PDF Export Styles */
 .pdf-export {
-  font-size: 0.49rem !important;
-  transform: scale(1) !important;
+  font-size: 8px !important;
+  transform: scale(0.7) !important;
   transform-origin: top left !important;
   width: 100% !important;
   max-width: 100% !important;
