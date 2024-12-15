@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export const eventTemplateSchema = z.object({
@@ -13,43 +14,91 @@ export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
 export const EVENT_TEMPLATES: EventTemplate[] = [
   {
-    id: 'speaker',
-    title: 'Speaker',
+    id: 'roman-reher',
+    title: 'Roman Reher',
     duration: 25,
-    color: 'bg-yellow-100',
-    description: 'Guest speaker session',
+    color: 'bg-pink-100',
+    description: 'Speaker session',
     icon: 'users'
   },
   {
-    id: 'lecture',
-    title: 'Lecture',
+    id: 'jack-mallers',
+    title: 'Jack Mallers',
     duration: 25,
-    color: 'bg-blue-100',
-    description: 'Standard lecture session',
-    icon: 'book-open'
+    color: 'bg-fuchsia-100',
+    description: 'Speaker session',
+    icon: 'users'
   },
   {
-    id: 'workshop',
-    title: 'Workshop',
+    id: 'michael-saylor',
+    title: 'Michael Saylor',
     duration: 25,
-    color: 'bg-green-100',
-    description: 'Interactive workshop session',
-    icon: 'wrench'
+    color: 'bg-rose-100',
+    description: 'Speaker session',
+    icon: 'users'
   },
   {
-    id: 'break',
-    title: 'Break',
-    duration: 25,
-    color: 'bg-orange-100',
-    description: 'Break or rest period',
-    icon: 'coffee'
-  },
-  {
-    id: 'meeting',
-    title: 'Meeting',
+    id: 'alex-frankenberg',
+    title: 'Alex von Frankenberg',
     duration: 25,
     color: 'bg-purple-100',
-    description: 'Team meeting or discussion',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'prof-schnabl',
+    title: 'Prof. Schnabl',
+    duration: 25,
+    color: 'bg-violet-100',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'rahim-taghizadegan',
+    title: 'Rahim Taghizadegan',
+    duration: 25,
+    color: 'bg-pink-200',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'king-bhutan',
+    title: 'König von Bhutan',
+    duration: 25,
+    color: 'bg-fuchsia-200',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'ijoma-mangold',
+    title: 'Ijoma Mangold',
+    duration: 25,
+    color: 'bg-rose-200',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'dr-stelter',
+    title: 'Dr. Stelter',
+    duration: 25,
+    color: 'bg-purple-200',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'isabell-schnabel',
+    title: 'Isabell Schnabel',
+    duration: 25,
+    color: 'bg-violet-200',
+    description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'florian-bruce',
+    title: 'Florian Bruce',
+    duration: 25,
+    color: 'bg-pink-300',
+    description: 'Speaker session',
     icon: 'users'
   }
 ];
