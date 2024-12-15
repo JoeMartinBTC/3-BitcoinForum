@@ -12,8 +12,7 @@ export default function Schedule() {
     page: {
       format: 'A4',
       orientation: 'landscape',
-      margin: 5,
-      scale: 0.7
+      margin: 5
     }
   });
 
@@ -40,8 +39,9 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
+  const { events } = useSchedule();
+  
   const handleExcelExport = useCallback(() => {
-    const { events } = useSchedule();
     import('xlsx').then(XLSX => {
       const data = events.map(event => ({
         Title: event.title,
