@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.pdf-export {
+  font-size: 0.5rem !important;
+}
+
+.pdf-export h1 {
+  font-size: 0.8rem !important;
+}
+
+.pdf-export h2 {
+  font-size: 0.7rem !important;
+}
+
+.pdf-export h3, .pdf-export p {
+  font-size: 0.6rem !important;
+}
+
 @layer base {
   * {
     @apply border-border;
