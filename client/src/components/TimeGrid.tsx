@@ -85,7 +85,7 @@ function TimeSlot({
       className={`p-1 transition-all relative ${
         slot.isTransition 
           ? 'h-[21px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
-          : 'h-[60px] hover:bg-gray-50 cursor-pointer'
+          : 'h-[60px] cursor-pointer'
       } ${
         isOver && canDrop
           ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
@@ -98,7 +98,7 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotColor,
+        backgroundColor: slotEvents[0]?.color || '#ffffff',
       }}
       onContextMenu={(e) => {
         e.preventDefault();
