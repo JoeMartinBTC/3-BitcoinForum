@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const eventTemplateSchema = z.object({
   id: z.string(),
   title: z.string(),
-  duration: z.number(),
+  duration: z.number(), // in minutes
   color: z.string(),
   description: z.string(),
   icon: z.string().optional(),
@@ -13,22 +13,6 @@ export const eventTemplateSchema = z.object({
 export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
 export const EVENT_TEMPLATES: EventTemplate[] = [
-  {
-    id: 'roman-reher',
-    title: 'Roman Reher',
-    duration: 25,
-    color: 'bg-amber-50',
-    description: 'Speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'jack-mallers',
-    title: 'Jack Mallers',
-    duration: 25,
-    color: 'bg-amber-100',
-    description: 'Speaker session',
-    icon: 'users'
-  },
   {
     id: 'speaker',
     title: 'Speaker',
