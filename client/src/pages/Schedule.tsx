@@ -14,7 +14,7 @@ export default function Schedule() {
         </div>
         <div>
           <Card className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Unscheduled Events</h2>
+            <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
             <HoldingArea />
           </Card>
         </div>
