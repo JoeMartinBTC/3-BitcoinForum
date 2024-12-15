@@ -2,12 +2,13 @@
 import { Input } from "@/components/ui/input";
 import { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
-import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
+import { BookOpen, Wrench, Coffee, Users, LucideIcon, Plus } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useSchedule } from "../hooks/useSchedule";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { EventCard } from "./EventCard";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ICONS = {
   'book-open': BookOpen,
@@ -20,6 +21,7 @@ export function HoldingArea() {
   const { events, createEvent, updateEvent } = useSchedule();
   const [newEventTitle, setNewEventTitle] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState(EVENT_TEMPLATES[0]);
+  const [selectedIcon, setSelectedIcon] = useState('users');
 
   const handleCreateEvent = () => {
     const now = new Date();
@@ -39,7 +41,7 @@ export function HoldingArea() {
     <div className="space-y-4">
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-full">Add Events or Speakers</Button>
+          <Button className="w-full">Add Events</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -62,12 +64,29 @@ export function HoldingArea() {
                 );
               })}
             </div>
-            <Input
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-              placeholder={`Custom ${selectedTemplate.title} title`}
-            />
-            <Button onClick={handleCreateEvent}>Create Event</Button>
+            <div className="space-y-2">
+              <Input
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+                placeholder={`Custom ${selectedTemplate.title} title`}
+              />
+              <Select value={selectedIcon} onValueChange={setSelectedIcon}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select icon" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(ICONS).map(([key, Icon]) => (
+                    <SelectItem key={key} value={key}>
+                      <div className="flex items-center gap-2">
+                        <Icon className="h-4 w-4" />
+                        <span className="capitalize">{key.replace('-', ' ')}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button onClick={handleCreateEvent} className="w-full">Create Event</Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
