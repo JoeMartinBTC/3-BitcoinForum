@@ -5,6 +5,14 @@ import { EVENT_TEMPLATES } from "../lib/eventTemplates";
 import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { EventTemplate } from "../lib/eventTemplates";
 import { useSchedule } from "../hooks/useSchedule";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { EventCard } from "./EventCard";
