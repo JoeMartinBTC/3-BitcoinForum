@@ -151,7 +151,7 @@ export function TimeGrid() {
         <div className="pt-12 space-y-1">
           {timeSlots.map((slot) => (
             <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center`}>
-              {!slot.isTransition && <span className="text-[8px] text-gray-500">{slot.time}</span>}
+              {!slot.isTransition && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
             </div>
           ))}
         </div>
