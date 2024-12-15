@@ -96,7 +96,7 @@ function TimeSlot({
       eventTime.getHours() === slotHours && 
       eventTime.getMinutes() === slotMinutes
     );
-  });
+  }) : [];
 
   return (
     <Card 
