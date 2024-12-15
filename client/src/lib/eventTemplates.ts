@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const eventTemplateSchema = z.object({
   id: z.string(),
   title: z.string(),
-  duration: z.number(), // in minutes
+  duration: z.number(),
   color: z.string(),
   description: z.string(),
   icon: z.string().optional(),
@@ -27,6 +27,14 @@ export const EVENT_TEMPLATES: EventTemplate[] = [
     duration: 25,
     color: 'bg-amber-100',
     description: 'Speaker session',
+    icon: 'users'
+  },
+  {
+    id: 'speaker',
+    title: 'Speaker',
+    duration: 25,
+    color: 'bg-yellow-100',
+    description: 'Guest speaker session',
     icon: 'users'
   },
   {
