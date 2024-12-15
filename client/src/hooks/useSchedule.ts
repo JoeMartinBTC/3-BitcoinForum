@@ -6,7 +6,15 @@ export function useSchedule() {
 
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
-    queryFn: () => fetch('/api/events').then(res => res.json()),
+    queryFn: async () => {
+      const res = await fetch('/api/events');
+      if (!res.ok) {
+        throw new Error('Failed to fetch events');
+      }
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    },
+    initialData: [],
   });
 
   const createEventMutation = useMutation({
