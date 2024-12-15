@@ -89,7 +89,7 @@ function TimeSlot({
         <div className={`w-16 shrink-0 flex items-center px-2 ${
           slot.isTransition ? 'text-[6px] text-gray-400' : 'text-[8px] text-gray-500'
         }`}>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 whitespace-nowrap">
             {slot.isTransition ? (
               <svg className="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
