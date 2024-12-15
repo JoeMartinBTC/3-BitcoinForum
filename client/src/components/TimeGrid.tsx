@@ -123,18 +123,6 @@ function TimeSlot({
         </div>
       )}
       <div className="flex h-full">
-        <div className={`w-16 shrink-0 flex items-center px-2 ${
-          slot.isTransition ? 'text-[6px] text-gray-400' : 'text-[8px] text-gray-500'
-        }`}>
-          <div className="flex items-center gap-1 whitespace-nowrap">
-            {slot.isTransition ? (
-              <svg className="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m-12 6h12m-12 6h12M4 7h0m0 6h0m0 6h0" />
-              </svg>
-            ) : null}
-            {slot.label}
-          </div>
-        </div>
         <div className="flex-1 relative">
           {!slot.isTransition && slotEvents.map(event => (
             <div key={event.id} className="-ml-[20%] w-[120%]">
@@ -157,7 +145,14 @@ export function TimeGrid() {
 
   return (
     <div className="w-full min-h-[600px]">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-[auto_1fr_1fr_1fr] gap-4">
+        <div className="pt-12 space-y-1">
+          {timeSlots.map((slot) => (
+            <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center`}>
+              {!slot.isTransition && <span className="text-[8px] text-gray-500">{slot.time}</span>}
+            </div>
+          ))}
+        </div>
         {[1, 2, 3].map((day) => (
           <div key={day} className="space-y-2">
             <h3 className="text-lg font-semibold text-center">Day {day}</h3>
