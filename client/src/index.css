@@ -6,14 +6,32 @@
 
 .pdf-export h1 {
   font-size: 1.5rem !important;
+  margin: 0 !important;
+  padding: 0.5rem 0 !important;
 }
 
 .pdf-export h2 {
   font-size: 1.2rem !important;
+  margin: 0 !important;
+  padding: 0.25rem 0 !important;
 }
 
 .pdf-export h3 {
   font-size: 1rem !important;
+  margin: 0 !important;
+  padding: 0.25rem 0 !important;
+}
+
+.pdf-export .schedule-content {
+  line-height: 1.2 !important;
+}
+
+.pdf-export .h-[60px] {
+  height: 50px !important;
+}
+
+.pdf-export .p-4 {
+  padding: 0.5rem !important;
 }
 
 @tailwind base;
