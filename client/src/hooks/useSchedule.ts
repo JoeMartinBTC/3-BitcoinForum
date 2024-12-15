@@ -52,20 +52,9 @@ export function useSchedule() {
     },
   });
 
-  const clearAllEventsMutation = useMutation({
-    mutationFn: () =>
-      fetch('/api/events', {
-        method: 'DELETE',
-      }).then(res => res.json()),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['events'] });
-    },
-  });
-
   return {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
-    clearAllEvents: clearAllEventsMutation.mutate,
   };
 }

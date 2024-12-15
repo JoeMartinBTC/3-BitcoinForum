@@ -119,14 +119,4 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to delete event" });
     }
   });
-
-  // Delete all events
-  app.delete("/api/events", async (req, res) => {
-    try {
-      await db.delete(events);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to delete all events" });
-    }
-  });
 }
