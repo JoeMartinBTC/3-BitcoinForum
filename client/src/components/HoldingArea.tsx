@@ -1,6 +1,6 @@
 
 import { Input } from "@/components/ui/input";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
 import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
 import { Card } from "@/components/ui/card";
