@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
