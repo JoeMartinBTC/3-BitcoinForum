@@ -1,25 +1,30 @@
 
 /* PDF Export Styles */
 .pdf-export {
-  font-size: 0.6rem !important;
+  font-size: 0.7rem !important;
+  transform: scale(0.9) !important;
+  transform-origin: top left !important;
 }
 
 .pdf-export h1 {
-  font-size: 1rem !important;
+  font-size: 1.2rem !important;
   margin: 0 !important;
   padding: 0.25rem 0 !important;
+  font-weight: bold !important;
 }
 
 .pdf-export h2 {
-  font-size: 0.8rem !important;
+  font-size: 1rem !important;
   margin: 0 !important;
   padding: 0.15rem 0 !important;
+  font-weight: bold !important;
 }
 
 .pdf-export h3 {
-  font-size: 0.7rem !important;
+  font-size: 0.9rem !important;
   margin: 0 !important;
   padding: 0.1rem 0 !important;
+  font-weight: bold !important;
 }
 
 .pdf-export .schedule-content {
