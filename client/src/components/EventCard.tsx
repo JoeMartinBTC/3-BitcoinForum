@@ -1,4 +1,3 @@
-
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,8 +39,8 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px] overflow-hidden group`}>
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
+      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-full overflow-hidden group`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
