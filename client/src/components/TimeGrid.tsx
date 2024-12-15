@@ -28,7 +28,7 @@ function TimeSlot({
     );
   });
 
-  const [slotColor, setSlotColor] = useState(slotEvent?.backgroundColor || "#ffffff");
+  const [slotColor, setSlotColor] = useState(slotEvent?.color || "#ffffff");
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
@@ -114,7 +114,7 @@ function TimeSlot({
               if (slotEvent) {
                 updateEvent({
                   id: slotEvent.id,
-                  backgroundColor: newColor
+                  color: newColor
                 });
               }
               setShowColorPicker(false);
