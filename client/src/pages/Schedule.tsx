@@ -39,39 +39,6 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const handleHTMLExport = useCallback(() => {
-    const element = targetRef.current;
-    if (element) {
-      const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Schedule Export</title>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    .schedule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-    .day { padding: 1rem; }
-    .time-slot { margin: 0.5rem 0; padding: 0.5rem; background: #f0f0f0; }
-    .event { padding: 0.5rem; margin: 0.25rem 0; background: #e0e0e0; }
-  </style>
-</head>
-<body>
-  ${element.outerHTML}
-</body>
-</html>`;
-
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'schedule.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-  }, [targetRef]);
-
   const { events } = useSchedule();
   
   const handleExcelExport = useCallback(() => {
@@ -116,12 +83,6 @@ export default function Schedule() {
                 className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
               >
                 Export Excel
-              </button>
-              <button
-                onClick={handleHTMLExport}
-                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-              >
-                Export HTML
               </button>
             </div>
           </Card>
