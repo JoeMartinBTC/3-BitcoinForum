@@ -98,7 +98,7 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotEvent?.color?.startsWith('#') ? slotEvent.color : 'white',
+        backgroundColor: slotColor,
       }}
       onContextMenu={(e) => {
         e.preventDefault();
