@@ -18,7 +18,17 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [slotColor, setSlotColor] = useState("#ffffff");
+  const slotEvent = events.find(event => {
+    const eventTime = new Date(event.startTime);
+    const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
+    return (
+      event.day === day && 
+      eventTime.getHours() === slotHours && 
+      eventTime.getMinutes() === slotMinutes
+    );
+  });
+
+  const [slotColor, setSlotColor] = useState(slotEvent?.backgroundColor || "#ffffff");
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
@@ -99,11 +109,14 @@ function TimeSlot({
             type="color" 
             value={slotColor}
             onChange={(e) => {
-              setSlotColor(e.target.value);
-              updateEvent({
-                id: slot.id,
-                backgroundColor: e.target.value
-              });
+              const newColor = e.target.value;
+              setSlotColor(newColor);
+              if (slotEvent) {
+                updateEvent({
+                  id: slotEvent.id,
+                  backgroundColor: newColor
+                });
+              }
               setShowColorPicker(false);
             }}
           />
