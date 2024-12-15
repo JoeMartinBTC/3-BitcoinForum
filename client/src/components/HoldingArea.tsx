@@ -154,8 +154,10 @@ export function HoldingArea() {
                     ].map((color) => (
                       <SelectItem key={color} value={color}>
                         <div className="flex items-center gap-2">
-                          <div className={`w-4 h-4 rounded ${color}`} />
-                          <span>{color.replace('bg-', '').replace('-100', '')}</span>
+                          <div className="flex items-center gap-2">
+                            <div className={`w-4 h-4 rounded ${color}`} />
+                            <span className="capitalize">{color.replace('bg-', '').replace('-100', '')} (Light)</span>
+                          </div>
                         </div>
                       </SelectItem>
                     ))}
