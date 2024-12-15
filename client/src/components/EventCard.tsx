@@ -41,11 +41,11 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px]`}>
+      <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow ${template.color} w-full h-[52px] overflow-hidden group`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
-            <span className="text-sm font-medium truncate">{event.title}</span>
+            <span className="text-sm font-medium line-clamp-2 text-pretty break-words group-hover:text-[10px] transition-all">{event.title}</span>
           </div>
           <div className="flex flex-col gap-0.5">
             <Button 
