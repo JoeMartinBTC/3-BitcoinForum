@@ -39,7 +39,7 @@ export function HoldingArea() {
     <div className="space-y-4">
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-full">Add New Event</Button>
+          <Button className="w-full">Add Events or Speakers</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
