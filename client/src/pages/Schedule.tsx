@@ -84,6 +84,12 @@ export default function Schedule() {
               >
                 Export Excel
               </button>
+              <button
+                onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+              >
+                Clear All Events
+              </button>
             </div>
           </Card>
         </div>
