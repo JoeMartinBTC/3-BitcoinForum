@@ -160,10 +160,13 @@ export function TimeGrid() {
           className="w-20 px-2 py-1 border rounded"
         />
       </div>
-      <div className="grid gap-4 w-full overflow-x-auto border rounded-lg p-4" style={{ 
-        gridTemplateColumns: `auto ${Array(numDays).fill('minmax(200px, 1fr)').join(' ')}`,
-        minWidth: 'fit-content'
-      }}>
+      <div className="relative w-full overflow-x-auto">
+        <div className="grid border rounded-lg p-4" style={{ 
+          gridTemplateColumns: `auto ${Array(numDays).fill('minmax(200px, 1fr)').join(' ')}`,
+          minWidth: 'fit-content',
+          gap: '1px',
+          background: '#e5e7eb'
+        }}>
         <div className="pt-12 space-y-1">
           {timeSlots.map((slot) => (
             <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center`}>
@@ -187,6 +190,7 @@ export function TimeGrid() {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );
