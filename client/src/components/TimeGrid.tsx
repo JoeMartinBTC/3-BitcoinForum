@@ -180,31 +180,41 @@ export function TimeGrid() {
         
         {Array.from({length: numDays}, (_, i) => i + 1).map((day) => (
           <div key={day} className="space-y-2">
-            <div className="flex flex-col items-center mb-2 px-2">
-              <textarea
-                className="w-full text-center font-semibold resize-none overflow-hidden"
-                className="text-[12px] font-medium"
-                style={{
-                  lineHeight: '1.2',
-                  height: 'auto'
-                }}
-                rows={1}
+            <div className="flex flex-col items-center gap-1 mb-2 px-2">
+              <input
+                type="text"
+                maxLength={20}
+                className="w-full text-center text-[12px] font-medium"
+                placeholder="Line 1"
                 defaultValue={`Day ${day}`}
                 onBlur={(e) => {
-                  const lines = e.target.value.split('\n', 2);
                   fetch('/api/day-titles', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                       day,
-                      title1: lines[0] || `Day ${day}`,
-                      title2: lines[1] || ''
+                      title1: e.target.value.slice(0, 20) || `Day ${day}`,
+                      title2: (e.target.nextElementSibling as HTMLInputElement)?.value.slice(0, 20) || ''
                     })
                   });
                 }}
-                onInput={(e) => {
-                  e.currentTarget.style.height = 'auto';
-                  e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+              />
+              <input
+                type="text"
+                maxLength={20}
+                className="w-full text-center text-[12px] font-medium"
+                placeholder="Line 2"
+                defaultValue=""
+                onBlur={(e) => {
+                  fetch('/api/day-titles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      day,
+                      title1: (e.target.previousElementSibling as HTMLInputElement)?.value.slice(0, 20) || `Day ${day}`,
+                      title2: e.target.value.slice(0, 20) || ''
+                    })
+                  });
                 }}
               />
             </div>
