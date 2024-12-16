@@ -2,11 +2,15 @@ import { pgTable, text, integer, timestamp, boolean, varchar } from "drizzle-orm
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const dayTitles = pgTable("dayTitles", {
+export const dayTitles = pgTable("day_titles", {
   day: integer("day").primaryKey(),
-  title1: text("title1").notNull(),
-  title2: text("title2").notNull(),
+  title1: text("title1").default("").notNull(),
+  title2: text("title2").default("").notNull(),
 });
+
+export const insertDayTitleSchema = createInsertSchema(dayTitles);
+export const selectDayTitleSchema = createSelectSchema(dayTitles);
+export type DayTitle = z.infer<typeof selectDayTitleSchema>;
 
 export const events = pgTable("events", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
