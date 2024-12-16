@@ -72,16 +72,13 @@ export default function Schedule() {
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
       <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3">
-          <Card className="p-4">
-            <TimeGrid />
-          </Card>
-        </div>
-        <div>
-          <Card className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
-            <HoldingArea />
+      <div className="flex flex-col gap-4">
+        <Card className="p-4">
+          <TimeGrid />
+        </Card>
+        <Card className="p-4">
+          <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
+          <HoldingArea />
             <div className="flex gap-2 mt-4">
               <button
                 onClick={handlePDFExport}
