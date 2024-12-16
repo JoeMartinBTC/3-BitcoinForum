@@ -180,7 +180,34 @@ export function TimeGrid() {
         
         {Array.from({length: numDays}, (_, i) => i + 1).map((day) => (
           <div key={day} className="space-y-2">
-            <h3 className="text-lg font-semibold text-center">Day {day}</h3>
+            <div className="flex flex-col items-center mb-2 px-2">
+              <textarea
+                className="w-full text-center font-semibold resize-none overflow-hidden"
+                style={{
+                  fontSize: 'clamp(14px, 2vw, 18px)',
+                  lineHeight: '1.2',
+                  height: 'auto'
+                }}
+                rows={1}
+                defaultValue={`Day ${day}`}
+                onBlur={(e) => {
+                  const lines = e.target.value.split('\n', 2);
+                  fetch('/api/day-titles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      day,
+                      title1: lines[0] || `Day ${day}`,
+                      title2: lines[1] || ''
+                    })
+                  });
+                }}
+                onInput={(e) => {
+                  e.currentTarget.style.height = 'auto';
+                  e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                }}
+              />
+            </div>
             <div className="space-y-1">
               {timeSlots.map((slot) => (
                 <TimeSlot

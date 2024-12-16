@@ -2,6 +2,12 @@ import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const dayTitles = pgTable("dayTitles", {
+  day: integer("day").primaryKey(),
+  title1: text("title1").notNull(),
+  title2: text("title2").notNull(),
+});
+
 export const events = pgTable("events", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: text("title").notNull(),

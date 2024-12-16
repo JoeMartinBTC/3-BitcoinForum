@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, insertEventSchema } from "@db/schema";
+import { events, dayTitles } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
