@@ -123,12 +123,17 @@ export function HoldingArea() {
                     ))}
                   </SelectContent>
                 </Select>
-                <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
-                  <SelectTrigger>
-                    <SelectValue>
-                      <div className={`w-full h-6 rounded ${newTemplateColor}`} />
-                    </SelectValue>
-                  </SelectTrigger>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Color</label>
+                  <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
+                    <SelectTrigger>
+                      <SelectValue>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded ${newTemplateColor}`} />
+                          <span>Select color</span>
+                        </div>
+                      </SelectValue>
+                    </SelectTrigger>
                   <SelectContent>
                     {[
                       'bg-rose-100',
