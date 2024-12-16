@@ -85,122 +85,124 @@ export function HoldingArea() {
 
   return (
     <div className="space-y-4">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full">Add Events or Speakers</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Create New Event</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <div className="flex justify-between mb-4">
-              <h3 className="text-lg font-medium">Event Types</h3>
-              <Button variant="outline" onClick={() => setIsCreatingTemplate(!isCreatingTemplate)}>
-                {isCreatingTemplate ? 'Cancel' : 'New Type'}
-              </Button>
-            </div>
-
-            {isCreatingTemplate && (
-              <div className="space-y-4 mb-4 p-4 border rounded-lg">
-                <Input
-                  value={newTemplateTitle}
-                  onChange={(e) => setNewTemplateTitle(e.target.value)}
-                  placeholder="Event type name"
-                />
-                <Select value={newTemplateIcon} onValueChange={setNewTemplateIcon}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select icon" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(ICONS).map(([key]) => (
-                      <SelectItem key={key} value={key}>
-                        <div className="flex items-center gap-2">
-                          {React.createElement(ICONS[key as keyof typeof ICONS], { className: "h-4 w-4" })}
-                          <span className="capitalize">{key.replace('-', ' ')}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Color</label>
-                  <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
-                    <SelectTrigger>
-                      <SelectValue>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-4 h-4 rounded ${newTemplateColor}`} />
-                          <span>Select color</span>
-                        </div>
-                      </SelectValue>
-                    </SelectTrigger>
-                  <SelectContent>
-                    {[
-                      'bg-rose-100',
-                      'bg-pink-100',
-                      'bg-fuchsia-100',
-                      'bg-purple-100',
-                      'bg-violet-100',
-                      'bg-indigo-100',
-                      'bg-blue-100',
-                      'bg-sky-100',
-                      'bg-cyan-100',
-                      'bg-teal-100',
-                      'bg-emerald-100',
-                      'bg-green-100',
-                      'bg-lime-100',
-                      'bg-yellow-100',
-                      'bg-amber-100',
-                      'bg-orange-100',
-                      'bg-red-100',
-                      'bg-stone-100',
-                      'bg-zinc-100',
-                      'bg-slate-100'
-                    ].map((color) => (
-                      <SelectItem key={color} value={color}>
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-4 h-4 rounded ${color}`} />
-                            <span className="capitalize">{color.replace('bg-', '').replace('-100', '')} (Light)</span>
-                          </div>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button onClick={handleCreateTemplate} className="w-full">
-                  Create Event Type
+      <>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="w-full">Add Events or Speakers</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Event</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="flex justify-between mb-4">
+                <h3 className="text-lg font-medium">Event Types</h3>
+                <Button variant="outline" onClick={() => setIsCreatingTemplate(!isCreatingTemplate)}>
+                  {isCreatingTemplate ? 'Cancel' : 'New Type'}
                 </Button>
               </div>
-            )}
 
-            <div className="grid grid-cols-2 gap-2">
-              {EVENT_TEMPLATES.map((template) => {
-                const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
-                return (
-                  <Button
-                    key={template.id}
-                    variant={selectedTemplate.id === template.id ? "default" : "outline"}
-                    className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color}`}
-                    onClick={() => setSelectedTemplate(template)}
-                  >
-                    {Icon && <Icon className="h-6 w-6" />}
-                    <span>{template.title}</span>
+              {isCreatingTemplate && (
+                <div className="space-y-4 mb-4 p-4 border rounded-lg">
+                  <Input
+                    value={newTemplateTitle}
+                    onChange={(e) => setNewTemplateTitle(e.target.value)}
+                    placeholder="Event type name"
+                  />
+                  <Select value={newTemplateIcon} onValueChange={setNewTemplateIcon}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select icon" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(ICONS).map(([key]) => (
+                        <SelectItem key={key} value={key}>
+                          <div className="flex items-center gap-2">
+                            {React.createElement(ICONS[key as keyof typeof ICONS], { className: "h-4 w-4" })}
+                            <span className="capitalize">{key.replace('-', ' ')}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Color</label>
+                    <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
+                      <SelectTrigger>
+                        <SelectValue>
+                          <div className="flex items-center gap-2">
+                            <div className={`w-4 h-4 rounded ${newTemplateColor}`} />
+                            <span>Select color</span>
+                          </div>
+                        </SelectValue>
+                      </SelectTrigger>
+                    <SelectContent>
+                      {[
+                        'bg-rose-100',
+                        'bg-pink-100',
+                        'bg-fuchsia-100',
+                        'bg-purple-100',
+                        'bg-violet-100',
+                        'bg-indigo-100',
+                        'bg-blue-100',
+                        'bg-sky-100',
+                        'bg-cyan-100',
+                        'bg-teal-100',
+                        'bg-emerald-100',
+                        'bg-green-100',
+                        'bg-lime-100',
+                        'bg-yellow-100',
+                        'bg-amber-100',
+                        'bg-orange-100',
+                        'bg-red-100',
+                        'bg-stone-100',
+                        'bg-zinc-100',
+                        'bg-slate-100'
+                      ].map((color) => (
+                        <SelectItem key={color} value={color}>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2">
+                              <div className={`w-4 h-4 rounded ${color}`} />
+                              <span className="capitalize">{color.replace('bg-', '').replace('-100', '')} (Light)</span>
+                            </div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button onClick={handleCreateTemplate} className="w-full">
+                    Create Event Type
                   </Button>
-                );
-              })}
-            </div>
-            <Input
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-              placeholder={`Custom ${selectedTemplate.title} title`}
-            />
-            <Button onClick={handleCreateEvent}>Create Event</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+                </div>
+              )}
 
-      <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                {EVENT_TEMPLATES.map((template) => {
+                  const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
+                  return (
+                    <Button
+                      key={template.id}
+                      variant={selectedTemplate.id === template.id ? "default" : "outline"}
+                      className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color}`}
+                      onClick={() => setSelectedTemplate(template)}
+                    >
+                      {Icon && <Icon className="h-6 w-6" />}
+                      <span>{template.title}</span>
+                    </Button>
+                  );
+                })}
+              </div>
+              <Input
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+                placeholder={`Custom ${selectedTemplate.title} title`}
+              />
+              <Button onClick={handleCreateEvent}>Create Event</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        <div className="space-y-2">
+      </>
         {events
           .filter(e => e.inHoldingArea)
           .map(event => (
