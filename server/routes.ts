@@ -131,4 +131,32 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to delete all events" });
     }
   });
+
+  // Day titles API endpoints
+  app.get("/api/day-titles", async (req, res) => {
+    try {
+      const titles = await db.select().from(dayTitles);
+      res.json(titles);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch day titles" });
+    }
+  });
+
+  app.post("/api/day-titles", async (req, res) => {
+    try {
+      const { day, title1, title2 } = req.body;
+      const existing = await db.select().from(dayTitles).where(eq(dayTitles.day, day));
+      
+      if (existing.length > 0) {
+        await db.update(dayTitles)
+          .set({ title1, title2 })
+          .where(eq(dayTitles.day, day));
+      } else {
+        await db.insert(dayTitles).values({ day, title1, title2 });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to save day titles" });
+    }
+  });
 }

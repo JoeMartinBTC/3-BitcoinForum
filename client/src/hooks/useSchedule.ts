@@ -2,6 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Event } from '@db/schema';
 
 export function useSchedule() {
+  const dayTitlesQuery = useQuery({
+    queryKey: ['dayTitles'],
+    queryFn: () => fetch('/api/day-titles').then(res => res.json()),
+  });
   const queryClient = useQueryClient();
 
   const { data: events = [] } = useQuery<Event[]>({
