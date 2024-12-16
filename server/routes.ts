@@ -46,8 +46,9 @@ export function registerRoutes(app: Express) {
       }
 
       // Validate day value
-      if (req.body.day !== undefined && ![1, 2, 3].includes(req.body.day)) {
-        return res.status(400).json({ error: "Day must be 1, 2, or 3" });
+      const day = req.body.day;
+      if (day !== undefined && (day < 1 || day > 20)) {
+        return res.status(400).json({ error: "Day must be between 1 and 20" });
       }
 
       // Convert and validate dates

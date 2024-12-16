@@ -108,7 +108,8 @@ function TimeSlot({
       {showColorPicker && (
         <div className="absolute top-0 right-0 z-50 p-2 bg-white rounded shadow-lg">
           <input 
-            type="color" 
+            type="color"
+            aria-label="Select event color"
             value={slotColor}
             onChange={(e) => {
               const newColor = e.target.value;
