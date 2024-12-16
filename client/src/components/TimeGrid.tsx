@@ -161,19 +161,23 @@ export function TimeGrid() {
         />
       </div>
       <div className="relative w-full overflow-x-auto">
-        <div className="grid border rounded-lg p-4" style={{ 
-          gridTemplateColumns: `auto ${Array(numDays).fill('minmax(200px, 1fr)').join(' ')}`,
-          minWidth: 'fit-content',
-          gap: '1px',
-          background: '#e5e7eb'
-        }}>
-        <div className="pt-12 space-y-1">
-          {timeSlots.map((slot) => (
-            <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center`}>
-              {!slot.isTransition && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
+        <div className="flex">
+          <div className="sticky left-0 z-10 bg-background">
+            <div className="pt-12">
+              {timeSlots.map((slot) => (
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center px-2`}>
+                  {!slot.isTransition && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+          <div className="grid flex-1 border rounded-lg p-4" style={{ 
+            gridTemplateColumns: `${Array(numDays).fill('minmax(200px, 1fr)').join(' ')}`,
+            minWidth: 'fit-content',
+            gap: '1px',
+            background: '#e5e7eb'
+          }}>
+        
         {Array.from({length: numDays}, (_, i) => i + 1).map((day) => (
           <div key={day} className="space-y-2">
             <h3 className="text-lg font-semibold text-center">Day {day}</h3>
@@ -190,6 +194,7 @@ export function TimeGrid() {
             </div>
           </div>
         ))}
+        </div>
         </div>
       </div>
     </div>
