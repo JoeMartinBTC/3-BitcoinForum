@@ -144,9 +144,21 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
+  const [numDays, setNumDays] = useState(3);
 
   return (
     <div className="w-full min-h-[600px]">
+      <div className="mb-4">
+        <label className="text-sm font-medium mr-2">Number of Days:</label>
+        <input 
+          type="number" 
+          min="1" 
+          max="20"
+          value={numDays} 
+          onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
+          className="w-20 px-2 py-1 border rounded"
+        />
+      </div>
       <div className="grid grid-cols-[auto_1fr_1fr_1fr] gap-4">
         <div className="pt-12 space-y-1">
           {timeSlots.map((slot) => (
