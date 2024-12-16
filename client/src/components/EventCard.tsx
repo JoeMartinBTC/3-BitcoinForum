@@ -54,7 +54,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               size="sm" 
               className="h-6 px-1.5 hover:bg-red-100"
               onClick={() => fetch(`/api/events/${event.id}`, { method: 'DELETE' })
-                .then(() => window.location.reload())
+                .then(() => onUpdate({ id: event.id, deleted: true }))
               }
             >
               ✕

@@ -36,7 +36,21 @@ export function useSchedule() {
         return res.json();
       });
     },
-    onSuccess: () => {
+    onMutate: ({ id, deleted }) => {
+      if (deleted) {
+        const previousEvents = queryClient.getQueryData(['events']);
+        queryClient.setQueryData(['events'], (old: Event[]) => 
+          old.filter(e => e.id !== id)
+        );
+        return { previousEvents };
+      }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousEvents) {
+        queryClient.setQueryData(['events'], context.previousEvents);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
     },
   });
@@ -48,7 +62,21 @@ export function useSchedule() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       }).then(res => res.json()),
-    onSuccess: () => {
+    onMutate: ({ id, deleted }) => {
+      if (deleted) {
+        const previousEvents = queryClient.getQueryData(['events']);
+        queryClient.setQueryData(['events'], (old: Event[]) => 
+          old.filter(e => e.id !== id)
+        );
+        return { previousEvents };
+      }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousEvents) {
+        queryClient.setQueryData(['events'], context.previousEvents);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
     },
   });
