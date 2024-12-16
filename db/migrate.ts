@@ -1,15 +1,19 @@
 
-import { drizzle } from 'drizzle-orm/neon-serverless';
 import { neon } from '@neondatabase/serverless';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
-const sql = readFileSync(join(__dirname, 'migrations/001_create_day_titles.sql'), 'utf-8');
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required');
+}
 
-const client = neon(process.env.DATABASE_URL!);
-const db = drizzle(client);
+const sql = `
+CREATE TABLE IF NOT EXISTS day_titles (
+  day INTEGER PRIMARY KEY,
+  title1 TEXT NOT NULL DEFAULT '',
+  title2 TEXT NOT NULL DEFAULT ''
+);`;
 
 async function migrate() {
+  const client = await neon(process.env.DATABASE_URL);
   try {
     await client.query(sql);
     console.log('Migration completed successfully');
