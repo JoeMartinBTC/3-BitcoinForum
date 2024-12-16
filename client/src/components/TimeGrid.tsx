@@ -160,7 +160,7 @@ export function TimeGrid() {
           className="w-20 px-2 py-1 border rounded"
         />
       </div>
-      <div className="grid gap-4 w-full overflow-x-auto" style={{ 
+      <div className="grid gap-4 w-full overflow-x-auto border rounded-lg p-4" style={{ 
         gridTemplateColumns: `auto ${Array(numDays).fill('minmax(200px, 1fr)').join(' ')}`,
         minWidth: 'fit-content'
       }}>
