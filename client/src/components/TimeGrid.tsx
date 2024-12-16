@@ -159,7 +159,9 @@ export function TimeGrid() {
           className="w-20 px-2 py-1 border rounded"
         />
       </div>
-      <div className="grid grid-cols-[auto_1fr_1fr_1fr] gap-4">
+      <div className={`grid gap-4`} style={{ 
+        gridTemplateColumns: `auto ${Array(numDays).fill('1fr').join(' ')}` 
+      }}>
         <div className="pt-12 space-y-1">
           {timeSlots.map((slot) => (
             <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center`}>
@@ -167,7 +169,7 @@ export function TimeGrid() {
             </div>
           ))}
         </div>
-        {[1, 2, 3].map((day) => (
+        {Array.from({length: numDays}, (_, i) => i + 1).map((day) => (
           <div key={day} className="space-y-2">
             <h3 className="text-lg font-semibold text-center">Day {day}</h3>
             <div className="space-y-1">
