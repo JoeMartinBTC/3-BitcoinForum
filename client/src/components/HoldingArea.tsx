@@ -123,7 +123,6 @@ export function HoldingArea() {
                     ))}
                   </SelectContent>
                 </Select>
-                </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Color</label>
                   <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
