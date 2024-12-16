@@ -183,8 +183,8 @@ export function TimeGrid() {
             <div className="flex flex-col items-center mb-2 px-2">
               <textarea
                 className="w-full text-center font-semibold resize-none overflow-hidden"
+                className="text-[12px] font-medium"
                 style={{
-                  fontSize: 'clamp(14px, 2vw, 18px)',
                   lineHeight: '1.2',
                   height: 'auto'
                 }}
