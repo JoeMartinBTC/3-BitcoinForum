@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS day_titles (
 );`;
 
 async function migrate() {
-  const client = neon(process.env.DATABASE_URL);
+  const client = neon(process.env.DATABASE_URL!);
   try {
-    await client.raw(sql);
+    await client.query(sql);
     console.log('Migration completed successfully');
   } catch (error) {
     console.error('Migration failed:', error);
