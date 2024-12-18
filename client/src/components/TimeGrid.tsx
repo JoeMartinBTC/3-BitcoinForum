@@ -187,7 +187,7 @@ export function TimeGrid() {
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 1"
                 defaultValue={`Day ${day}`}
-                onChange={(e) => {
+                onBlur={(e) => {
                   fetch('/api/day-titles', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -205,7 +205,7 @@ export function TimeGrid() {
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 2"
                 defaultValue=""
-                onChange={(e) => {
+                onBlur={(e) => {
                   fetch('/api/day-titles', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

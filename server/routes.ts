@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, insertEventSchema } from "../db/schema";
+import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -132,25 +132,31 @@ export function registerRoutes(app: Express) {
     }
   });
 
+  // Day titles API endpoints
+  app.get("/api/day-titles", async (req, res) => {
+    try {
+      const titles = await db.select().from(dayTitles);
+      res.json(titles);
+    } catch (error) {
+      console.error('Failed to fetch day titles:', error);
+      res.status(500).json({ error: "Failed to fetch day titles" });
+    }
+  });
+
   app.post("/api/day-titles", async (req, res) => {
     try {
-      const { day, title1, title2 } = req.body;
-      console.log('Updating day titles:', { day, title1, title2 });
-      
-      await db.insert(dayTitles).values({ 
-        day: parseInt(day), 
-        title1: title1 || '', 
-        title2: title2 || '' 
-      })
-      .onConflictDoUpdate({
-        target: [dayTitles.day],
-        set: { title1: title1 || '', title2: title2 || '' }
-      });
-      
+      const { day, title1, title2 } = insertDayTitleSchema.parse(req.body);
+      await db
+        .insert(dayTitles)
+        .values({ day, title1, title2 })
+        .onConflictDoUpdate({
+          target: dayTitles.day,
+          set: { title1, title2 }
+        });
       res.json({ success: true });
     } catch (error) {
-      console.error('Failed to update day titles:', error);
-      res.status(500).json({ error: "Failed to update day titles", details: error instanceof Error ? error.message : 'Unknown error' });
+      console.error('Failed to save day titles:', error);
+      res.status(500).json({ error: "Failed to save day titles" });
     }
   });
 }
