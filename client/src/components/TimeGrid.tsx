@@ -146,19 +146,66 @@ export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(3);
+  const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
+  const [showAllDays, setShowAllDays] = useState(true);
+
+  const toggleDayVisibility = (day: number) => {
+    setHiddenDays(prev => {
+      const next = new Set(prev);
+      if (next.has(day)) {
+        next.delete(day);
+      } else {
+        next.add(day);
+      }
+      return next;
+    });
+    setShowAllDays(false);
+  };
+
+  const toggleShowAll = () => {
+    setShowAllDays(prev => !prev);
+    if (!showAllDays) {
+      setHiddenDays(new Set());
+    }
+  };
 
   return (
     <div className="w-full min-h-[600px]">
-      <div className="mb-4">
-        <label className="text-sm font-medium mr-2">Number of Days:</label>
-        <input 
-          type="number" 
-          min="1" 
-          max="20"
-          value={numDays} 
-          onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
-          className="w-20 px-2 py-1 border rounded"
-        />
+      <div className="mb-4 space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Number of Days:</label>
+            <input 
+              type="number" 
+              min="1" 
+              max="20"
+              value={numDays} 
+              onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
+              className="w-20 px-2 py-1 border rounded"
+            />
+          </div>
+          <button
+            onClick={toggleShowAll}
+            className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
+          >
+            {showAllDays ? 'Hide Days' : 'Show All'}
+          </button>
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          {Array.from({length: numDays}, (_, i) => i + 1).map(day => (
+            <button
+              key={day}
+              onClick={() => toggleDayVisibility(day)}
+              className={`px-2 py-1 rounded text-sm ${
+                !showAllDays && hiddenDays.has(day) 
+                  ? 'bg-gray-100 text-gray-400' 
+                  : 'bg-primary/10 text-primary'
+              }`}
+            >
+              Day {day}
+            </button>
+          ))}
+        </div>
       </div>
       <div className="relative w-full overflow-x-auto">
         <div className="flex">
@@ -178,7 +225,9 @@ export function TimeGrid() {
             background: '#e5e7eb'
           }}>
         
-        {Array.from({length: numDays}, (_, i) => i + 1).map((day) => (
+        {Array.from({length: numDays}, (_, i) => i + 1)
+          .filter(day => showAllDays || !hiddenDays.has(day))
+          .map((day) => (
           <div key={day} className="space-y-2">
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
               <input
