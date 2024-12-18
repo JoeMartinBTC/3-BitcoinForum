@@ -2,10 +2,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Event } from '@db/schema';
 
 export function useSchedule() {
-  const dayTitlesQuery = useQuery({
-    queryKey: ['dayTitles'],
-    queryFn: () => fetch('/api/day-titles').then(res => res.json()),
-  });
   const queryClient = useQueryClient();
 
   const { data: events = [] } = useQuery<Event[]>({
@@ -40,21 +36,7 @@ export function useSchedule() {
         return res.json();
       });
     },
-    onMutate: ({ id, deleted }) => {
-      if (deleted) {
-        const previousEvents = queryClient.getQueryData(['events']);
-        queryClient.setQueryData(['events'], (old: Event[]) => 
-          old.filter(e => e.id !== id)
-        );
-        return { previousEvents };
-      }
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousEvents) {
-        queryClient.setQueryData(['events'], context.previousEvents);
-      }
-    },
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
     },
   });
@@ -66,21 +48,7 @@ export function useSchedule() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       }).then(res => res.json()),
-    onMutate: ({ id, deleted }) => {
-      if (deleted) {
-        const previousEvents = queryClient.getQueryData(['events']);
-        queryClient.setQueryData(['events'], (old: Event[]) => 
-          old.filter(e => e.id !== id)
-        );
-        return { previousEvents };
-      }
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousEvents) {
-        queryClient.setQueryData(['events'], context.previousEvents);
-      }
-    },
-    onSettled: () => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
     },
   });

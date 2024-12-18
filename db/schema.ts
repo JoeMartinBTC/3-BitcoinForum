@@ -1,17 +1,12 @@
-
-import { pgTable, text, integer, timestamp, boolean, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const dayTitles = pgTable("day_titles", {
+export const dayTitles = pgTable("dayTitles", {
   day: integer("day").primaryKey(),
-  title1: text("title1").default("").notNull(),
-  title2: text("title2").default("").notNull(),
+  title1: text("title1").notNull(),
+  title2: text("title2").notNull(),
 });
-
-export const insertDayTitleSchema = createInsertSchema(dayTitles);
-export const selectDayTitleSchema = createSelectSchema(dayTitles);
-export type DayTitle = z.infer<typeof selectDayTitleSchema>;
 
 export const events = pgTable("events", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
