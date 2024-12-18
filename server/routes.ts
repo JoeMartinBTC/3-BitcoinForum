@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles } from "../db/schema";
+import { events, dayTitles, insertEventSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -135,14 +135,22 @@ export function registerRoutes(app: Express) {
   app.post("/api/day-titles", async (req, res) => {
     try {
       const { day, title1, title2 } = req.body;
-      await db.insert(dayTitles).values({ day, title1, title2 })
-        .onConflictDoUpdate({
-          target: dayTitles.day,
-          set: { title1, title2 }
-        });
+      console.log('Updating day titles:', { day, title1, title2 });
+      
+      await db.insert(dayTitles).values({ 
+        day: parseInt(day), 
+        title1: title1 || '', 
+        title2: title2 || '' 
+      })
+      .onConflictDoUpdate({
+        target: [dayTitles.day],
+        set: { title1: title1 || '', title2: title2 || '' }
+      });
+      
       res.json({ success: true });
     } catch (error) {
-      res.status(500).json({ error: "Failed to update day titles" });
+      console.error('Failed to update day titles:', error);
+      res.status(500).json({ error: "Failed to update day titles", details: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 }
