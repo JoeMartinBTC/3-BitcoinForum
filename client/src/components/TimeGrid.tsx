@@ -192,19 +192,23 @@ export function TimeGrid() {
           </button>
         </div>
         <div className="flex gap-2 flex-wrap">
-          {Array.from({length: numDays}, (_, i) => i + 1).map(day => (
-            <button
-              key={day}
-              onClick={() => toggleDayVisibility(day)}
-              className={`px-2 py-1 rounded text-sm ${
-                !showAllDays && hiddenDays.has(day) 
-                  ? 'bg-gray-100 text-gray-400' 
-                  : 'bg-primary/10 text-primary'
-              }`}
-            >
-              Day {day}
-            </button>
-          ))}
+          {Array.from({length: numDays}, (_, i) => i + 1).map(day => {
+            const headerInput = document.querySelector(`input[data-day="${day}"]`) as HTMLInputElement;
+            const title = headerInput?.value || `Day ${day}`;
+            return (
+              <button
+                key={day}
+                onClick={() => toggleDayVisibility(day)}
+                className={`px-2 py-1 rounded text-sm ${
+                  !showAllDays && hiddenDays.has(day) 
+                    ? 'bg-gray-100 text-gray-400' 
+                    : 'bg-primary/10 text-primary'
+                }`}
+              >
+                {title}
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="relative w-full overflow-x-auto">
@@ -236,6 +240,7 @@ export function TimeGrid() {
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 1"
                 defaultValue={`Day ${day}`}
+                data-day={day}
                 onBlur={(e) => {
                   fetch('/api/day-titles', {
                     method: 'POST',
