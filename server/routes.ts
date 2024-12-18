@@ -131,4 +131,18 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to delete all events" });
     }
   });
+
+  app.post("/api/day-titles", async (req, res) => {
+    try {
+      const { day, title1, title2 } = req.body;
+      await db.insert(dayTitles).values({ day, title1, title2 })
+        .onConflictDoUpdate({
+          target: dayTitles.day,
+          set: { title1, title2 }
+        });
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update day titles" });
+    }
+  });
 }
