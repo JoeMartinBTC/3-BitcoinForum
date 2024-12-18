@@ -1,11 +1,12 @@
 
 import { neon } from '@neondatabase/serverless';
+import { sql } from '@vercel/postgres';
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
 }
 
-const sql = `
+const createTableSQL = `
 CREATE TABLE IF NOT EXISTS day_titles (
   day INTEGER PRIMARY KEY,
   title1 TEXT NOT NULL DEFAULT '',
@@ -13,9 +14,9 @@ CREATE TABLE IF NOT EXISTS day_titles (
 );`;
 
 async function migrate() {
-  const client = neon(process.env.DATABASE_URL);
+  const client = neon(process.env.DATABASE_URL!);
   try {
-    await client.query(sql);
+    const result = await client.query.raw(createTableSQL);
     console.log('Migration completed successfully');
   } catch (error) {
     console.error('Migration failed:', error);
