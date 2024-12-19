@@ -6,7 +6,7 @@ export function useSchedule() {
     queryKey: ['dayTitles'],
     queryFn: () => fetch('/api/day-titles').then(res => res.json()),
     staleTime: 0,
-    cacheTime: 0,
+    gcTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });

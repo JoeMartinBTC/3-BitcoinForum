@@ -203,7 +203,7 @@ export function TimeGrid() {
               }`}
             >
               {(() => {
-                const dayTitle = dayTitlesQuery.data?.find(title => title.day === day);
+                const dayTitle = dayTitlesQuery.data?.find((title: { day: number; title1: string; title2: string }) => title.day === day);
                 return (
                   <>
                     {dayTitle?.title1 || `Day ${day}`}
