@@ -237,7 +237,7 @@ export function TimeGrid() {
                 maxLength={20}
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 1"
-                defaultValue={`Day ${day}`}
+                defaultValue={dayTitlesQuery.data?.find(title => title.day === day)?.title1 || `Day ${day}`}
                 onBlur={(e) => {
                   fetch('/api/day-titles', {
                     method: 'POST',
@@ -257,7 +257,7 @@ export function TimeGrid() {
                 maxLength={20}
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 2"
-                defaultValue=""
+                defaultValue={dayTitlesQuery.data?.find(title => title.day === day)?.title2 || ""}
                 onBlur={(e) => {
                   fetch('/api/day-titles', {
                     method: 'POST',
