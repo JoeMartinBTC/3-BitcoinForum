@@ -5,6 +5,10 @@ export function useSchedule() {
   const dayTitlesQuery = useQuery({
     queryKey: ['dayTitles'],
     queryFn: () => fetch('/api/day-titles').then(res => res.json()),
+    staleTime: 0,
+    cacheTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
   const queryClient = useQueryClient();
 

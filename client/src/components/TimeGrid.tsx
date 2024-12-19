@@ -202,9 +202,15 @@ export function TimeGrid() {
                   : 'bg-primary/10 text-primary'
               }`}
             >
-              {dayTitlesQuery.data?.find(title => title.day === day)?.title1 || `Day ${day}`}
-              {dayTitlesQuery.data?.find(title => title.day === day)?.title2 && 
-                ` - ${dayTitlesQuery.data?.find(title => title.day === day)?.title2}`}
+              {(() => {
+                const dayTitle = dayTitlesQuery.data?.find(title => title.day === day);
+                return (
+                  <>
+                    {dayTitle?.title1 || `Day ${day}`}
+                    {dayTitle?.title2 && ` - ${dayTitle.title2}`}
+                  </>
+                );
+              })()}
             </button>
           ))}
         </div>
