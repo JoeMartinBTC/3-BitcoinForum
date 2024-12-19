@@ -23,7 +23,8 @@ export const events = pgTable("events", {
   isBreak: boolean("is_break").default(false).notNull(),
   inHoldingArea: boolean("in_holding_area").default(true).notNull(),
   templateId: text("template_id").notNull().default('lecture'),
-  color: text("color").notNull().default("bg-blue-100")
+  color: text("color").notNull().default("bg-blue-100"),
+  deleted: boolean("deleted").default(false).notNull()
 });
 
 export const speakers = pgTable("speakers", {
