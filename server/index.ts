@@ -2,7 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { setupRoutes } from "./routes";
 import { setupVite, serveStatic } from "./vite";
 import { createServer, Server } from "http";
-import { db } from "@db";
+import { db } from "../db";
 
 function log(message: string) {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
