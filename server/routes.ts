@@ -146,14 +146,24 @@ export function registerRoutes(app: Express) {
   app.post("/api/day-titles", async (req, res) => {
     try {
       const { day, title1, title2 } = insertDayTitleSchema.parse(req.body);
+      
       await db
         .insert(dayTitles)
-        .values({ day, title1, title2 })
+        .values({ 
+          day: Number(day), 
+          title1: title1 || '', 
+          title2: title2 || '' 
+        })
         .onConflictDoUpdate({
           target: dayTitles.day,
-          set: { title1, title2 }
+          set: { 
+            title1: title1 || '',
+            title2: title2 || ''
+          }
         });
-      res.json({ success: true });
+        
+      const titles = await db.select().from(dayTitles);
+      res.json(titles);
     } catch (error) {
       console.error('Failed to save day titles:', error);
       res.status(500).json({ error: "Failed to save day titles" });
