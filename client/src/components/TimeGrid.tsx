@@ -202,7 +202,9 @@ export function TimeGrid() {
                   : 'bg-primary/10 text-primary'
               }`}
             >
-              Day {day}
+              {dayTitlesQuery.data?.find(title => title.day === day)?.title1 || `Day ${day}`}
+              {dayTitlesQuery.data?.find(title => title.day === day)?.title2 && 
+                ` - ${dayTitlesQuery.data?.find(title => title.day === day)?.title2}`}
             </button>
           ))}
         </div>
