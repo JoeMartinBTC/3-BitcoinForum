@@ -143,7 +143,7 @@ function TimeSlot({
 }
 
 export function TimeGrid() {
-  const { events, updateEvent } = useSchedule();
+  const { events, updateEvent, dayTitlesQuery } = useSchedule();
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(3);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());

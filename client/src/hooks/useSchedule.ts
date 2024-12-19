@@ -89,5 +89,6 @@ export function useSchedule() {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
+    dayTitlesQuery,
   };
 }
