@@ -247,6 +247,8 @@ export function TimeGrid() {
                       title1: e.target.value.slice(0, 20) || `Day ${day}`,
                       title2: (e.target.nextElementSibling as HTMLInputElement)?.value.slice(0, 20) || ''
                     })
+                  }).then(() => {
+                    dayTitlesQuery.refetch();
                   });
                 }}
               />
@@ -265,6 +267,8 @@ export function TimeGrid() {
                       title1: (e.target.previousElementSibling as HTMLInputElement)?.value.slice(0, 20) || `Day ${day}`,
                       title2: e.target.value.slice(0, 20) || ''
                     })
+                  }).then(() => {
+                    dayTitlesQuery.refetch();
                   });
                 }}
               />
