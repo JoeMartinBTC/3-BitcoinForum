@@ -15,9 +15,9 @@ import {
 import React, { useCallback, useState } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; //Assumed imports
+import { Input } from "@/components/ui/input";
 
 
 export default function Schedule() {
@@ -110,6 +110,9 @@ export default function Schedule() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Save Calendar Configuration</DialogTitle>
+                  <DialogDescription>
+                    Enter a name and optional description for your calendar configuration
+                  </DialogDescription>
                 </DialogHeader>
                 <Input
                   placeholder="Configuration Name"
