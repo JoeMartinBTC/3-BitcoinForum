@@ -100,7 +100,7 @@ export default function Schedule() {
         <Card key="events-speakers" className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
-          <div className="flex gap-2 mt-4">
+          <div key="action-buttons" className="flex gap-2 mt-4">
             <Dialog>
               <DialogTrigger asChild>
                 <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors">
