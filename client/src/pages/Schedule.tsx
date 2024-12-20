@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -13,9 +12,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Input, Button } from "@/components/ui/dialog"; //Assumed imports
+
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
@@ -51,7 +52,7 @@ export default function Schedule() {
   }, [targetRef, toPDF]);
 
   const { events } = useSchedule();
-  
+
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const data = events.map(event => ({
@@ -69,6 +70,24 @@ export default function Schedule() {
     });
   }, [events]);
 
+  const [configName, setConfigName] = useState('');
+  const [configDescription, setConfigDescription] = useState('');
+  const [savedConfigs, setSavedConfigs] = useState([]); // Assumed state
+
+  const saveConfig = (config) => {
+    //Implementation to save config to backend.  Update savedConfigs state accordingly
+    fetch('/api/configs', { method: 'POST', body: JSON.stringify(config), headers: { 'Content-Type': 'application/json' } })
+      .then(res => res.json())
+      .then(data => setSavedConfigs([...savedConfigs, data]));
+  };
+
+  const loadConfig = (configId) => {
+    //Implementation to load config from backend
+    fetch(`/api/configs/${configId}`)
+      .then(res => res.json())
+      .then(data => { /*Update application state with loaded config data*/ });
+  };
+
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
       <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
@@ -80,6 +99,68 @@ export default function Schedule() {
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
           <div className="flex gap-2 mt-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors">
+                  Save Configuration
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Save Calendar Configuration</DialogTitle>
+                </DialogHeader>
+                <Input
+                  placeholder="Configuration Name"
+                  onChange={(e) => setConfigName(e.target.value)}
+                  className="mb-4"
+                />
+                <Input
+                  placeholder="Description (optional)"
+                  onChange={(e) => setConfigDescription(e.target.value)}
+                  className="mb-4"
+                />
+                <Button onClick={() => {
+                  if (configName) {
+                    saveConfig({ name: configName, description: configDescription });
+                    setConfigName('');
+                    setConfigDescription('');
+                  }
+                }}>
+                  Save
+                </Button>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
+                  Load Configuration
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Load Calendar Configuration</DialogTitle>
+                </DialogHeader>
+                <div className="max-h-[400px] overflow-y-auto">
+                  {savedConfigs.map((config) => (
+                    <div key={config.id} className="p-4 border rounded mb-2">
+                      <h3 className="font-bold">{config.name}</h3>
+                      {config.description && <p className="text-sm text-gray-600">{config.description}</p>}
+                      <p className="text-xs text-gray-500">
+                        {new Date(config.createdAt).toLocaleString()}
+                      </p>
+                      <Button
+                        onClick={() => loadConfig(config.id)}
+                        className="mt-2"
+                      >
+                        Load
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
             <button
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
