@@ -94,10 +94,10 @@ export default function Schedule() {
     <div className="container mx-auto p-4" ref={targetRef}>
       <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
       <div className="flex flex-col gap-4">
-        <Card className="p-4">
+        <Card key="time-grid" className="p-4">
           <TimeGrid />
         </Card>
-        <Card className="p-4">
+        <Card key="events-speakers" className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
           <div className="flex gap-2 mt-4">
