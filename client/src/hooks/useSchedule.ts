@@ -85,9 +85,42 @@ export function useSchedule() {
     },
   });
 
+  const saveConfigMutation = useMutation({
+    mutationFn: async (config: { name: string; description?: string }) => {
+      const response = await fetch('/api/configs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...config,
+          events: events,
+          dayTitles: dayTitlesQuery.data || []
+        })
+      });
+      return response.json();
+    }
+  });
+
+  const { data: savedConfigs = [] } = useQuery({
+    queryKey: ['configs'],
+    queryFn: () => fetch('/api/configs').then(res => res.json())
+  });
+
+  const loadConfig = async (configId: number) => {
+    const config = await fetch(`/api/configs/${configId}`).then(res => res.json());
+    if (config.events) {
+      queryClient.setQueryData(['events'], config.events);
+    }
+    if (config.dayTitles) {
+      queryClient.setQueryData(['dayTitles'], config.dayTitles);
+    }
+  };
+
   return {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
+    saveConfig: saveConfigMutation.mutate,
+    savedConfigs,
+    loadConfig
   };
 }

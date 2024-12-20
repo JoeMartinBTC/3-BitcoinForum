@@ -159,4 +159,46 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to save day titles" });
     }
   });
+
+  // Save calendar configuration
+  app.post("/api/configs", async (req, res) => {
+    try {
+      const config = await db.insert(calendarConfigs)
+        .values(req.body)
+        .returning();
+      res.json(config[0]);
+    } catch (error) {
+      console.error('Failed to save configuration:', error);
+      res.status(500).json({ error: "Failed to save configuration" });
+    }
+  });
+
+  // Get all saved configurations
+  app.get("/api/configs", async (req, res) => {
+    try {
+      const configs = await db.select().from(calendarConfigs)
+        .orderBy(desc(calendarConfigs.createdAt));
+      res.json(configs);
+    } catch (error) {
+      console.error('Failed to fetch configurations:', error);
+      res.status(500).json({ error: "Failed to fetch configurations" });
+    }
+  });
+
+  // Load specific configuration
+  app.get("/api/configs/:id", async (req, res) => {
+    try {
+      const config = await db.select()
+        .from(calendarConfigs)
+        .where(eq(calendarConfigs.id, parseInt(req.params.id)));
+      if (config.length === 0) {
+        res.status(404).json({ error: "Configuration not found" });
+      } else {
+        res.json(config[0]);
+      }
+    } catch (error) {
+      console.error('Failed to fetch configuration:', error);
+      res.status(500).json({ error: "Failed to fetch configuration" });
+    }
+  });
 }
