@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { events, dayTitles, calendarConfigs, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
 
 export function registerRoutes(app: Express) {
