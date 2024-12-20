@@ -213,7 +213,7 @@ export function TimeGrid() {
             <div className="pt-12">
               {timeSlots.map((slot) => (
                 <div key={slot.time} className={`${slot.isTransition ? 'h-[21px]' : 'h-[60px]'} flex items-center px-2`}>
-                  {!slot.isTransition && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
+                  {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
                 </div>
               ))}
             </div>
@@ -230,42 +230,7 @@ export function TimeGrid() {
           .map((day) => (
           <div key={day} className="space-y-2">
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
-              <input
-                type="text"
-                maxLength={20}
-                className="w-full text-center text-[12px] font-medium"
-                placeholder="Line 1"
-                defaultValue={`Day ${day}`}
-                onBlur={(e) => {
-                  fetch('/api/day-titles', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      day,
-                      title1: e.target.value.slice(0, 20) || `Day ${day}`,
-                      title2: (e.target.nextElementSibling as HTMLInputElement)?.value.slice(0, 20) || ''
-                    })
-                  });
-                }}
-              />
-              <input
-                type="text"
-                maxLength={20}
-                className="w-full text-center text-[12px] font-medium"
-                placeholder="Line 2"
-                defaultValue=""
-                onBlur={(e) => {
-                  fetch('/api/day-titles', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      day,
-                      title1: (e.target.previousElementSibling as HTMLInputElement)?.value.slice(0, 20) || `Day ${day}`,
-                      title2: e.target.value.slice(0, 20) || ''
-                    })
-                  });
-                }}
-              />
+              <h3 className="text-center text-[14px] font-medium">Day {day}</h3>
             </div>
             <div className="space-y-1">
               {timeSlots.map((slot) => (
