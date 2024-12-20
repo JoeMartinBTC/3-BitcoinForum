@@ -15,7 +15,9 @@ import {
 import React, { useCallback, useState } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Input, Button } from "@/components/ui/dialog"; //Assumed imports
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"; //Assumed imports
 
 
 export default function Schedule() {
