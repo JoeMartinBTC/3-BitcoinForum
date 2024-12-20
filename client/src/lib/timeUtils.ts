@@ -4,6 +4,8 @@ export function generateTimeSlots() {
   const slots: { time: string; isTransition: boolean; showTime?: boolean }[] = [];
   
   // Add morning slots with specific labels
+  slots.push({ time: '08:30', isTransition: false, showTime: false });
+  slots.push({ time: '08:55', isTransition: true, showTime: false });
   slots.push({ time: '09:00', isTransition: false, showTime: true });
   slots.push({ time: '09:25', isTransition: true, showTime: false });
   slots.push({ time: '09:30', isTransition: false, showTime: true });
