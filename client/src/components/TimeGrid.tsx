@@ -143,7 +143,7 @@ function TimeSlot({
 }
 
 export function TimeGrid() {
-  const { events, updateEvent, dayTitlesQuery } = useSchedule();
+  const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(3);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
@@ -202,15 +202,7 @@ export function TimeGrid() {
                   : 'bg-primary/10 text-primary'
               }`}
             >
-              {(() => {
-                const dayTitle = dayTitlesQuery.data?.find((title: { day: number; title1: string; title2: string }) => title.day === day);
-                return (
-                  <>
-                    {dayTitle?.title1 || `Day ${day}`}
-                    {dayTitle?.title2 && ` - ${dayTitle.title2}`}
-                  </>
-                );
-              })()}
+              Day {day}
             </button>
           ))}
         </div>
@@ -243,23 +235,17 @@ export function TimeGrid() {
                 maxLength={20}
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 1"
-                defaultValue={dayTitlesQuery.data?.find((title: { day: number; title1: string; title2: string }) => title.day === day)?.title1 || `Day ${day}`}
-                onBlur={async (e) => {
-                  try {
-                    const response = await fetch('/api/day-titles', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        day,
-                        title1: e.target.value.trim() || `Day ${day}`,
-                        title2: (e.target.nextElementSibling as HTMLInputElement)?.value.trim() || ''
-                      })
-                    });
-                    if (!response.ok) throw new Error('Failed to update title');
-                    await dayTitlesQuery.refetch();
-                  } catch (error) {
-                    console.error('Error updating title:', error);
-                  }
+                defaultValue={`Day ${day}`}
+                onBlur={(e) => {
+                  fetch('/api/day-titles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      day,
+                      title1: e.target.value.slice(0, 20) || `Day ${day}`,
+                      title2: (e.target.nextElementSibling as HTMLInputElement)?.value.slice(0, 20) || ''
+                    })
+                  });
                 }}
               />
               <input
@@ -267,23 +253,17 @@ export function TimeGrid() {
                 maxLength={20}
                 className="w-full text-center text-[12px] font-medium"
                 placeholder="Line 2"
-                defaultValue={dayTitlesQuery.data?.find((title: { day: number; title1: string; title2: string }) => title.day === day)?.title2 || ""}
-                onBlur={async (e) => {
-                  try {
-                    const response = await fetch('/api/day-titles', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        day,
-                        title1: (e.target.previousElementSibling as HTMLInputElement)?.value.trim() || `Day ${day}`,
-                        title2: e.target.value.trim() || ''
-                      })
-                    });
-                    if (!response.ok) throw new Error('Failed to update title');
-                    await dayTitlesQuery.refetch();
-                  } catch (error) {
-                    console.error('Error updating title:', error);
-                  }
+                defaultValue=""
+                onBlur={(e) => {
+                  fetch('/api/day-titles', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      day,
+                      title1: (e.target.previousElementSibling as HTMLInputElement)?.value.slice(0, 20) || `Day ${day}`,
+                      title2: e.target.value.slice(0, 20) || ''
+                    })
+                  });
                 }}
               />
             </div>

@@ -1,8 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { setupRoutes } from "./routes";
+import { registerRoutes } from "./routes";
 import { setupVite, serveStatic } from "./vite";
 import { createServer, Server } from "http";
-import { db } from "../db";
 
 function log(message: string) {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -50,7 +49,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  setupRoutes(app, db);
+  registerRoutes(app);
   const server = createServer(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
