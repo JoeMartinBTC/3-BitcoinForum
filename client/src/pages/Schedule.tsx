@@ -91,7 +91,7 @@ export default function Schedule() {
   };
 
   return (
-    <div className="container mx-auto p-4" ref={targetRef}>
+    <div key="schedule-main-container" className="container mx-auto p-4" ref={targetRef}>
       <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
       <div key="schedule-container" className="flex flex-col gap-4">
         <Card key="time-grid" className="p-4">
@@ -136,9 +136,9 @@ export default function Schedule() {
               </DialogContent>
             </Dialog>
 
-            <Dialog>
+            <Dialog key="load-config-dialog">
               <DialogTrigger asChild>
-                <button className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
+                <button key="load-config-button" className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition-colors">
                   Load Configuration
                 </button>
               </DialogTrigger>
@@ -146,7 +146,7 @@ export default function Schedule() {
                 <DialogHeader>
                   <DialogTitle>Load Calendar Configuration</DialogTitle>
                 </DialogHeader>
-                <div className="max-h-[400px] overflow-y-auto">
+                <div key="configs-list" className="max-h-[400px] overflow-y-auto">
                   {savedConfigs.map((config) => (
                     <div key={config.id} className="p-4 border rounded mb-2">
                       <h3 className="font-bold">{config.name}</h3>
