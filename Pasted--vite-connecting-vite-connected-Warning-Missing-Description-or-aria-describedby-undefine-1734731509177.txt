@@ -1,0 +1,26 @@
+[vite] connecting...
+[vite] connected.
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+Warning: Each child in a list should have a unique &quot;key&quot; prop.
+
+Check the render method of `Schedule`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at Schedule (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/src/pages/Schedule.tsx:40:32)
+    at Route (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/wouter.js?v=015ce6a1:323:16)
+    at Switch (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/wouter.js?v=015ce6a1:379:17)
+    at Router
+    at DndProvider2 (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/react-dnd.js?v=015ce6a1:1507:9)
+    at QueryClientProvider (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/@tanstack_react-query.js?v=015ce6a1:2805:3)
+
+Check the render method of &#x60;Schedule&#x60;. See https://reactjs.org/link/warning-keys for more information.
+at div
+at Schedule (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/src/pages/Schedule.tsx:40:32)
+at Route (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/wouter.js?v=015ce6a1:323:16)
+at Switch (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/wouter.js?v=015ce6a1:379:17)
+at Router
+at DndProvider2 (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/react-dnd.js?v=015ce6a1:1507:9)
+at QueryClientProvider (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/@fs/home/runner/3-BitcoinForum/node_modules/.vite/deps/@tanstack_react-query.js?v=015ce6a1:2805:3)
+at t.value (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:17465)
+at new t (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:12630)
+at t.value (https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:32766)
+at https://c1a608d5-1ea2-4ae4-a6d6-b18691869a5c-00-58upgq7fv19j.riker.replit.dev/__replco/static/devtools/eruda/3.2.3/eruda.js:2:34400
