@@ -92,10 +92,13 @@ export function useSchedule() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...config,
-          events: events,
+          events: events || [],
           dayTitles: dayTitlesQuery.data || []
         })
       });
+      if (!response.ok) {
+        throw new Error('Failed to save configuration');
+      }
       return response.json();
     }
   });
