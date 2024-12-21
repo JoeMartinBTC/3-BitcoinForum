@@ -93,7 +93,7 @@ export default function Schedule() {
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
       <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
-      <div className="flex flex-col gap-4">
+      <div key="schedule-container" className="flex flex-col gap-4">
         <Card key="time-grid" className="p-4">
           <TimeGrid />
         </Card>
