@@ -85,9 +85,37 @@ export function useSchedule() {
     },
   });
 
+  const { data: states = [] } = useQuery({
+    queryKey: ['calendar-states'],
+    queryFn: () => fetch('/api/calendar-states').then(res => res.json()),
+  });
+
+  const saveState = async (state: any) => {
+    const response = await fetch('/api/calendar-states', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state),
+    });
+    await queryClient.invalidateQueries({ queryKey: ['calendar-states'] });
+    return response.json();
+  };
+
+  const loadState = async (stateId: number) => {
+    const response = await fetch(`/api/calendar-states/${stateId}`);
+    const state = await response.json();
+    if (state) {
+      queryClient.setQueryData(['events'], state.events);
+      queryClient.setQueryData(['dayTitles'], state.dayTitles);
+    }
+  };
+
   return {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
+    dayTitlesQuery,
+    states,
+    saveState,
+    loadState,
   };
 }

@@ -1,0 +1,10 @@
+
+CREATE TABLE IF NOT EXISTS calendar_states (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  events JSONB NOT NULL,
+  day_titles JSONB NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  is_active BOOLEAN DEFAULT false
+);

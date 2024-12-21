@@ -48,6 +48,16 @@ export type Event = z.infer<typeof selectEventSchema>;
 export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
 
+export const calendarStates = pgTable("calendar_states", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  name: text("name").notNull(),
+  description: text("description"),
+  events: json("events").notNull(),
+  dayTitles: json("day_titles").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  isActive: boolean("is_active").default(false).notNull()
+});
+
 export const calendarConfigs = pgTable("calendar_configs", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),

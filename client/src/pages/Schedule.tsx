@@ -71,7 +71,10 @@ export default function Schedule() {
 
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
-      <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Event Schedule</h1>
+        <CalendarStateManager />
+      </div>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
