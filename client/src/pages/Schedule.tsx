@@ -54,7 +54,7 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const { events, states: savedConfigs } = useSchedule();
+  const { events, states: savedConfigs, dayTitlesQuery } = useSchedule();
   
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
