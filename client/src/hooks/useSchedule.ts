@@ -87,21 +87,46 @@ export function useSchedule() {
 
   const saveConfigMutation = useMutation({
     mutationFn: async (config: { name: string; description?: string }) => {
-      const response = await fetch('/api/configs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...config,
-          events: events || [],
-          dayTitles: dayTitlesQuery.data || []
-        })
-      });
-      if (!response.ok) {
-        throw new Error('Failed to save configuration');
+      // First save locally
+      const configData = {
+        ...config,
+        events: events,
+        dayTitles: dayTitlesQuery.data,
+        id: Date.now(),
+        createdAt: new Date().toISOString()
+      };
+      
+      const existingConfigs = JSON.parse(localStorage.getItem('calendar_configs') || '[]');
+      existingConfigs.push(configData);
+      localStorage.setItem('calendar_configs', JSON.stringify(existingConfigs));
+
+      // Then try to sync with server
+      try {
+        const response = await fetch('/api/configs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(configData)
+        });
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (err) {
+        console.log('Server sync failed, using local storage only');
       }
-      return response.json();
+      
+      return configData;
     }
   });
+
+  // Add this to load configs
+  const loadConfigs = () => {
+    return JSON.parse(localStorage.getItem('calendar_configs') || '[]');
+  };
+
+  const loadConfig = (configId: number) => {
+    const configs = loadConfigs();
+    return configs.find((c: any) => c.id === configId);
+  };
 
   const { data: savedConfigs = [] } = useQuery({
     queryKey: ['configs'],

@@ -83,30 +83,39 @@ export default function Schedule() {
   
   const [savedConfigs, setSavedConfigs] = useState<Config[]>([]);
 
+  useEffect(() => {
+    const configs = JSON.parse(localStorage.getItem('calendar_configs') || '[]');
+    setSavedConfigs(configs);
+  }, []);
+
   const saveConfig = async (config: { name: string; description?: string }) => {
     try {
-      const response = await fetch('/api/configs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config),
-      });
-      const data = await response.json();
-      setSavedConfigs(prev => [...prev, data]);
+      const { events, dayTitlesQuery } = useSchedule();
+      const configData = {
+        ...config,
+        events,
+        dayTitles: dayTitlesQuery.data,
+        id: Date.now(),
+        createdAt: new Date().toISOString()
+      };
+      
+      const existingConfigs = [...savedConfigs];
+      existingConfigs.push(configData);
+      localStorage.setItem('calendar_configs', JSON.stringify(existingConfigs));
+      setSavedConfigs(existingConfigs);
     } catch (error) {
       console.error('Failed to save config:', error);
     }
   };
 
-  const loadConfig = async (configId: number) => {
-    try {
-      const response = await fetch(`/api/configs/${configId}`);
-      const data = await response.json();
-      if (data) {
-        // Handle the loaded configuration
-        console.log('Loaded config:', data);
+  const loadConfig = (configId: number) => {
+    const config = savedConfigs.find(c => c.id === configId);
+    if (config) {
+      // Apply the loaded configuration
+      if (config.events) {
+        // Handle events loading
+        console.log('Loaded config:', config);
       }
-    } catch (error) {
-      console.error('Failed to load config:', error);
     }
   };
 
