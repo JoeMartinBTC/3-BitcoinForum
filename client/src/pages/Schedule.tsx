@@ -79,7 +79,73 @@ export default function Schedule() {
         <Card className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-4 flex-wrap">
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                  Save State
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Save Calendar State</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  fetch('/api/configs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      name: formData.get('name'),
+                      description: formData.get('description'),
+                      events,
+                      dayTitles: dayTitlesQuery.data
+                    })
+                  }).then(() => window.location.reload());
+                }}>
+                  <div className="grid gap-4 py-4">
+                    <Input name="name" placeholder="Configuration Name" required />
+                    <Input name="description" placeholder="Description (optional)" />
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Save Configuration</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
+                  Load State
+                </button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Load Calendar State</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  {savedConfigs?.map((config) => (
+                    <Card key={config.id} className="p-4">
+                      <h3 className="font-bold">{config.name}</h3>
+                      <p className="text-sm text-gray-500">{config.description}</p>
+                      <p className="text-xs text-gray-400">
+                        {new Date(config.createdAt).toLocaleString()}
+                      </p>
+                      <Button
+                        className="mt-2"
+                        onClick={() => {
+                          window.location.reload();
+                        }}
+                      >
+                        Load
+                      </Button>
+                    </Card>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
             <button
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
