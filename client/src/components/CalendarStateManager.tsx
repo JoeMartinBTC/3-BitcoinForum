@@ -13,6 +13,18 @@ export function CalendarStateManager() {
 
   const handleSaveState = async () => {
     if (!stateName) return;
+    const currentEvents = queryClient.getQueryData(['events']);
+    const currentDayTitles = queryClient.getQueryData(['dayTitles']);
+    
+    await saveState({
+      name: stateName,
+      description: stateDesc,
+      events: currentEvents,
+      dayTitles: currentDayTitles
+    });
+    
+    setStateName('');
+    setStateDesc('');
     await saveState({ 
       name: stateName,
       description: stateDesc,

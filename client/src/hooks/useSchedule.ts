@@ -101,13 +101,19 @@ export function useSchedule() {
   });
 
   const saveState = async (state: any) => {
-    const response = await fetch('/api/calendar-states', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state),
-    });
-    await queryClient.invalidateQueries({ queryKey: ['calendar-states'] });
-    return response.json();
+    try {
+      const response = await fetch('/api/calendar-states', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state),
+      });
+      if (!response.ok) throw new Error('Failed to save state');
+      await queryClient.invalidateQueries({ queryKey: ['calendar-states'] });
+      return response.json();
+    } catch (error) {
+      console.error('Error saving state:', error);
+      throw error;
+    }
   };
 
   const loadState = async (stateId: number) => {
