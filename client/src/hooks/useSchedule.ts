@@ -92,10 +92,12 @@ export function useSchedule() {
       if (!res.ok) {
         throw new Error('Failed to fetch calendar states');
       }
-      return res.json();
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
     },
     refetchOnMount: true,
-    refetchOnWindowFocus: true
+    refetchOnWindowFocus: true,
+    staleTime: 0
   });
 
   const saveState = async (state: any) => {

@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 export function CalendarStateManager() {
   const [stateName, setStateName] = useState('');
   const [stateDesc, setStateDesc] = useState('');
-  const { events, dayTitlesQuery, saveState, loadState, states } = useSchedule();
+  const { events, dayTitlesQuery, saveState, loadState, states = [] } = useSchedule();
 
   const handleSaveState = async () => {
     if (!stateName) return;
