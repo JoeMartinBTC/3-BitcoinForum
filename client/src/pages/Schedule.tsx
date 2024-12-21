@@ -74,20 +74,40 @@ export default function Schedule() {
 
   const [configName, setConfigName] = useState('');
   const [configDescription, setConfigDescription] = useState('');
-  const [savedConfigs, setSavedConfigs] = useState([]); // Assumed state
+  interface Config {
+    id: number;
+    name: string;
+    description?: string;
+    createdAt: string;
+  }
+  
+  const [savedConfigs, setSavedConfigs] = useState<Config[]>([]);
 
-  const saveConfig = (config) => {
-    //Implementation to save config to backend.  Update savedConfigs state accordingly
-    fetch('/api/configs', { method: 'POST', body: JSON.stringify(config), headers: { 'Content-Type': 'application/json' } })
-      .then(res => res.json())
-      .then(data => setSavedConfigs([...savedConfigs, data]));
+  const saveConfig = async (config: { name: string; description?: string }) => {
+    try {
+      const response = await fetch('/api/configs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      });
+      const data = await response.json();
+      setSavedConfigs(prev => [...prev, data]);
+    } catch (error) {
+      console.error('Failed to save config:', error);
+    }
   };
 
-  const loadConfig = (configId) => {
-    //Implementation to load config from backend
-    fetch(`/api/configs/${configId}`)
-      .then(res => res.json())
-      .then(data => { /*Update application state with loaded config data*/ });
+  const loadConfig = async (configId: number) => {
+    try {
+      const response = await fetch(`/api/configs/${configId}`);
+      const data = await response.json();
+      if (data) {
+        // Handle the loaded configuration
+        console.log('Loaded config:', data);
+      }
+    } catch (error) {
+      console.error('Failed to load config:', error);
+    }
   };
 
   return (
@@ -146,22 +166,32 @@ export default function Schedule() {
                 <DialogHeader>
                   <DialogTitle>Load Calendar Configuration</DialogTitle>
                 </DialogHeader>
-                <div key="configs-list" className="max-h-[400px] overflow-y-auto">
-                  {savedConfigs.map((config) => (
-                    <div key={config.id} className="p-4 border rounded mb-2">
-                      <h3 className="font-bold">{config.name}</h3>
-                      {config.description && <p className="text-sm text-gray-600">{config.description}</p>}
-                      <p className="text-xs text-gray-500">
-                        {new Date(config.createdAt).toLocaleString()}
-                      </p>
-                      <Button
-                        onClick={() => loadConfig(config.id)}
-                        className="mt-2"
+                <div className="max-h-[400px] overflow-y-auto">
+                  {savedConfigs.length === 0 ? (
+                    <p className="text-center text-gray-500 py-4">No saved configurations</p>
+                  ) : (
+                    savedConfigs.map((config) => (
+                      <div 
+                        key={`config-${config.id}`} 
+                        className="p-4 border rounded mb-2"
                       >
-                        Load
-                      </Button>
-                    </div>
-                  ))}
+                        <h3 className="font-bold">{config.name}</h3>
+                        {config.description && (
+                          <p className="text-sm text-gray-600">{config.description}</p>
+                        )}
+                        <p className="text-xs text-gray-500">
+                          {new Date(config.createdAt).toLocaleString()}
+                        </p>
+                        <Button
+                          onClick={() => loadConfig(config.id)}
+                          className="mt-2"
+                          type="button"
+                        >
+                          Load
+                        </Button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </DialogContent>
             </Dialog>
