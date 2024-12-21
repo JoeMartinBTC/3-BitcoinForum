@@ -101,9 +101,9 @@ export default function Schedule() {
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
           <div key="action-buttons" className="flex gap-2 mt-4">
-            <Dialog>
+            <Dialog key="save-config-dialog">
               <DialogTrigger asChild>
-                <button className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors">
+                <button key="save-config-button" className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors">
                   Save Configuration
                 </button>
               </DialogTrigger>
@@ -167,12 +167,14 @@ export default function Schedule() {
             </Dialog>
 
             <button
+              key="pdf-export"
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
               Export PDF
             </button>
             <button
+              key="excel-export"
               onClick={handleExcelExport}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
