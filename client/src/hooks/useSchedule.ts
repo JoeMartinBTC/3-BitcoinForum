@@ -87,7 +87,15 @@ export function useSchedule() {
 
   const { data: states = [] } = useQuery({
     queryKey: ['calendar-states'],
-    queryFn: () => fetch('/api/calendar-states').then(res => res.json()),
+    queryFn: async () => {
+      const res = await fetch('/api/calendar-states');
+      if (!res.ok) {
+        throw new Error('Failed to fetch calendar states');
+      }
+      return res.json();
+    },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
 
   const saveState = async (state: any) => {
