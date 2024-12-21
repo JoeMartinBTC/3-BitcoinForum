@@ -12,7 +12,9 @@ export const eventTemplateSchema = z.object({
 
 export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
-export let EVENT_TEMPLATES: EventTemplate[] = [
+// Load templates from localStorage or use defaults
+const storedTemplates = localStorage.getItem('eventTemplates');
+const defaultTemplates = [
   {
     id: 'roman-reher',
     title: 'Roman Reher',
@@ -70,3 +72,10 @@ export let EVENT_TEMPLATES: EventTemplate[] = [
     icon: 'users'
   }
 ];
+
+export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(storedTemplates) : defaultTemplates;
+
+// Function to save templates
+export const saveEventTemplates = () => {
+  localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
+};

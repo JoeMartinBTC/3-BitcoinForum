@@ -66,6 +66,7 @@ export function HoldingArea() {
     };
     
     EVENT_TEMPLATES.push(newTemplate);
+    localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
     setSelectedTemplate(newTemplate);
     setIsCreatingTemplate(false);
     setNewTemplateTitle('');
