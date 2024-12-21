@@ -115,13 +115,14 @@ export function useSchedule() {
       const response = await fetch(`/api/calendar-states/${stateId}`);
       if (!response.ok) throw new Error('Failed to load state');
       const state = await response.json();
-      if (state) {
-        queryClient.setQueryData(['events'], state.events);
-        queryClient.setQueryData(['dayTitles'], state.dayTitles);
+      if (state && state.events && state.dayTitles) {
+        await queryClient.setQueryData(['events'], state.events);
+        await queryClient.setQueryData(['dayTitles'], state.dayTitles);
         await Promise.all([
           queryClient.invalidateQueries({ queryKey: ['events'] }),
           queryClient.invalidateQueries({ queryKey: ['dayTitles'] })
         ]);
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error loading state:', error);
