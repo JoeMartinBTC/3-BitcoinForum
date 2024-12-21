@@ -4,12 +4,14 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
 import { useSchedule } from "../hooks/useSchedule";
+import { useQueryClient } from '@tanstack/react-query';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 export function CalendarStateManager() {
   const [stateName, setStateName] = useState('');
   const [stateDesc, setStateDesc] = useState('');
   const { events, dayTitlesQuery, saveState, loadState, states = [] } = useSchedule();
+  const queryClient = useQueryClient();
 
   const handleSaveState = async () => {
     if (!stateName) return;
@@ -23,14 +25,6 @@ export function CalendarStateManager() {
       dayTitles: currentDayTitles
     });
     
-    setStateName('');
-    setStateDesc('');
-    await saveState({ 
-      name: stateName,
-      description: stateDesc,
-      events,
-      dayTitles: dayTitlesQuery.data
-    });
     setStateName('');
     setStateDesc('');
   };
