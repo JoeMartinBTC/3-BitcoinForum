@@ -178,7 +178,7 @@ export default function Schedule() {
             >
               Export Excel
             </button>
-            <AlertDialog>
+            <AlertDialog key="clear-events-dialog">
               <AlertDialogTrigger asChild>
                 <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
                   Clear All Events
