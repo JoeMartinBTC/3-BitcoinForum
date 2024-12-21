@@ -2,10 +2,6 @@
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CalendarStateManager } from "@/components/CalendarStateManager";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,7 +50,7 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const { events, states: savedConfigs, dayTitlesQuery, loadState } = useSchedule();
+  const { events } = useSchedule();
   
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
@@ -75,10 +71,7 @@ export default function Schedule() {
 
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Event Schedule</h1>
-        <CalendarStateManager />
-      </div>
+      <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
@@ -86,74 +79,7 @@ export default function Schedule() {
         <Card className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
-          <div className="flex gap-2 mt-4 flex-wrap">
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-                  Save State
-                </button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Save Calendar State</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  fetch('/api/configs', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      name: formData.get('name'),
-                      description: formData.get('description'),
-                      events,
-                      dayTitles: dayTitlesQuery.data
-                    })
-                  }).then(() => window.location.reload());
-                }}>
-                  <div className="grid gap-4 py-4">
-                    <Input name="name" placeholder="Configuration Name" required />
-                    <Input name="description" placeholder="Description (optional)" />
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit">Save Configuration</Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
-
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
-                  Load State
-                </button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Load Calendar State</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  {savedConfigs?.map((config) => (
-                    <Card key={config.id} className="p-4">
-                      <h3 className="font-bold">{config.name}</h3>
-                      <p className="text-sm text-gray-500">{config.description}</p>
-                      <p className="text-xs text-gray-400">
-                        {new Date(config.createdAt).toLocaleString()}
-                      </p>
-                      <Button
-                        className="mt-2"
-                        onClick={async () => {
-                          await loadState(config.id);
-                          window.location.reload();
-                        }}
-                      >
-                        Load
-                      </Button>
-                    </Card>
-                  ))}
-                </div>
-              </DialogContent>
-            </Dialog>
+          <div className="flex gap-2 mt-4">
             <button
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"

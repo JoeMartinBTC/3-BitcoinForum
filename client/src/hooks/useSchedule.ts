@@ -85,63 +85,9 @@ export function useSchedule() {
     },
   });
 
-  const { data: states = [] } = useQuery({
-    queryKey: ['calendar-states'],
-    queryFn: async () => {
-      const res = await fetch('/api/calendar-states');
-      if (!res.ok) {
-        throw new Error('Failed to fetch calendar states');
-      }
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
-    },
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    staleTime: 0
-  });
-
-  const saveState = async (state: any) => {
-    try {
-      const response = await fetch('/api/calendar-states', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(state),
-      });
-      if (!response.ok) throw new Error('Failed to save state');
-      await queryClient.invalidateQueries({ queryKey: ['calendar-states'] });
-      return response.json();
-    } catch (error) {
-      console.error('Error saving state:', error);
-      throw error;
-    }
-  };
-
-  const loadState = async (stateId: number) => {
-    try {
-      const response = await fetch(`/api/calendar-states/${stateId}`);
-      if (!response.ok) throw new Error('Failed to load state');
-      const state = await response.json();
-      if (state && state.events && state.dayTitles) {
-        await queryClient.setQueryData(['events'], state.events);
-        await queryClient.setQueryData(['dayTitles'], state.dayTitles);
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ['events'] }),
-          queryClient.invalidateQueries({ queryKey: ['dayTitles'] })
-        ]);
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error('Error loading state:', error);
-    }
-  };
-
   return {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
-    dayTitlesQuery,
-    states,
-    saveState,
-    loadState,
   };
 }
