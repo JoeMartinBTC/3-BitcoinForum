@@ -1,16 +1,7 @@
 import moment from 'moment';
 
-interface TimeSlot {
-  time: string;
-  isTransition: boolean;
-  showTime?: boolean;
-  isBreak?: boolean;
-  duration?: number;
-  label?: string;
-}
-
 export function generateTimeSlots() {
-  const slots: TimeSlot[] = [];
+  const slots: { time: string; isTransition: boolean; showTime?: boolean }[] = [];
   
   // Add morning slots with specific labels
   slots.push({ time: '08:30', isTransition: false, showTime: false });
