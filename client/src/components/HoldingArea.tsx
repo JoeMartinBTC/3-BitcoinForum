@@ -1,3 +1,6 @@
+
+import { ScrollArea } from "./ui/scroll-area";
+
 import { Input } from "@/components/ui/input";
 import React, { useState } from 'react';
 import { EVENT_TEMPLATES } from "../lib/eventTemplates";
@@ -175,8 +178,9 @@ export function HoldingArea() {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-2">
-                {EVENT_TEMPLATES.map((template) => {
+              <ScrollArea className="h-[400px] pr-4">
+                <div className="grid grid-cols-2 gap-2">
+                  {EVENT_TEMPLATES.map((template) => {
                   const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
                   return (
                     <Button
@@ -190,7 +194,8 @@ export function HoldingArea() {
                     </Button>
                   );
                 })}
-              </div>
+                </div>
+              </ScrollArea>
               <Input
                 value={newEventTitle}
                 onChange={(e) => setNewEventTitle(e.target.value)}
