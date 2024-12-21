@@ -142,7 +142,8 @@ export default function Schedule() {
                       </p>
                       <Button
                         className="mt-2"
-                        onClick={() => {
+                        onClick={async () => {
+                          await loadState(config.id);
                           window.location.reload();
                         }}
                       >

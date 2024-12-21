@@ -112,8 +112,10 @@ export function useSchedule() {
     const response = await fetch(`/api/calendar-states/${stateId}`);
     const state = await response.json();
     if (state) {
-      queryClient.setQueryData(['events'], state.events);
-      queryClient.setQueryData(['dayTitles'], state.dayTitles);
+      await queryClient.setQueryData(['events'], state.events);
+      await queryClient.setQueryData(['dayTitles'], state.dayTitles);
+      await queryClient.invalidateQueries({ queryKey: ['events'] });
+      await queryClient.invalidateQueries({ queryKey: ['dayTitles'] });
     }
   };
 
