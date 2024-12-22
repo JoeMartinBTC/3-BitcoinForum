@@ -106,6 +106,8 @@ export default function Schedule() {
                         const endTime = new Date();
                         endTime.setHours(parseInt(row.EndTime.split(':')[0]));
                         endTime.setMinutes(parseInt(row.EndTime.split(':')[1]));
+
+                        const template = EVENT_TEMPLATES.find(t => t.id === row.Type) || EVENT_TEMPLATES[0];
                         
                         return fetch('/api/events', {
                           method: 'POST',
@@ -115,8 +117,9 @@ export default function Schedule() {
                             day: row.Day,
                             startTime: startTime.toISOString(),
                             endTime: endTime.toISOString(),
-                            templateId: row.Type,
-                            inHoldingArea: false
+                            templateId: template.id,
+                            color: template.color,
+                            inHoldingArea: true
                           })
                         });
                       });
