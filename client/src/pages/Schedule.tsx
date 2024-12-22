@@ -77,31 +77,31 @@ export default function Schedule() {
       const reader = new FileReader();
       reader.onload = (e) => {
         import('xlsx').then(XLSX => {
-        const wb = XLSX.read(e.target?.result, { type: 'array' });
-        const ws = wb.Sheets[wb.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(ws);
-        
-        data.forEach((row: any) => {
-          const startTime = new Date();
-          const endTime = new Date();
+          const wb = XLSX.read(e.target?.result, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const data = XLSX.utils.sheet_to_json(ws);
           
-          if (row.StartTime && row.EndTime) {
-            const [startHour, startMinute] = row.StartTime.split(':').map(Number);
-            const [endHour, endMinute] = row.EndTime.split(':').map(Number);
+          data.forEach((row: any) => {
+            const startTime = new Date();
+            const endTime = new Date();
             
-            startTime.setHours(startHour || 8, startMinute || 0, 0);
-            endTime.setHours(endHour || 8, endMinute || 25, 0);
-            
-            createEvent({
-              title: row.Title || 'Untitled Event',
-              day: parseInt(row.Day) || 1,
-              startTime,
-              endTime,
-              templateId: row.Type || 'workshop',
-              inHoldingArea: false
-            });
-          }
-          reader.readAsArrayBuffer(file);
+            if (row.StartTime && row.EndTime) {
+              const [startHour, startMinute] = row.StartTime.split(':').map(Number);
+              const [endHour, endMinute] = row.EndTime.split(':').map(Number);
+              
+              startTime.setHours(startHour || 8, startMinute || 0, 0);
+              endTime.setHours(endHour || 8, endMinute || 25, 0);
+              
+              createEvent({
+                title: row.Title || 'Untitled Event',
+                day: parseInt(row.Day) || 1,
+                startTime,
+                endTime,
+                templateId: row.Type || 'workshop',
+                inHoldingArea: false
+              });
+            }
+          });
         });
       };
       reader.readAsArrayBuffer(file);
