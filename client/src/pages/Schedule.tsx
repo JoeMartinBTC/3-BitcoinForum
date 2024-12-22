@@ -15,6 +15,7 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
+import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
