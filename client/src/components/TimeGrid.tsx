@@ -213,7 +213,7 @@ export function TimeGrid() {
       </div>
       <div className="relative w-full overflow-x-auto">
         <div className="flex">
-          <div className="sticky left-0 top-0 z-10 bg-background">
+          <div className="sticky left-0 top-0 z-30 bg-background">
             <div className="pt-12">
               {timeSlots.map((slot) => {
                 const isCollapsed = collapsedSlots.has(slot.time);
@@ -224,9 +224,12 @@ export function TimeGrid() {
                       ${slot.isTransition ? 'h-[15px]' : isCollapsed ? 'h-[30px]' : 'h-[60px]'} 
                       relative transition-all duration-200 flex items-center
                     `}
+                    style={{
+                      marginBottom: slot.isTransition ? '1px' : '0'
+                    }}
                   >
                     {!slot.isTransition && slot.showTime !== false && (
-                      <div style={{height: isCollapsed ? '30px' : '60px'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] absolute left-0 top-0 z-20">
+                      <div style={{height: isCollapsed ? '30px' : '60px'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] sticky left-0">
                         <input
                           type="checkbox"
                           checked={!isCollapsed}
