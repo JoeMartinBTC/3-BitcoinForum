@@ -81,11 +81,21 @@ export default function Schedule() {
         const data = XLSX.utils.sheet_to_json(ws);
         
         data.forEach((row: any) => {
+          // Convert Excel time strings to proper Date objects
+          const startParts = row.StartTime.split(':');
+          const endParts = row.EndTime.split(':');
+          
+          const startTime = new Date();
+          startTime.setHours(parseInt(startParts[0]), parseInt(startParts[1]), 0);
+          
+          const endTime = new Date();
+          endTime.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
+          
           createEvent({
             title: row.Title,
-            day: row.Day,
-            startTime: new Date(row.StartTime),
-            endTime: new Date(row.EndTime),
+            day: parseInt(row.Day),
+            startTime,
+            endTime,
             templateId: row.Type,
             inHoldingArea: true
           });
