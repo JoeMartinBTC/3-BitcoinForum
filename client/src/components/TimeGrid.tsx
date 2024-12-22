@@ -215,31 +215,40 @@ export function TimeGrid() {
         <div className="flex">
           <div className="sticky left-0 z-10 bg-background">
             <div className="pt-12">
-              {timeSlots.map((slot) => (
-                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-center gap-2 px-2`}>
-                  {!slot.isTransition && slot.showTime !== false && (
-                    <>
-                      <input
-                        type="checkbox"
-                        checked={!collapsedSlots.has(slot.time)}
-                        onChange={() => {
-                          setCollapsedSlots(prev => {
-                            const next = new Set(prev);
-                            if (next.has(slot.time)) {
-                              next.delete(slot.time);
-                            } else {
-                              next.add(slot.time);
-                            }
-                            return next;
-                          });
-                        }}
-                        className="w-3 h-3"
-                      />
-                      <span className="text-[12px] text-black font-medium">{slot.time}</span>
-                    </>
-                  )}
-                </div>
-              ))}
+              {timeSlots.map((slot) => {
+                const isCollapsed = collapsedSlots.has(slot.time);
+                return (
+                  <div 
+                    key={slot.time} 
+                    className={`
+                      ${slot.isTransition ? 'h-[15px]' : isCollapsed ? 'h-[30px]' : 'h-[60px]'} 
+                      flex items-center gap-2 px-2 transition-all duration-200
+                    `}
+                  >
+                    {!slot.isTransition && slot.showTime !== false && (
+                      <div className="flex items-center gap-2 sticky">
+                        <input
+                          type="checkbox"
+                          checked={!isCollapsed}
+                          onChange={() => {
+                            setCollapsedSlots(prev => {
+                              const next = new Set(prev);
+                              if (next.has(slot.time)) {
+                                next.delete(slot.time);
+                              } else {
+                                next.add(slot.time);
+                              }
+                              return next;
+                            });
+                          }}
+                          className="w-3 h-3"
+                        />
+                        <span className="text-[12px] text-black font-medium whitespace-nowrap">{slot.time}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className="grid flex-1 border rounded-lg p-4 w-full" style={{ 
