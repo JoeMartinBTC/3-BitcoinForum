@@ -72,9 +72,12 @@ export default function Schedule() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      import('xlsx').then(XLSX => {
+    // First delete all existing events
+    fetch('/api/events', { method: 'DELETE' })
+      .then(() => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          import('xlsx').then(XLSX => {
         const wb = XLSX.read(e.target?.result, { type: 'array' });
         const ws = wb.Sheets[wb.SheetNames[0]];
         const data = XLSX.utils.sheet_to_json(ws);
@@ -100,9 +103,9 @@ export default function Schedule() {
             });
           }
         });
+        });
+        reader.readAsArrayBuffer(file);
       });
-    };
-    reader.readAsArrayBuffer(file);
   }, [createEvent]);
 
   return (
