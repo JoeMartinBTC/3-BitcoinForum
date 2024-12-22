@@ -10,13 +10,16 @@ function TimeSlot({
   day, 
   slot, 
   events, 
-  updateEvent 
+  updateEvent,
+  isCollapsed
 }: { 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
+  isCollapsed: boolean;
 }) {
+  if (isCollapsed) return null;
   const [showColorPicker, setShowColorPicker] = useState(false);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
@@ -148,6 +151,7 @@ export function TimeGrid() {
   const [numDays, setNumDays] = useState(3);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
+  const [collapsedSlots, setCollapsedSlots] = useState<Set<string>>(new Set());
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
@@ -212,8 +216,28 @@ export function TimeGrid() {
           <div className="sticky left-0 z-10 bg-background">
             <div className="pt-12">
               {timeSlots.map((slot) => (
-                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-center px-2`}>
-                  {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-center gap-2 px-2`}>
+                  {!slot.isTransition && slot.showTime !== false && (
+                    <>
+                      <input
+                        type="checkbox"
+                        checked={!collapsedSlots.has(slot.time)}
+                        onChange={() => {
+                          setCollapsedSlots(prev => {
+                            const next = new Set(prev);
+                            if (next.has(slot.time)) {
+                              next.delete(slot.time);
+                            } else {
+                              next.add(slot.time);
+                            }
+                            return next;
+                          });
+                        }}
+                        className="w-3 h-3"
+                      />
+                      <span className="text-[12px] text-black font-medium">{slot.time}</span>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
@@ -242,6 +266,7 @@ export function TimeGrid() {
                   slot={slot}
                   events={events}
                   updateEvent={updateEvent}
+                  isCollapsed={collapsedSlots.has(slot.time)}
                 />
               ))}
             </div>
