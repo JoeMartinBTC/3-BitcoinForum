@@ -226,7 +226,7 @@ export function TimeGrid() {
                     `}
                   >
                     {!slot.isTransition && slot.showTime !== false && (
-                      <div className={`flex items-center gap-2 px-2 bg-background min-w-[80px] h-[${isCollapsed ? '30px' : '60px'}]`}>
+                      <div style={{height: isCollapsed ? '30px' : '60px'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] absolute left-0 top-0">
                         <input
                           type="checkbox"
                           checked={!isCollapsed}
