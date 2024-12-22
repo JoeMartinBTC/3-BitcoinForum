@@ -187,11 +187,12 @@ export function HoldingArea() {
                     <Button
                       key={template.id}
                       variant={selectedTemplate.id === template.id ? "default" : "outline"}
-                      className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color}`}
+                      className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color} relative group`}
                       onClick={() => setSelectedTemplate(template)}
                     >
                       {Icon && <Icon className="h-6 w-6" />}
                       <span>{template.title}</span>
+                      <span className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs">✎</span>
                     </Button>
                   );
                 })}
