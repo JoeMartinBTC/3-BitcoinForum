@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -81,22 +80,17 @@ export default function Schedule() {
         const data = XLSX.utils.sheet_to_json(ws);
         
         data.forEach((row: any) => {
-          // Convert Excel time strings to proper Date objects
-          const startParts = row.StartTime.split(':');
-          const endParts = row.EndTime.split(':');
-          
           const startTime = new Date();
-          startTime.setHours(parseInt(startParts[0]), parseInt(startParts[1]), 0);
-          
           const endTime = new Date();
-          endTime.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
+          startTime.setHours(8, 0, 0);
+          endTime.setHours(8, 25, 0);
           
           createEvent({
-            title: row.Title,
-            day: parseInt(row.Day),
+            title: row.title || 'Untitled Event',
+            day: parseInt(row.day) || 1,
             startTime,
             endTime,
-            templateId: row.Type,
+            templateId: row.templateId || 'workshop',
             inHoldingArea: true
           });
         });
