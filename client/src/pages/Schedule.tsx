@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -15,7 +16,6 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
-import * as XLSX from 'xlsx';
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
