@@ -281,18 +281,23 @@ const handleCreateTemplate = () => {
                                   Save Changes
                                 </Button>
                               </DialogPrimitive.Close>
-                              <Button 
-                                variant="destructive" 
-                                onClick={() => {
-                                  const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
-                                  EVENT_TEMPLATES.splice(index, 1);
-                                  saveEventTemplates();
-                                  setSelectedTemplate(EVENT_TEMPLATES[0]);
-                                }}
-                                className="flex-1"
-                              >
-                                Delete
-                              </Button>
+                              <DialogPrimitive.Close asChild>
+                                <Button 
+                                  variant="destructive" 
+                                  onClick={() => {
+                                    fetch(`/api/events/${template.id}`, { method: 'DELETE' })
+                                      .then(() => {
+                                        const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
+                                        EVENT_TEMPLATES.splice(index, 1);
+                                        saveEventTemplates();
+                                        setSelectedTemplate(EVENT_TEMPLATES[0]);
+                                      });
+                                  }}
+                                  className="flex-1"
+                                >
+                                  Delete
+                                </Button>
+                              </DialogPrimitive.Close>
                             </div>
                           </div>
                         </DialogContent>
