@@ -1,5 +1,6 @@
 
 import { ScrollArea } from "./ui/scroll-area";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { Input } from "@/components/ui/input";
 import React, { useState } from 'react';
@@ -53,7 +54,11 @@ export function HoldingArea() {
   const [newTemplateIcon, setNewTemplateIcon] = useState('users');
   const [newTemplateColor, setNewTemplateColor] = useState('bg-purple-100');
 
-  const handleCreateTemplate = () => {
+  const saveEventTemplates = () => {
+  localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
+};
+
+const handleCreateTemplate = () => {
     if (!newTemplateTitle) return;
     
     const newTemplate: EventTemplate = {
