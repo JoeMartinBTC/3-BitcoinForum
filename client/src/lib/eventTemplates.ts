@@ -1,8 +1,5 @@
 
 import { z } from 'zod';
-import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, 
-         Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone,
-         Rocket, ShoppingBag, Sun, Zap } from 'lucide-react';
 
 export const eventTemplateSchema = z.object({
   id: z.string(),
@@ -81,27 +78,4 @@ export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(store
 // Function to save templates
 export const saveEventTemplates = () => {
   localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
-};
-
-export const ICONS = {
-  'book-open': BookOpen,
-  'wrench': Wrench,
-  'coffee': Coffee,
-  'users': Users,
-  'calendar': Calendar,
-  'star': Star,
-  'video': Video,
-  'music': Music,
-  'briefcase': Briefcase,
-  'code': Code,
-  'gamepad': Gamepad,
-  'heart': Heart,
-  'image': Image,
-  'mail': Mail,
-  'map': Map,
-  'phone': Phone,
-  'rocket': Rocket,
-  'shopping': ShoppingBag,
-  'sun': Sun,
-  'zap': Zap
 };
