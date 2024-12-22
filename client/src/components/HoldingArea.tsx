@@ -192,7 +192,106 @@ export function HoldingArea() {
                     >
                       {Icon && <Icon className="h-6 w-6" />}
                       <span>{template.title}</span>
-                      <span className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs">✎</span>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <span 
+                            className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-xs cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setNewTemplateTitle(template.title);
+                              setNewTemplateIcon(template.icon || 'users');
+                              setNewTemplateColor(template.color);
+                            }}
+                          >
+                            ✎
+                          </span>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Edit Event Type</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <Input
+                              value={newTemplateTitle}
+                              onChange={(e) => setNewTemplateTitle(e.target.value)}
+                              placeholder="Event type name"
+                            />
+                            <Select value={newTemplateIcon} onValueChange={setNewTemplateIcon}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select icon" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.entries(ICONS).map(([key]) => (
+                                  <SelectItem key={key} value={key}>
+                                    <div className="flex items-center gap-2">
+                                      {React.createElement(ICONS[key as keyof typeof ICONS], { className: "h-4 w-4" })}
+                                      <span className="capitalize">{key.replace('-', ' ')}</span>
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Select value={newTemplateColor} onValueChange={setNewTemplateColor}>
+                              <SelectTrigger>
+                                <SelectValue>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-4 h-4 rounded ${newTemplateColor}`} />
+                                    <span>Select color</span>
+                                  </div>
+                                </SelectValue>
+                              </SelectTrigger>
+                              <SelectContent>
+                                {[
+                                  'bg-rose-100', 'bg-pink-100', 'bg-fuchsia-100',
+                                  'bg-purple-100', 'bg-violet-100', 'bg-indigo-100',
+                                  'bg-blue-100', 'bg-sky-100', 'bg-cyan-100',
+                                  'bg-teal-100', 'bg-emerald-100', 'bg-green-100',
+                                  'bg-lime-100', 'bg-yellow-100', 'bg-amber-100',
+                                  'bg-orange-100', 'bg-red-100', 'bg-stone-100',
+                                  'bg-zinc-100', 'bg-slate-100'
+                                ].map((color) => (
+                                  <SelectItem key={color} value={color}>
+                                    <div className="flex items-center gap-2">
+                                      <div className={`w-4 h-4 rounded ${color}`} />
+                                      <span className="capitalize">{color.replace('bg-', '').replace('-100', '')}</span>
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <div className="flex gap-2">
+                              <DialogPrimitive.Close asChild>
+                                <Button onClick={() => {
+                                  const updatedTemplate = {
+                                    ...template,
+                                    title: newTemplateTitle,
+                                    icon: newTemplateIcon,
+                                    color: newTemplateColor
+                                  };
+                                  const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
+                                  EVENT_TEMPLATES[index] = updatedTemplate;
+                                  saveEventTemplates();
+                                  setSelectedTemplate(updatedTemplate);
+                                }} className="flex-1">
+                                  Save Changes
+                                </Button>
+                              </DialogPrimitive.Close>
+                              <Button 
+                                variant="destructive" 
+                                onClick={() => {
+                                  const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
+                                  EVENT_TEMPLATES.splice(index, 1);
+                                  saveEventTemplates();
+                                  setSelectedTemplate(EVENT_TEMPLATES[0]);
+                                }}
+                                className="flex-1"
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </Button>
                   );
                 })}
