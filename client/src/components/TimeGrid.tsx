@@ -222,11 +222,11 @@ export function TimeGrid() {
                     key={slot.time} 
                     className={`
                       ${slot.isTransition ? 'h-[15px]' : isCollapsed ? 'h-[30px]' : 'h-[60px]'} 
-                      flex items-center gap-2 px-2 transition-all duration-200
+                      flex items-center gap-2 px-2 transition-all duration-200 relative
                     `}
                   >
                     {!slot.isTransition && slot.showTime !== false && (
-                      <div className="flex items-center gap-2 sticky">
+                      <div className="flex items-center gap-2 sticky top-0 left-0 z-10 bg-background h-full">
                         <input
                           type="checkbox"
                           checked={!isCollapsed}
