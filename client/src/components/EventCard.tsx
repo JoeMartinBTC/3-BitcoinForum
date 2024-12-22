@@ -48,16 +48,20 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               event.title.length > 50 ? 'text-[8px]' : event.title.length > 30 ? 'text-[10px]' : 'text-sm'
             }`}>{event.title}</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex flex-col gap-0.5">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-6 px-1.5 hover:bg-red-100"
+              onClick={() => fetch(`/api/events/${event.id}`, { method: 'DELETE' })
+                .then(() => onUpdate({ id: event.id, deleted: true }))
+              }
+            >
+              ✕
+            </Button>
             <Dialog>
               <DialogTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  className="h-6 px-2 bg-amber-50 hover:bg-amber-100 text-amber-900"
-                >
-                  Edit
-                </Button>
+                <Button variant="ghost" size="sm" className="h-6 px-1.5">✎</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
