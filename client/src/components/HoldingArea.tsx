@@ -52,24 +52,36 @@ export function HoldingArea() {
   const [newTemplateTitle, setNewTemplateTitle] = useState('');
   const [newTemplateIcon, setNewTemplateIcon] = useState('users');
   const [newTemplateColor, setNewTemplateColor] = useState('bg-purple-100');
+  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
 
-  const handleCreateTemplate = () => {
+  const handleCreateOrUpdateTemplate = () => {
     if (!newTemplateTitle) return;
     
-    const newTemplate: EventTemplate = {
-      id: newTemplateTitle.toLowerCase().replace(/\s+/g, '-'),
-      title: newTemplateTitle,
-      duration: 25,
-      color: newTemplateColor,
-      description: 'Custom event type',
-      icon: newTemplateIcon
-    };
+    if (editingTemplateId) {
+      editEventTemplate(editingTemplateId, {
+        title: newTemplateTitle,
+        color: newTemplateColor,
+        icon: newTemplateIcon
+      });
+      setEditingTemplateId(null);
+    } else {
+      const newTemplate: EventTemplate = {
+        id: newTemplateTitle.toLowerCase().replace(/\s+/g, '-'),
+        title: newTemplateTitle,
+        duration: 25,
+        color: newTemplateColor,
+        description: 'Custom event type',
+        icon: newTemplateIcon
+      };
+      EVENT_TEMPLATES.push(newTemplate);
+      setSelectedTemplate(newTemplate);
+    }
     
-    EVENT_TEMPLATES.push(newTemplate);
-    localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
-    setSelectedTemplate(newTemplate);
+    saveEventTemplates();
     setIsCreatingTemplate(false);
     setNewTemplateTitle('');
+    setNewTemplateIcon('users');
+    setNewTemplateColor('bg-purple-100');
   };
 
   const handleCreateEvent = () => {
@@ -104,6 +116,39 @@ export function HoldingArea() {
                   {isCreatingTemplate ? 'Cancel' : 'New Type'}
                 </Button>
               </div>
+              {EVENT_TEMPLATES.map((template) => (
+                <div key={template.id} className="flex items-center justify-between p-2 border rounded mb-2">
+                  <div className="flex items-center gap-2">
+                    {template.icon && React.createElement(ICONS[template.icon as keyof typeof ICONS], { className: "h-4 w-4" })}
+                    <span>{template.title}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => {
+                        setNewTemplateTitle(template.title);
+                        setNewTemplateIcon(template.icon || 'users');
+                        setNewTemplateColor(template.color);
+                        setEditingTemplateId(template.id);
+                      }}
+                    >
+                      ✎
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => {
+                        if (confirm('Are you sure you want to delete this template?')) {
+                          deleteEventTemplate(template.id);
+                        }
+                      }}
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                </div>
+              ))}
 
               {isCreatingTemplate && (
                 <div className="space-y-4 mb-4 p-4 border rounded-lg">
