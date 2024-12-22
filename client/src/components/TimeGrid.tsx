@@ -225,7 +225,8 @@ export function TimeGrid() {
                       relative transition-all duration-200 flex items-center
                     `}
                     style={{
-                      marginBottom: slot.isTransition ? '1px' : '0'
+                      marginBottom: slot.isTransition ? '1px' : '0',
+                      marginTop: isCollapsed ? '-15px' : '0'
                     }}
                   >
                     {!slot.isTransition && slot.showTime !== false && (
