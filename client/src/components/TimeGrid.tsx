@@ -226,7 +226,7 @@ export function TimeGrid() {
                     `}
                   >
                     {!slot.isTransition && slot.showTime !== false && (
-                      <div style={{height: isCollapsed ? '30px' : '60px'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] absolute left-0 top-0">
+                      <div style={{height: isCollapsed ? '30px' : '60px'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] absolute left-0 top-0 z-20">
                         <input
                           type="checkbox"
                           checked={!isCollapsed}
@@ -251,7 +251,7 @@ export function TimeGrid() {
               })}
             </div>
           </div>
-          <div className="grid flex-1 border rounded-lg p-4 w-full" style={{ 
+          <div className="grid flex-1 border rounded-lg p-4 w-full relative" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
