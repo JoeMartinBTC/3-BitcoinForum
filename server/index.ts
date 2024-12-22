@@ -91,8 +91,9 @@ app.use((req, res, next) => {
   const startServer = async (port: number): Promise<Server> => {
     return new Promise((resolve, reject) => {
       try {
-        const instance = server.listen(port, "0.0.0.0", () => {
-          log(`serving on port ${port}`);
+        const instance = server.listen(process.env.PORT || port, "0.0.0.0", () => {
+          const actualPort = (instance.address() as any).port;
+          log(`serving on port ${actualPort}`);
           resolve(instance);
         });
 
