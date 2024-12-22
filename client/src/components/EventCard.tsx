@@ -1,20 +1,13 @@
-import { useDrag } from 'react-dnd';
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useState, useContext } from 'react';
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Event } from '@db/schema';
-import { EVENT_TEMPLATES } from '../lib/eventTemplates';
-import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
-
-const ICONS = {
-  'book-open': BookOpen,
-  'wrench': Wrench,
-  'coffee': Coffee,
-  'users': Users,
-};
+import { useDrag } from 'react-dnd';
+import { useState } from 'react';
+import type { Event } from '@db/schema';
+import { EVENT_TEMPLATES, ICONS } from '../lib/eventTemplates';
 
 interface EventCardProps {
   event: Event;
