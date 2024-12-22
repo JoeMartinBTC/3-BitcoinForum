@@ -95,7 +95,32 @@ export default function Schedule() {
                       const sheetName = workbook.SheetNames[0];
                       const sheet = workbook.Sheets[sheetName];
                       const jsonData = XLSX.utils.sheet_to_json(sheet);
-                      console.log('Imported data:', jsonData);
+                      const promises = jsonData.map((row: any) => {
+                        const startTime = new Date();
+                        startTime.setHours(parseInt(row.StartTime.split(':')[0]));
+                        startTime.setMinutes(parseInt(row.StartTime.split(':')[1]));
+                        
+                        const endTime = new Date();
+                        endTime.setHours(parseInt(row.EndTime.split(':')[0]));
+                        endTime.setMinutes(parseInt(row.EndTime.split(':')[1]));
+                        
+                        return fetch('/api/events', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title: row.Title,
+                            day: row.Day,
+                            startTime: startTime.toISOString(),
+                            endTime: endTime.toISOString(),
+                            templateId: row.Type,
+                            inHoldingArea: false
+                          })
+                        });
+                      });
+                      
+                      Promise.all(promises)
+                        .then(() => window.location.reload())
+                        .catch(err => console.error('Import failed:', err));
                     };
                     reader.readAsBinaryString(file);
                   });
