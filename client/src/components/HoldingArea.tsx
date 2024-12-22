@@ -223,58 +223,11 @@ export function HoldingArea() {
           {events
             .filter(e => e.inHoldingArea)
             .map(event => (
-              <div key={event.id} className="relative group">
-                <EventCard 
-                  event={event}
-                  onUpdate={updateEvent}
-                />
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0"
-                    >
-                      ✎
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Edit Event</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 pt-4">
-                      <Input 
-                        defaultValue={event.title}
-                        onChange={(e) => updateEvent({ 
-                          id: event.id, 
-                          title: e.target.value 
-                        })}
-                        placeholder="Event title"
-                      />
-                      <div className="grid grid-cols-2 gap-2">
-                        {EVENT_TEMPLATES.map((template) => {
-                          const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
-                          return (
-                            <Button
-                              key={template.id}
-                              variant={event.templateId === template.id ? "default" : "outline"}
-                              className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color}`}
-                              onClick={() => updateEvent({ 
-                                id: event.id, 
-                                templateId: template.id,
-                                color: template.color
-                              })}
-                            >
-                              {Icon && <Icon className="h-6 w-6" />}
-                              <span>{template.title}</span>
-                            </Button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
+              <EventCard 
+                key={event.id} 
+                event={event}
+                onUpdate={updateEvent}
+              />
             ))}
         </div>
       </ScrollArea>
