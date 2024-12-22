@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -49,7 +50,7 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const { events, createEvent } = useSchedule();
+  const { events } = useSchedule();
   
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
@@ -68,49 +69,9 @@ export default function Schedule() {
     });
   }, [events]);
 
-  const handleExcelImport = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // First clear all events
-    fetch('/api/events', { method: 'DELETE' }).then(() => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        import('xlsx').then(XLSX => {
-          const wb = XLSX.read(e.target?.result, { type: 'array' });
-          const ws = wb.Sheets[wb.SheetNames[0]];
-          const data = XLSX.utils.sheet_to_json(ws);
-          
-          data.forEach((row: any) => {
-            const startTime = new Date();
-            const endTime = new Date();
-            
-            if (row.StartTime && row.EndTime) {
-              const [startHour, startMinute] = row.StartTime.split(':').map(Number);
-              const [endHour, endMinute] = row.EndTime.split(':').map(Number);
-              
-              startTime.setHours(startHour || 8, startMinute || 0, 0);
-              endTime.setHours(endHour || 8, endMinute || 25, 0);
-              
-              createEvent({
-                title: row.Title || 'Untitled Event',
-                day: parseInt(row.Day) || 1,
-                startTime,
-                endTime,
-                templateId: row.Type || 'workshop',
-                inHoldingArea: false
-              });
-            }
-          });
-        });
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  }, [createEvent]);
-
   return (
     <div className="container mx-auto p-4" ref={targetRef}>
-      <h1 className="text-3xl font-bold mb-6">Event Schedule <span className="text-xs text-gray-500">v0.5</span></h1>
+      <h1 className="text-3xl font-bold mb-6">Event Schedule</h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
@@ -131,19 +92,6 @@ export default function Schedule() {
             >
               Export Excel
             </button>
-            <div className="relative">
-              <input
-                type="file"
-                accept=".xlsx,.xls"
-                onChange={handleExcelImport}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-              >
-                Import Excel
-              </button>
-            </div>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
