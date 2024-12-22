@@ -1,4 +1,3 @@
-
 import { pgTable, text, integer, timestamp, boolean, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -44,6 +43,18 @@ export const selectSpeakerSchema = createSelectSchema(speakers);
 export const selectEventSchema = createSelectSchema(events);
 
 export type InsertEvent = z.infer<typeof insertEventSchema>;
-export type Event = z.infer<typeof selectEventSchema>;
+export type Event = {
+  id: number;
+  title: string;
+  color: string;
+  description: string | null;
+  day: number;
+  startTime: Date;
+  endTime: Date;
+  isBreak: boolean;
+  inHoldingArea: boolean;
+  templateId: string;
+  deleted?: boolean;
+};
 export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
