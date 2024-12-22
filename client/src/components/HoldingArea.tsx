@@ -195,15 +195,33 @@ export function HoldingArea() {
                   {EVENT_TEMPLATES.map((template) => {
                     const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
                     return (
-                      <Button
-                        key={template.id}
-                        variant={selectedTemplate.id === template.id ? "default" : "outline"}
-                        className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color}`}
-                        onClick={() => setSelectedTemplate(template)}
-                      >
-                        {Icon && <Icon className="h-6 w-6" />}
-                        <span>{template.title}</span>
-                      </Button>
+                      <div key={template.id} className="relative group">
+                        <Button
+                          variant={selectedTemplate.id === template.id ? "default" : "outline"}
+                          className={`p-4 h-auto flex flex-col items-center gap-2 ${template.color} w-full`}
+                          onClick={() => setSelectedTemplate(template)}
+                        >
+                          {Icon && <Icon className="h-6 w-6" />}
+                          <span>{template.title}</span>
+                        </Button>
+                        <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setNewTemplateTitle(template.title);
+                              setNewTemplateIcon(template.icon || 'users');
+                              setNewTemplateColor(template.color);
+                              setEditingTemplateId(template.id);
+                              setIsCreatingTemplate(true);
+                            }}
+                          >
+                            ✎
+                          </Button>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
