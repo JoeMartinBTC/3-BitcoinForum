@@ -218,19 +218,17 @@ export function HoldingArea() {
           </DialogContent>
         </Dialog>
       </div>
-      <ScrollArea className="h-[300px]">
-        <div className="grid grid-cols-2 gap-2 pr-4">
-          {events
-            .filter(e => e.inHoldingArea)
-            .map(event => (
-              <EventCard 
-                key={event.id} 
-                event={event}
-                onUpdate={updateEvent}
-              />
-            ))}
-        </div>
-      </ScrollArea>
+      <div className="space-y-2">
+        {events
+          .filter(e => e.inHoldingArea)
+          .map(event => (
+            <EventCard 
+              key={event.id} 
+              event={event}
+              onUpdate={updateEvent}
+            />
+          ))}
+      </div>
     </div>
   );
 }
