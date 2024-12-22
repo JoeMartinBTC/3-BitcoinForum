@@ -79,15 +79,3 @@ export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(store
 export const saveEventTemplates = () => {
   localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
 };
-
-export const deleteEventTemplate = (id: string) => {
-  EVENT_TEMPLATES = EVENT_TEMPLATES.filter(t => t.id !== id);
-  saveEventTemplates();
-};
-
-export const editEventTemplate = (id: string, updates: Partial<EventTemplate>) => {
-  EVENT_TEMPLATES = EVENT_TEMPLATES.map(t => 
-    t.id === id ? { ...t, ...updates } : t
-  );
-  saveEventTemplates();
-};
