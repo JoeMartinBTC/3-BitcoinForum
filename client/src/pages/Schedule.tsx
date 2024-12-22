@@ -82,17 +82,23 @@ export default function Schedule() {
         data.forEach((row: any) => {
           const startTime = new Date();
           const endTime = new Date();
-          startTime.setHours(8, 0, 0);
-          endTime.setHours(8, 25, 0);
           
-          createEvent({
-            title: row.title || 'Untitled Event',
-            day: parseInt(row.day) || 1,
-            startTime,
-            endTime,
-            templateId: row.templateId || 'workshop',
-            inHoldingArea: true
-          });
+          if (row.StartTime && row.EndTime) {
+            const [startHour, startMinute] = row.StartTime.split(':').map(Number);
+            const [endHour, endMinute] = row.EndTime.split(':').map(Number);
+            
+            startTime.setHours(startHour || 8, startMinute || 0, 0);
+            endTime.setHours(endHour || 8, endMinute || 25, 0);
+            
+            createEvent({
+              title: row.Title || 'Untitled Event',
+              day: parseInt(row.Day) || 1,
+              startTime,
+              endTime,
+              templateId: row.Type || 'workshop',
+              inHoldingArea: false
+            });
+          }
         });
       });
     };
