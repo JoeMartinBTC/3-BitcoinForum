@@ -10,16 +10,13 @@ function TimeSlot({
   day, 
   slot, 
   events, 
-  updateEvent,
-  isCollapsed
+  updateEvent 
 }: { 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
-  isCollapsed: boolean;
 }) {
-  if (isCollapsed) return null;
   const [showColorPicker, setShowColorPicker] = useState(false);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
@@ -151,7 +148,6 @@ export function TimeGrid() {
   const [numDays, setNumDays] = useState(3);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
-  const [collapsedSlots, setCollapsedSlots] = useState<Set<string>>(new Set());
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
@@ -213,50 +209,16 @@ export function TimeGrid() {
       </div>
       <div className="relative w-full overflow-x-auto">
         <div className="flex">
-          <div className="sticky left-0 top-0 z-30 bg-background">
+          <div className="sticky left-0 z-10 bg-background">
             <div className="pt-12">
-              {timeSlots.map((slot) => {
-                const isCollapsed = collapsedSlots.has(slot.time);
-                return (
-                  <div 
-                    key={slot.time} 
-                    className={`
-                      ${slot.isTransition ? 'h-[15px]' : isCollapsed ? 'h-[30px]' : 'h-[60px]'} 
-                      relative transition-all duration-200 flex items-center
-                    `}
-                    style={{
-                      marginBottom: slot.isTransition ? '1px' : '0',
-                      height: slot.isTransition ? '15px' : isCollapsed ? '30px' : '60px',
-                      transition: 'height 0.2s ease-in-out'
-                    }}
-                  >
-                    {!slot.isTransition && slot.showTime !== false && (
-                      <div style={{height: '100%'}} className="flex items-center gap-2 px-2 bg-background min-w-[80px] sticky left-0 z-10">
-                        <input
-                          type="checkbox"
-                          checked={!isCollapsed}
-                          onChange={() => {
-                            setCollapsedSlots(prev => {
-                              const next = new Set(prev);
-                              if (next.has(slot.time)) {
-                                next.delete(slot.time);
-                              } else {
-                                next.add(slot.time);
-                              }
-                              return next;
-                            });
-                          }}
-                          className="w-3 h-3"
-                        />
-                        <span className="text-[12px] text-black font-medium whitespace-nowrap">{slot.time}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {timeSlots.map((slot) => (
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-center px-2`}>
+                  {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium">{slot.time}</span>}
+                </div>
+              ))}
             </div>
           </div>
-          <div className="grid flex-1 border rounded-lg p-4 w-full relative" style={{ 
+          <div className="grid flex-1 border rounded-lg p-4 w-full" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
@@ -280,7 +242,6 @@ export function TimeGrid() {
                   slot={slot}
                   events={events}
                   updateEvent={updateEvent}
-                  isCollapsed={collapsedSlots.has(slot.time)}
                 />
               ))}
             </div>
