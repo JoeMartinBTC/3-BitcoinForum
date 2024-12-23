@@ -56,6 +56,7 @@ export default function Schedule() {
     import('xlsx').then(XLSX => {
       const data = events.map(event => ({
         Title: event.title,
+        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
         Day: event.day,
         StartTime: new Date(event.startTime).toLocaleTimeString(),
         EndTime: new Date(event.endTime).toLocaleTimeString(),
