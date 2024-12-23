@@ -89,7 +89,8 @@ export function registerRoutes(app: Express) {
         .update(events)
         .set(updateData)
         .where(eq(events.id, eventId))
-        .returning();
+        .returning()
+        .execute();
 
       if (!updatedEvent.length) {
         return res.status(404).json({ error: "Event not found" });
