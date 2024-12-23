@@ -109,7 +109,11 @@ export default function Schedule() {
                     Title: event.title,
                     Description: event.description || '',
                     TemplateID: event.templateId || '',
-                    Color: event.color || ''
+                    Color: event.color || '',
+                    StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+                    EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+                    Duration: event.endTime && event.startTime ? 
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : ''
                   }));
                   const ws = XLSX.utils.json_to_sheet(data);
                   const wb = XLSX.utils.book_new();
