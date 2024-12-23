@@ -15,7 +15,6 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
-import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
@@ -107,8 +106,6 @@ export default function Schedule() {
                         const endTime = new Date();
                         endTime.setHours(parseInt(row.EndTime.split(':')[0]));
                         endTime.setMinutes(parseInt(row.EndTime.split(':')[1]));
-
-                        const template = EVENT_TEMPLATES.find(t => t.id === row.Type) || EVENT_TEMPLATES[0];
                         
                         return fetch('/api/events', {
                           method: 'POST',
@@ -118,21 +115,14 @@ export default function Schedule() {
                             day: row.Day,
                             startTime: startTime.toISOString(),
                             endTime: endTime.toISOString(),
-                            templateId: template.id,
-                            color: template.color,
-                            inHoldingArea: true
+                            templateId: row.Type,
+                            inHoldingArea: false
                           })
                         });
                       });
                       
                       Promise.all(promises)
-                        .then(() => {
-                          window.location.reload();
-                        })
-                        .catch(err => {
-                          console.error('Import failed:', err);
-                          alert('Import failed. Please try again.');
-                        });
+                        .then(() => window.location.reload())
                         .catch(err => console.error('Import failed:', err));
                     };
                     reader.readAsBinaryString(file);
