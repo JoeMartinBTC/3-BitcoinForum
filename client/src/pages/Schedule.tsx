@@ -120,7 +120,7 @@ export default function Schedule() {
                             endTime: endTime.toISOString(),
                             templateId: template.id,
                             color: template.color,
-                            inHoldingArea: row.Day === null || row.Day === undefined
+                            inHoldingArea: !row.Day || row.Day === 0
                           })
                         });
                       });
