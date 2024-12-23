@@ -107,6 +107,9 @@ export default function Schedule() {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
+                    // Clear existing calendar data first
+                    await fetch('/api/events', { method: 'DELETE' });
+                    
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
