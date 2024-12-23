@@ -32,10 +32,7 @@ function TimeSlot({
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
-    canDrop: () => {
-      const [hours, minutes] = slot.time.split(':').map(Number);
-      return !slot.isTransition && hours < 20;
-    },
+    canDrop: () => !slot.isTransition,
     drop: (item: Event) => {
       // Create a new Date object for today
       const today = new Date();
@@ -128,21 +125,19 @@ function TimeSlot({
           />
         </div>
       )}
-      {!slot.isTransition && (
-        <div className="flex h-full">
-          <div className="flex-1 relative">
-            {slotEvents.map(event => (
-              <div key={event.id} className="w-full h-full px-1">
-                <EventCard 
-                  key={event.id} 
-                  event={event}
-                  onUpdate={updateEvent}
-                />
-              </div>
-            ))}
-          </div>
+      <div className="flex h-full">
+        <div className="flex-1 relative">
+          {!slot.isTransition && slotEvents.map(event => (
+            <div key={event.id} className="w-full h-full px-1">
+              <EventCard 
+                key={event.id} 
+                event={event}
+                onUpdate={updateEvent}
+              />
+            </div>
+          ))}
         </div>
-      )}
+      </div>
     </Card>
   );
 }
