@@ -16,6 +16,7 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
+import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge"; // Added import for VersionBadge
 
 export default function Schedule() {
@@ -111,7 +112,7 @@ export default function Schedule() {
                     Description: event.description || '',
                     TemplateID: event.templateId || '',
                     Color: event.color || '',
-                    Type: EVENT_TEMPLATES.find(t => t.id === event.templateId)?.title || '',
+                    Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
                     StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
                     EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
                     Duration: event.endTime && event.startTime ? 
