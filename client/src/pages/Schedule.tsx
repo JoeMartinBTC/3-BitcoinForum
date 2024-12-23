@@ -89,10 +89,7 @@ export default function Schedule() {
                 if (file) {
                   import('xlsx').then(XLSX => {
                     const reader = new FileReader();
-                    reader.onload = async (e) => {
-                      // Delete all existing events first
-                      await fetch('/api/events', { method: 'DELETE' });
-                      
+                    reader.onload = (e) => {
                       const data = e.target?.result;
                       const workbook = XLSX.read(data, { type: 'binary' });
                       const sheetName = workbook.SheetNames[0];
