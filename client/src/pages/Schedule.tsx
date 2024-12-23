@@ -104,8 +104,20 @@ export default function Schedule() {
             <button
               onClick={() => {
                 import('xlsx').then(XLSX => {
-                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea === true) || [];
-                  console.log('Holding area events:', holdingAreaEvents); // Debug log
+                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea) || [];
+                  const filteredEvents = holdingAreaEvents.map(event => ({
+                    ID: event.id,
+                    Title: event.title,
+                    Description: event.description || '',
+                    TemplateID: event.templateId || '',
+                    Color: event.color || '',
+                    Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
+                    StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+                    EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+                    Duration: event.endTime && event.startTime ? 
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : ''
+                  }));
+                  console.log('Holding area events:', filteredEvents);
                   const data = holdingAreaEvents.map(event => ({
                     ID: event.id,
                     Title: event.title,
