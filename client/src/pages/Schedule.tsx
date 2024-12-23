@@ -53,14 +53,18 @@ export default function Schedule() {
   
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
-      const data = events.map(event => ({
+      const allEvents = events || [];
+      const data = allEvents.map(event => ({
+        ID: event.id,
         Title: event.title,
-        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
-        Day: event.inHoldingArea ? 'N/A' : event.day,
-        StartTime: event.inHoldingArea ? 'N/A' : new Date(event.startTime).toLocaleTimeString(),
-        EndTime: event.inHoldingArea ? 'N/A' : new Date(event.endTime).toLocaleTimeString(),
-        Type: event.templateId,
-        Color: event.color
+        Description: event.description || '',
+        Day: event.day,
+        StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
+        EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',
+        IsBreak: event.isBreak ? 'Yes' : 'No',
+        InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+        TemplateID: event.templateId || '',
+        Color: event.color || ''
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
