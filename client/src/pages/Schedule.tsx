@@ -104,7 +104,9 @@ export default function Schedule() {
             <button
               onClick={() => {
                 import('xlsx').then(XLSX => {
-                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea) || [];
+                  console.log('All events:', events);
+                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea === true) || [];
+                  console.log('Filtered holding area events:', holdingAreaEvents);
                   const filteredEvents = holdingAreaEvents.map(event => ({
                     ID: event.id,
                     Title: event.title,
