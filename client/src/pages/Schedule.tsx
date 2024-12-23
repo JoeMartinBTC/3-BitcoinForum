@@ -267,42 +267,41 @@ export default function Schedule() {
               </AlertDialogContent>
             </AlertDialog>
                 const file = e.target.files?.[0];
-                if (file) {
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = async (e) => {
                   const XLSX = await import('xlsx');
-                  const reader = new FileReader();
-                  reader.onload = async (e) => {
-                    const data = e.target?.result;
-                    const workbook = XLSX.read(data, { type: 'binary' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
-                    // Process and import the data
-                    for (const event of jsonData as any[]) {
-                      try {
-                        await fetch('/api/events', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            title: event.Title,
-                            description: event.Description,
-                            day: event.Day,
-                            startTime: event.StartTime,
-                            endTime: event.EndTime,
-                            isBreak: event.IsBreak === 'Yes',
-                            inHoldingArea: event.InHoldingArea === 'Yes',
-                            templateId: event.TemplateID,
-                            color: event.Color
-                          })
-                        });
-                      } catch (error) {
-                        console.error('Failed to import event:', error);
-                      }
+                  const data = e.target?.result;
+                  const workbook = XLSX.read(data, { type: 'binary' });
+                  const sheetName = workbook.SheetNames[0];
+                  const worksheet = workbook.Sheets[sheetName];
+                  const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                  
+                  for (const event of jsonData as any[]) {
+                    try {
+                      await fetch('/api/events', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                          title: event.Title,
+                          description: event.Description,
+                          day: event.Day,
+                          startTime: event.StartTime,
+                          endTime: event.EndTime,
+                          isBreak: event.IsBreak === 'Yes',
+                          inHoldingArea: event.InHoldingArea === 'Yes',
+                          templateId: event.TemplateID,
+                          color: event.Color
+                        })
+                      });
+                    } catch (error) {
+                      console.error('Failed to import event:', error);
                     }
-                    window.location.reload();
-                  };
-                  reader.readAsBinaryString(file);
-                }
+                  }
+                  window.location.reload();
+                };
+                reader.readAsBinaryString(file);
               }}
               className="hidden"
               id="excelImport"
