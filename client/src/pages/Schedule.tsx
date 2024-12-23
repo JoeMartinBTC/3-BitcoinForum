@@ -79,7 +79,7 @@ export default function Schedule() {
   return (
     <div className="container mx-auto p-4 relative" ref={targetRef}> {/* Added relative */}
       <VersionBadge /> {/* Added VersionBadge */}
-      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.5.0</span></h1>
+      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.6.0</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
