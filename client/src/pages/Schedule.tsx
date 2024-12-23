@@ -193,6 +193,50 @@ export default function Schedule() {
               className="hidden"
               id="holdingImport"
             />
+            <input
+              type="file"
+              accept=".xlsx"
+              id="excelFileInput"
+              className="hidden"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const XLSX = await import('xlsx');
+                  const reader = new FileReader();
+                  reader.onload = async (e) => {
+                    const data = e.target?.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    for (const event of jsonData as any[]) {
+                      try {
+                        await fetch('/api/events', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title: event.Title,
+                            description: event.Description,
+                            day: event.Day,
+                            startTime: event.StartTime,
+                            endTime: event.EndTime,
+                            isBreak: event.IsBreak === 'Yes',
+                            inHoldingArea: event.InHoldingArea === 'Yes',
+                            templateId: event.TemplateID,
+                            color: event.Color
+                          })
+                        });
+                      } catch (error) {
+                        console.error('Failed to import event:', error);
+                      }
+                    }
+                    window.location.reload();
+                  };
+                  reader.readAsBinaryString(file);
+                }
+              }}
+            />
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
@@ -208,26 +252,20 @@ export default function Schedule() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => {
-                    fetch('/api/events', { method: 'DELETE' })
-                      .then(() => document.getElementById('excelImport')?.click());
+                  <AlertDialogAction onClick={async () => {
+                    await fetch('/api/events', { method: 'DELETE' });
+                    document.getElementById('excelFileInput')?.click();
                   }}>
                     Clear and Import
                   </AlertDialogAction>
                   <AlertDialogAction onClick={() => {
-                    document.getElementById('excelImport')?.click();
+                    document.getElementById('excelFileInput')?.click();
                   }}>
                     Add to Existing
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <input
-              type="file"
-              accept=".xlsx"
-              id="excelImportInput"
-              className="hidden"
-              onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
                   const XLSX = await import('xlsx');
