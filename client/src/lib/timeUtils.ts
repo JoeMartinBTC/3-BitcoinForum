@@ -21,16 +21,25 @@ export function generateTimeSlots() {
   slots.push({ time: '09:55', isTransition: true, showTime: false });
   
   const startTime = moment().set({ hour: 10, minute: 0 });
-  const endTime = moment().set({ hour: 20, minute: 25 });  // Include the break after 20:00
+  const endTime = moment().set({ hour: 20, minute: 0 });
 
-  while (startTime.isBefore(endTime)) {
+  while (startTime.isBefore(endTime) || startTime.isSame(endTime)) {
     const timeString = startTime.format('HH:mm');
     const isTransitionTime = startTime.minutes() === 25 || startTime.minutes() === 55;
-    slots.push({ 
-      time: timeString, 
-      isTransition: isTransitionTime,
-      showTime: !isTransitionTime || startTime.hours() === 20
-    });
+    
+    // Only add slots up to 20:00
+    if (startTime.hours() <= 20) {
+      slots.push({ 
+        time: timeString, 
+        isTransition: isTransitionTime,
+        showTime: !isTransitionTime
+      });
+    }
+    
+    if (startTime.hours() === 20 && startTime.minutes() === 0) {
+      break;
+    }
+    
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
   return slots;
