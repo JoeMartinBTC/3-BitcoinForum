@@ -60,14 +60,11 @@ export default function Schedule() {
         Description: event.description || '',
         Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
         Day: event.day || '',
-        StartTime: event.startTime || '',
-        EndTime: event.endTime || '',
-        Duration: event.duration || '',
+        StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+        EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
         IsBreak: event.isBreak ? 'Yes' : 'No',
         InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-        TemplateID: event.templateId || '',
-        Color: event.color || '',
-        Icon: event.icon || ''
+        TemplateID: event.templateId || ''
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
