@@ -193,17 +193,48 @@ export default function Schedule() {
               className="hidden"
               id="holdingImport"
             />
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  onClick={() => document.getElementById('excelImport')?.click()}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Import Excel
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Import Options</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Would you like to clear existing data before importing?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={async () => {
+                    await fetch('/api/events', { method: 'DELETE' });
+                    document.getElementById('excelImportInput')?.click();
+                  }}>
+                    Clear and Import
+                  </AlertDialogAction>
+                  <AlertDialogAction onClick={() => {
+                    document.getElementById('excelImportInput')?.click();
+                  }}>
+                    Add to Existing
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
             <input
               type="file"
               accept=".xlsx"
+              id="excelImportInput"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
-                    // Clear existing calendar data first
-                    await fetch('/api/events', { method: 'DELETE' });
                     
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
@@ -241,12 +272,7 @@ export default function Schedule() {
               className="hidden"
               id="excelImport"
             />
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Excel
-            </button>
+            
             <button
               onClick={() => document.getElementById('holdingImport')?.click()}
               className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
