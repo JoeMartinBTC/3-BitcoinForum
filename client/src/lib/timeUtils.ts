@@ -33,7 +33,7 @@ export function generateTimeSlots() {
       isTransition: isTransitionTime,
       showTime: !isTransitionTime
     });
-
+    
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
 
