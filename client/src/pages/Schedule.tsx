@@ -54,18 +54,31 @@ export default function Schedule() {
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
-      const data = allEvents.map(event => ({
-        ID: event.id,
-        Title: event.title,
-        Description: event.description || '',
-        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
-        Day: event.day,
-        StartTime: event.startTime ? new Date(event.startTime).toLocaleTimeString() : '',
-        EndTime: event.endTime ? new Date(event.endTime).toLocaleTimeString() : '',
-        IsBreak: event.isBreak ? 'Yes' : 'No',
-        InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-        TemplateID: event.templateId || ''
-      }));
+      const data = allEvents.map(event => {
+        const startTimeStr = event.startTime ? new Date(event.startTime).toLocaleString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: false 
+        }) : '';
+        const endTimeStr = event.endTime ? new Date(event.endTime).toLocaleString('en-US', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          hour12: false 
+        }) : '';
+        
+        return {
+          ID: event.id,
+          Title: event.title,
+          Description: event.description || '',
+          Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
+          Day: event.day,
+          StartTime: startTimeStr,
+          EndTime: endTimeStr,
+          IsBreak: event.isBreak ? 'Yes' : 'No',
+          InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+          TemplateID: event.templateId || ''
+        };
+      });
 
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
