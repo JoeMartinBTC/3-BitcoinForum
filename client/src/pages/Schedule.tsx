@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -50,38 +51,18 @@ export default function Schedule() {
   }, [targetRef, toPDF]);
 
   const { events } = useSchedule();
-
+  
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
-      const allEvents = events || [];
-      const data = allEvents.map(event => {
-        const formatTime = (timeStr: string | null) => {
-          if (!timeStr) return '';
-          try {
-            const date = new Date(timeStr);
-            return date.toLocaleTimeString('de-DE', {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: false
-            });
-          } catch {
-            return '';
-          }
-        };
-
-        return {
-          ID: event.id,
-          Title: event.title,
-          Description: event.description || '',
-          Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
-          Day: event.day,
-          StartTime: formatTime(event.startTime),
-          EndTime: formatTime(event.endTime),
-          IsBreak: event.isBreak ? 'Yes' : 'No',
-          InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-          TemplateID: event.templateId || ''
-        };
-      });
+      const data = events.map(event => ({
+        Title: event.title,
+        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
+        Day: event.inHoldingArea ? 'N/A' : event.day,
+        StartTime: event.inHoldingArea ? 'N/A' : new Date(event.startTime).toLocaleTimeString(),
+        EndTime: event.inHoldingArea ? 'N/A' : new Date(event.endTime).toLocaleTimeString(),
+        Type: event.templateId,
+        Color: event.color
+      }));
 
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
