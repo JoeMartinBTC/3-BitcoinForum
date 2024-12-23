@@ -55,25 +55,28 @@ export default function Schedule() {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
       const data = allEvents.map(event => {
-        const startTimeStr = event.startTime ? new Date(event.startTime).toLocaleString('en-US', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: false 
-        }) : '';
-        const endTimeStr = event.endTime ? new Date(event.endTime).toLocaleString('en-US', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: false 
-        }) : '';
-        
+        const formatTime = (timeStr: string | null) => {
+          if (!timeStr) return '';
+          try {
+            const date = new Date(timeStr);
+            return date.toLocaleTimeString('de-DE', {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            });
+          } catch {
+            return '';
+          }
+        };
+
         return {
           ID: event.id,
           Title: event.title,
           Description: event.description || '',
           Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
           Day: event.day,
-          StartTime: startTimeStr,
-          EndTime: endTimeStr,
+          StartTime: formatTime(event.startTime),
+          EndTime: formatTime(event.endTime),
           IsBreak: event.isBreak ? 'Yes' : 'No',
           InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
           TemplateID: event.templateId || ''
