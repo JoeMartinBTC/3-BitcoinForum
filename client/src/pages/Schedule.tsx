@@ -120,13 +120,19 @@ export default function Schedule() {
                             endTime: endTime.toISOString(),
                             templateId: template.id,
                             color: template.color,
-                            inHoldingArea: row.Day === null || row.Day === undefined || row.Day === 0 || row.Day === "" || row.Day === "null"
+                            inHoldingArea: true
                           })
                         });
                       });
                       
                       Promise.all(promises)
-                        .then(() => window.location.reload())
+                        .then(() => {
+                          window.location.reload();
+                        })
+                        .catch(err => {
+                          console.error('Import failed:', err);
+                          alert('Import failed. Please try again.');
+                        });
                         .catch(err => console.error('Import failed:', err));
                     };
                     reader.readAsBinaryString(file);
