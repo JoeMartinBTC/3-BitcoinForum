@@ -99,7 +99,7 @@ export default function Schedule() {
               onClick={handleExcelExport}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
-              Export All Excel
+              Export Calendar
             </button>
             <button
               onClick={() => {
@@ -245,7 +245,7 @@ export default function Schedule() {
               onClick={() => document.getElementById('excelImport')?.click()}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
-              Import Excel
+              Import Calendar
             </button>
             <button
               onClick={() => document.getElementById('holdingImport')?.click()}
