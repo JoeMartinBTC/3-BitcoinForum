@@ -55,19 +55,36 @@ export default function Schedule() {
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
-      const data = allEvents.map(event => ({
-        ID: event.id,
-        Title: event.title,
-        Description: event.description || 'N/A',
-        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
-        Day: event.inHoldingArea ? 'N/A' : event.day,
-        StartTime: event.startTime ? new Date(event.startTime).toLocaleTimeString() : 'N/A',
-        EndTime: event.endTime ? new Date(event.endTime).toLocaleTimeString() : 'N/A',
-        IsBreak: event.isBreak ? 'Yes' : 'No',
-        InHolding: event.inHoldingArea ? 'Yes' : 'No',
-        Template: event.templateId,
-        Color: event.color
-      }));
+      const data = allEvents.map(event => {
+        let startTime = 'N/A';
+        let endTime = 'N/A';
+        
+        try {
+          if (event.startTime && !event.inHoldingArea) {
+            startTime = new Date(event.startTime).toLocaleTimeString();
+          }
+          if (event.endTime && !event.inHoldingArea) {
+            endTime = new Date(event.endTime).toLocaleTimeString();
+          }
+        } catch (e) {
+          console.error('Date parsing error:', e);
+        }
+
+        return {
+          ID: event.id || '',
+          Title: event.title || '',
+          Description: event.description || 'N/A',
+          Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
+          Day: event.inHoldingArea ? 'N/A' : (event.day || 'N/A'),
+          StartTime: startTime,
+          EndTime: endTime,
+          IsBreak: event.isBreak ? 'Yes' : 'No',
+          InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+          TemplateID: event.templateId || '',
+          Color: event.color || ''
+        };
+      });
+      
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Schedule");
