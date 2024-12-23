@@ -21,7 +21,7 @@ export function generateTimeSlots() {
   slots.push({ time: '09:55', isTransition: true, showTime: false });
   
   const startTime = moment().set({ hour: 10, minute: 0 });
-  const endTime = moment().set({ hour: 19, minute: 55 });
+  const endTime = moment().set({ hour: 19, minute: 30 });
 
   while (startTime.isSameOrBefore(endTime)) {
     const timeString = startTime.format('HH:mm');
@@ -33,16 +33,13 @@ export function generateTimeSlots() {
       isTransition: isTransitionTime,
       showTime: !isTransitionTime
     });
-    
+
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
-  
-  // Add final 20:00 slot
-  slots.push({
-    time: '20:00',
-    isTransition: false,
-    showTime: true
-  });
+
+  // Add final slots
+  slots.push({ time: '19:55', isTransition: true, showTime: false });
+  slots.push({ time: '20:00', isTransition: false, showTime: true });
 
   return slots;
 }

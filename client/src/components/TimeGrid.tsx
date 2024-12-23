@@ -33,8 +33,8 @@ function TimeSlot({
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
     canDrop: () => {
-      const [hours] = slot.time.split(':').map(Number);
-      return !slot.isTransition && hours <= 20;
+      const [hours, minutes] = slot.time.split(':').map(Number);
+      return !slot.isTransition && (hours < 20 || (hours === 20 && minutes === 0));
     },
     drop: (item: Event) => {
       // Create a new Date object for today
