@@ -16,6 +16,7 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
+import { VersionBadge } from "@/components/ui/badge"; // Added import for VersionBadge
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
@@ -76,7 +77,8 @@ export default function Schedule() {
   }, [events]);
 
   return (
-    <div className="container mx-auto p-4" ref={targetRef}>
+    <div className="container mx-auto p-4 relative" ref={targetRef}> {/* Added relative */}
+      <VersionBadge /> {/* Added VersionBadge */}
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.5.0</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
