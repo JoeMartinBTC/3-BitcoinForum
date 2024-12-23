@@ -1,6 +1,7 @@
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
+import { useRef } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -96,6 +97,36 @@ export default function Schedule() {
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
               Export Excel
+            </button>
+            <input
+              type="file"
+              accept=".xlsx"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  import('xlsx').then(XLSX => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                      const data = e.target?.result;
+                      const workbook = XLSX.read(data, { type: 'binary' });
+                      const sheetName = workbook.SheetNames[0];
+                      const worksheet = workbook.Sheets[sheetName];
+                      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                      // Handle the imported data here
+                      console.log(jsonData);
+                    };
+                    reader.readAsBinaryString(file);
+                  });
+                }
+              }}
+              className="hidden"
+              id="excelImport"
+            />
+            <button
+              onClick={() => document.getElementById('excelImport')?.click()}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Import Excel
             </button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
