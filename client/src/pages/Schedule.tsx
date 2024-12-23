@@ -54,44 +54,18 @@ export default function Schedule() {
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
-      const data = allEvents.map(event => {
-        let startTime = '';
-        let endTime = '';
-        
-        if (event.startTime) {
-          try {
-            startTime = typeof event.startTime === 'string' ? 
-              new Date(event.startTime).toLocaleString() :
-              event.startTime.toLocaleString();
-          } catch (e) {
-            console.error('StartTime parsing error:', e);
-          }
-        }
-        
-        if (event.endTime) {
-          try {
-            endTime = typeof event.endTime === 'string' ? 
-              new Date(event.endTime).toLocaleString() :
-              event.endTime.toLocaleString();
-          } catch (e) {
-            console.error('EndTime parsing error:', e);
-          }
-        }
-
-        return {
-          ID: event.id || '',
-          Title: event.title || '',
-          Description: event.description || '',
-          Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
-          Day: event.day || '',
-          StartTime: startTime,
-          EndTime: endTime,
-          IsBreak: event.isBreak ? 'Yes' : 'No',
-          InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-          TemplateID: event.templateId || '',
-          Color: event.color || ''
-        };
-      });
+      const data = allEvents.map(event => ({
+        ID: event.id,
+        Title: event.title,
+        Description: event.description || '',
+        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
+        Day: event.day,
+        StartTime: event.startTime ? new Date(event.startTime).toLocaleTimeString() : '',
+        EndTime: event.endTime ? new Date(event.endTime).toLocaleTimeString() : '',
+        IsBreak: event.isBreak ? 'Yes' : 'No',
+        InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+        TemplateID: event.templateId || ''
+      }));
 
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
