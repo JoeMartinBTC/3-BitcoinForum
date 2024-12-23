@@ -1,15 +1,16 @@
+
 import moment from 'moment';
 
 export function generateTimeSlots() {
   interface TimeSlot {
-  time: string;
-  isTransition: boolean;
-  showTime?: boolean;
-  isBreak?: boolean;
-  duration?: number;
-  label?: string;
-}
-const slots: TimeSlot[] = [];
+    time: string;
+    isTransition: boolean;
+    showTime?: boolean;
+    isBreak?: boolean;
+    duration?: number;
+    label?: string;
+  }
+  const slots: TimeSlot[] = [];
   
   // Add morning slots with specific labels
   slots.push({ time: '08:30', isTransition: false, showTime: false });
@@ -32,23 +33,6 @@ const slots: TimeSlot[] = [];
     });
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
-  return slots;
-    const minutes = startTime.minutes();
-    
-    // Mark transition periods at :25 and :55
-    const isTransition = minutes === 25 || minutes === 55;
-    
-    slots.push({
-      time: timeString,
-      isBreak: isTransition,
-      isTransition,
-      duration: isTransition ? 5 : 25,
-      label: isTransition ? 'Transition Period' : timeString
-    });
-
-    startTime.add(isTransition ? 5 : 25, 'minutes');
-  }
-
   return slots;
 }
 
