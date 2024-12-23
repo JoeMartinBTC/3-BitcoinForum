@@ -1,0 +1,48 @@
+06:56:41 PM [express] serving on port 5000
+6:56:45 PM [vite] warning: Duplicate "onContextMenu" attribute in JSX element
+106|          setShowColorPicker(true);
+107|        }}
+108|        onContextMenu={(e) => {
+   |        ^
+109|          e.preventDefault();
+110|          setShowColorPicker(true);
+
+  Plugin: vite:esbuild
+  File: /home/runner/3-BitcoinForum/client/src/components/TimeGrid.tsx
+06:56:45 PM [express] GET /api/events 304 in 120ms :: [{"id":651,"title":"s","description":"","day":2…
+06:56:45 PM [express] GET /api/day-titles 304 in 136ms :: [{"day":1,"title1":"sfdf 1","title2":""},{"…
+
+ ERROR(TypeScript)  JSX elements cannot have multiple attributes with the same name.
+ FILE  /home/runner/3-BitcoinForum/client/src/components/TimeGrid.tsx:108:7
+
+    106 |         setShowColorPicker(true);
+    107 |       }}
+  > 108 |       onContextMenu={(e) => {
+        |       ^^^^^^^^^^^^^
+    109 |         e.preventDefault();
+    110 |         setShowColorPicker(true);
+    111 |       }}
+
+ ERROR(TypeScript)  Cannot find name 'EVENT_TEMPLATES'.
+ FILE  /home/runner/3-BitcoinForum/client/src/pages/Schedule.tsx:114:27
+
+    112 |                     TemplateID: event.templateId || '',
+    113 |                     Color: event.color || '',
+  > 114 |                     Type: EVENT_TEMPLATES.find(t => t.id === event.templateId)?.title || '',
+        |                           ^^^^^^^^^^^^^^^
+    115 |                     StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+    116 |                     EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+    117 |                     Duration: event.endTime && event.startTime ? 
+
+ ERROR(TypeScript)  Parameter 't' implicitly has an 'any' type.
+ FILE  /home/runner/3-BitcoinForum/client/src/pages/Schedule.tsx:114:48
+
+    112 |                     TemplateID: event.templateId || '',
+    113 |                     Color: event.color || '',
+  > 114 |                     Type: EVENT_TEMPLATES.find(t => t.id === event.templateId)?.title || '',
+        |                                                ^
+    115 |                     StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+    116 |                     EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+    117 |                     Duration: event.endTime && event.startTime ? 
+
+[TypeScript] Found 3 errors. Watching for file changes.
