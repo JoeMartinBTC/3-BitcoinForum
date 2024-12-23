@@ -196,20 +196,22 @@ export default function Schedule() {
             <input
               type="file"
               accept=".xlsx"
-              id="excelFileInput"
-              className="hidden"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
+                    // Clear existing calendar data first
+                    await fetch('/api/events', { method: 'DELETE' });
+                    
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
                     
+                    // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
                         await fetch('/api/events', {
@@ -236,77 +238,15 @@ export default function Schedule() {
                   reader.readAsBinaryString(file);
                 }
               }}
-            />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
-                  Import Excel
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Import Options</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Would you like to clear existing data before importing?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={async () => {
-                    await fetch('/api/events', { method: 'DELETE' });
-                    document.getElementById('excelFileInput')?.click();
-                  }}>
-                    Clear and Import
-                  </AlertDialogAction>
-                  <AlertDialogAction onClick={() => {
-                    document.getElementById('excelFileInput')?.click();
-                  }}>
-                    Add to Existing
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-                const file = e.target.files?.[0];
-                if (!file) return;
-                
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                  const XLSX = await import('xlsx');
-                  const data = e.target?.result;
-                  const workbook = XLSX.read(data, { type: 'binary' });
-                  const sheetName = workbook.SheetNames[0];
-                  const worksheet = workbook.Sheets[sheetName];
-                  const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                  
-                  for (const event of jsonData as any[]) {
-                    try {
-                      await fetch('/api/events', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          title: event.Title,
-                          description: event.Description,
-                          day: event.Day,
-                          startTime: event.StartTime,
-                          endTime: event.EndTime,
-                          isBreak: event.IsBreak === 'Yes',
-                          inHoldingArea: event.InHoldingArea === 'Yes',
-                          templateId: event.TemplateID,
-                          color: event.Color
-                        })
-                      });
-                    } catch (error) {
-                      console.error('Failed to import event:', error);
-                    }
-                  }
-                  window.location.reload();
-                };
-                reader.readAsBinaryString(file);
-              }}
               className="hidden"
               id="excelImport"
             />
-            
+            <button
+              onClick={() => document.getElementById('excelImport')?.click()}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Import Excel
+            </button>
             <button
               onClick={() => document.getElementById('holdingImport')?.click()}
               className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
@@ -340,42 +280,3 @@ export default function Schedule() {
     </div>
   );
 }
-
-{(() => {
-  const handleImport = async (file: File) => {
-    const XLSX = await import('xlsx');
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const data = e.target?.result;
-      const workbook = XLSX.read(data, { type: 'binary' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-      for (const event of jsonData as any[]) {
-        try {
-          await fetch('/api/events', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              title: event.Title,
-              description: event.Description,
-              day: event.Day,
-              startTime: event.StartTime,
-              endTime: event.EndTime,
-              isBreak: event.IsBreak === 'Yes',
-              inHoldingArea: event.InHoldingArea === 'Yes',
-              templateId: event.TemplateID,
-              color: event.Color
-            })
-          });
-        } catch (error) {
-          console.error('Failed to import event:', error);
-        }
-      }
-      window.location.reload();
-    };
-    reader.readAsBinaryString(file);
-  };
-  return null;
-})()}
