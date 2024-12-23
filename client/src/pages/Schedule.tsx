@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -79,60 +80,6 @@ export default function Schedule() {
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
           <div className="flex gap-2 mt-4">
-            <input
-              type="file"
-              id="fileInput"
-              accept=".xlsx,.xls,.csv"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  import('xlsx').then(XLSX => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                      const data = e.target?.result;
-                      const workbook = XLSX.read(data, { type: 'binary' });
-                      const sheetName = workbook.SheetNames[0];
-                      const sheet = workbook.Sheets[sheetName];
-                      const jsonData = XLSX.utils.sheet_to_json(sheet);
-                      const promises = jsonData.map((row: any) => {
-                        const startTime = new Date();
-                        startTime.setHours(parseInt(row.StartTime.split(':')[0]));
-                        startTime.setMinutes(parseInt(row.StartTime.split(':')[1]));
-                        
-                        const endTime = new Date();
-                        endTime.setHours(parseInt(row.EndTime.split(':')[0]));
-                        endTime.setMinutes(parseInt(row.EndTime.split(':')[1]));
-                        
-                        return fetch('/api/events', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            title: row.Title,
-                            day: row.Day,
-                            startTime: startTime.toISOString(),
-                            endTime: endTime.toISOString(),
-                            templateId: row.Type,
-                            inHoldingArea: false
-                          })
-                        });
-                      });
-                      
-                      Promise.all(promises)
-                        .then(() => window.location.reload())
-                        .catch(err => console.error('Import failed:', err));
-                    };
-                    reader.readAsBinaryString(file);
-                  });
-                }
-              }}
-            />
-            <button
-              onClick={() => document.getElementById('fileInput')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import
-            </button>
             <button
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
