@@ -55,35 +55,19 @@ export default function Schedule() {
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
-      const scheduledEvents = allEvents.filter(e => !e.inHoldingArea).map(event => ({
+      const data = allEvents.map(event => ({
         ID: event.id,
         Title: event.title,
         Description: event.description || 'N/A',
-        Status: 'Scheduled',
-        Day: event.day,
+        Status: event.inHoldingArea ? 'Unscheduled' : 'Scheduled',
+        Day: event.inHoldingArea ? 'N/A' : event.day,
         StartTime: event.startTime ? new Date(event.startTime).toLocaleTimeString() : 'N/A',
         EndTime: event.endTime ? new Date(event.endTime).toLocaleTimeString() : 'N/A',
         IsBreak: event.isBreak ? 'Yes' : 'No',
-        InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-        TemplateID: event.templateId,
+        InHolding: event.inHoldingArea ? 'Yes' : 'No',
+        Template: event.templateId,
         Color: event.color
       }));
-      
-      const holdingEvents = allEvents.filter(e => e.inHoldingArea).map(event => ({
-        ID: event.id,
-        Title: event.title,
-        Description: event.description || 'N/A',
-        Status: 'Unscheduled',
-        Day: 'N/A',
-        StartTime: 'N/A',
-        EndTime: 'N/A',
-        IsBreak: event.isBreak ? 'Yes' : 'No',
-        InHoldingArea: 'Yes',
-        TemplateID: event.templateId,
-        Color: event.color
-      }));
-
-      const data = [...scheduledEvents, ...holdingEvents];
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Schedule");
