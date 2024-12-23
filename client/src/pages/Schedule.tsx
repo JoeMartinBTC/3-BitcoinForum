@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -17,7 +18,7 @@ import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
-import { VersionBadge } from "@/components/ui/badge"; // Added import for VersionBadge
+import { VersionBadge } from "@/components/ui/badge";
 
 export default function Schedule() {
   const { toPDF, targetRef } = usePDF({
@@ -52,7 +53,7 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const { events, createEvent } = useSchedule(); // Added createEvent to destructured object
+  const { events, createEvent } = useSchedule();
 
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
@@ -78,8 +79,8 @@ export default function Schedule() {
   }, [events]);
 
   return (
-    <div className="container mx-auto p-4 relative" ref={targetRef}> {/* Added relative */}
-      <VersionBadge /> {/* Added VersionBadge */}
+    <div className="container mx-auto p-4 relative" ref={targetRef}>
+      <VersionBadge />
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.6.5</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
@@ -132,7 +133,7 @@ export default function Schedule() {
                     Duration: event.endTime && event.startTime ? 
                       (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : ''
                   }));
-                  console.log('Excel data:', data); // Debug log
+                  console.log('Excel data:', data);
                   const ws = XLSX.utils.json_to_sheet(data);
                   const wb = XLSX.utils.book_new();
                   XLSX.utils.book_append_sheet(wb, ws, "HoldingArea");
@@ -241,18 +242,6 @@ export default function Schedule() {
               className="hidden"
               id="excelImport"
             />
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Calendar
-            </button>
-            <button
-              onClick={() => document.getElementById('holdingImport')?.click()}
-              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
-            >
-              Import to Holding
-            </button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
@@ -274,6 +263,18 @@ export default function Schedule() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+            <button
+              onClick={() => document.getElementById('excelImport')?.click()}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Import Calendar
+            </button>
+            <button
+              onClick={() => document.getElementById('holdingImport')?.click()}
+              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+            >
+              Import to Holding
+            </button>
           </div>
         </Card>
       </div>
