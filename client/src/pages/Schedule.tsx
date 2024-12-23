@@ -152,6 +152,56 @@ export default function Schedule() {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
+                    const data = e.target?.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    // Process and import the data
+                    for (const event of jsonData as any[]) {
+                      try {
+                        const startTime = new Date();
+                        startTime.setHours(startTime.getHours() + 1);
+                        const endTime = new Date(startTime);
+                        endTime.setMinutes(endTime.getMinutes() + 25);
+                        
+                        await fetch('/api/events', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            title: event.Title,
+                            description: event.Description || '',
+                            day: 1,
+                            startTime: startTime.toISOString(),
+                            endTime: endTime.toISOString(),
+                            isBreak: false,
+                            inHoldingArea: true,
+                            templateId: event.TemplateID || '1',
+                            color: event.Color || 'bg-blue-100'
+                          })
+                        });
+                      } catch (error) {
+                        console.error('Failed to import event:', error);
+                      }
+                    }
+                    window.location.reload();
+                  };
+                  reader.readAsBinaryString(file);
+                }
+              }}
+              className="hidden"
+              id="holdingImport"
+            />
+            <input
+              type="file"
+              accept=".xlsx"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const XLSX = await import('xlsx');
+                  const reader = new FileReader();
+                  reader.onload = async (e) => {
                     // Clear existing calendar data first
                     await fetch('/api/events', { method: 'DELETE' });
                     
@@ -196,6 +246,12 @@ export default function Schedule() {
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
               Import Excel
+            </button>
+            <button
+              onClick={() => document.getElementById('holdingImport')?.click()}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+            >
+              Import to Holding
             </button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
