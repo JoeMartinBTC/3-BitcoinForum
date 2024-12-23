@@ -120,13 +120,10 @@ export default function Schedule() {
                             endTime: endTime.toISOString(),
                             templateId: template.id,
                             color: template.color,
-                            inHoldingArea: !row.Day || row.Day === 0 || row.Day === "" || row.Day === "null"
+                            inHoldingArea: row.Day === null || row.Day === undefined || row.Day === 0 || row.Day === ""
                           })
                         });
                       });
-
-                      // Refresh the page to show updated events
-                      window.location.reload();
                       
                       Promise.all(promises)
                         .then(() => window.location.reload())
