@@ -125,19 +125,21 @@ function TimeSlot({
           />
         </div>
       )}
-      <div className="flex h-full">
-        <div className="flex-1 relative">
-          {!slot.isTransition && slotEvents.map(event => (
-            <div key={event.id} className="w-full h-full px-1">
-              <EventCard 
-                key={event.id} 
-                event={event}
-                onUpdate={updateEvent}
-              />
-            </div>
-          ))}
+      {!slot.isTransition && (
+        <div className="flex h-full">
+          <div className="flex-1 relative">
+            {slotEvents.map(event => (
+              <div key={event.id} className="w-full h-full px-1">
+                <EventCard 
+                  key={event.id} 
+                  event={event}
+                  onUpdate={updateEvent}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </Card>
   );
 }
