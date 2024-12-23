@@ -64,7 +64,7 @@ export default function Schedule() {
         StartTime: event.startTime ? new Date(event.startTime).toLocaleTimeString() : 'N/A',
         EndTime: event.endTime ? new Date(event.endTime).toLocaleTimeString() : 'N/A',
         IsBreak: event.isBreak ? 'Yes' : 'No',
-        InHoldingArea: 'No',
+        InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
         TemplateID: event.templateId,
         Color: event.color
       }));
