@@ -24,6 +24,15 @@ const slots: TimeSlot[] = [];
 
   while (startTime.isBefore(endTime)) {
     const timeString = startTime.format('HH:mm');
+    const isTransitionTime = startTime.minutes() === 25 || startTime.minutes() === 55;
+    slots.push({ 
+      time: timeString, 
+      isTransition: isTransitionTime,
+      showTime: !isTransitionTime || startTime.hours() === 20
+    });
+    startTime.add(isTransitionTime ? 5 : 25, 'minutes');
+  }
+  return slots;
     const minutes = startTime.minutes();
     
     // Mark transition periods at :25 and :55
