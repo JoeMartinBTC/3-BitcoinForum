@@ -52,8 +52,8 @@ export default function Schedule() {
     }
   }, [targetRef, toPDF]);
 
-  const { events } = useSchedule();
-  
+  const { events, createEvent } = useSchedule(); // Added createEvent to destructured object
+
   const handleExcelExport = useCallback(() => {
     import('xlsx').then(XLSX => {
       const allEvents = events || [];
