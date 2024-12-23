@@ -83,6 +83,11 @@ export function registerRoutes(app: Express) {
         if (diffMinutes !== 25) {
           return res.status(400).json({ error: "Event duration must be exactly 25 minutes" });
         }
+        
+        const startHour = updateData.startTime.getHours();
+        if (startHour >= 20) {
+          return res.status(400).json({ error: "Events cannot start at or after 20:00" });
+        }
       }
 
       const updatedEvent = await db
