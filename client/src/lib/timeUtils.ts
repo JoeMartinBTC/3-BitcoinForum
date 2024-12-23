@@ -12,8 +12,8 @@ export function generateTimeSlots() {
   }
   const slots: TimeSlot[] = [];
   
-  // Add morning slots with specific labels
-  slots.push({ time: '08:30', isTransition: false, showTime: false });
+  // Morning slots
+  slots.push({ time: '08:30', isTransition: false, showTime: true });
   slots.push({ time: '08:55', isTransition: true, showTime: false });
   slots.push({ time: '09:00', isTransition: false, showTime: true });
   slots.push({ time: '09:25', isTransition: true, showTime: false });
@@ -23,25 +23,24 @@ export function generateTimeSlots() {
   const startTime = moment().set({ hour: 10, minute: 0 });
   const endTime = moment().set({ hour: 20, minute: 0 });
 
-  while (startTime.isBefore(endTime) || startTime.isSame(endTime)) {
+  while (startTime.isSameOrBefore(endTime)) {
     const timeString = startTime.format('HH:mm');
-    const isTransitionTime = startTime.minutes() === 25 || startTime.minutes() === 55;
+    const minutes = startTime.minutes();
+    const isTransitionTime = minutes === 25 || minutes === 55;
     
-    // Only add slots up to 20:00
-    if (startTime.hours() <= 20) {
-      slots.push({ 
-        time: timeString, 
-        isTransition: isTransitionTime,
-        showTime: !isTransitionTime
-      });
-    }
-    
-    if (startTime.hours() === 20 && startTime.minutes() === 0) {
+    slots.push({
+      time: timeString,
+      isTransition: isTransitionTime,
+      showTime: !isTransitionTime
+    });
+
+    if (timeString === '20:00') {
       break;
     }
-    
+
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
+
   return slots;
 }
 
