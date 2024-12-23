@@ -66,9 +66,7 @@ export default function Schedule() {
         IsBreak: event.isBreak ? 'Yes' : 'No',
         InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
         TemplateID: event.templateId,
-        Color: event.color,
-        StartTimeISO: event.startTime.toISOString(),
-        EndTimeISO: event.endTime.toISOString()
+        Color: event.color
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
