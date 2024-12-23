@@ -193,42 +193,30 @@ export default function Schedule() {
               className="hidden"
               id="holdingImport"
             />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button
-                  onClick={() => {}}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                >
-                  Import Excel
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Import Options</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Would you like to clear existing data before importing?
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={async () => {
-                    await fetch('/api/events', { method: 'DELETE' });
-                    document.getElementById('excelImportInput')?.click();
-                  }}>
-                    Clear and Import
-                  </AlertDialogAction>
-                  <AlertDialogAction onClick={() => {
-                    document.getElementById('excelImportInput')?.click();
-                  }}>
-                    Add to Existing
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <button
+              onClick={() => {
+                const importDialog = document.createElement('div');
+                importDialog.innerHTML = `
+                  <dialog open class="fixed inset-0 z-50 bg-white p-6 rounded shadow-lg">
+                    <h2 class="text-lg font-bold mb-4">Import Options</h2>
+                    <p class="mb-4">Would you like to clear existing data before importing?</p>
+                    <div class="flex gap-2 justify-end">
+                      <button class="px-4 py-2 bg-gray-200 rounded" onclick="this.closest('dialog').close()">Cancel</button>
+                      <button class="px-4 py-2 bg-red-500 text-white rounded" onclick="fetch('/api/events', { method: 'DELETE' }).then(() => { document.getElementById('excelImport').click(); this.closest('dialog').close(); })">Clear and Import</button>
+                      <button class="px-4 py-2 bg-green-500 text-white rounded" onclick="document.getElementById('excelImport').click(); this.closest('dialog').close()">Add to Existing</button>
+                    </div>
+                  </dialog>
+                `;
+                document.body.appendChild(importDialog);
+              }}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Import Excel
+            </button>
             <input
               type="file"
               accept=".xlsx"
-              id="excelImportInput"
+              id="excelImport"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
