@@ -241,13 +241,6 @@ export default function Schedule() {
               className="hidden"
               id="excelImport"
             />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
-                  Clear All Events
-                </button>
-              </AlertDialogTrigger>
-            </AlertDialog>
             <button
               onClick={() => document.getElementById('excelImport')?.click()}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
@@ -260,6 +253,12 @@ export default function Schedule() {
             >
               Import to Holding
             </button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                  Clear All Events
+                </button>
+              </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Clear All Events</AlertDialogTitle>
