@@ -225,14 +225,14 @@ export default function Schedule() {
             <input
               type="file"
               accept=".xlsx"
-              id="excelImport"
+              id="excelImportInput"
+              className="hidden"
               onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
-                    
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
