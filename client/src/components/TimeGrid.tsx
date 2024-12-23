@@ -18,6 +18,7 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
@@ -84,7 +85,7 @@ function TimeSlot({
       ref={drop}
       className={`p-1 transition-all relative ${
         slot.isTransition 
-          ? 'h-[15px] bg-gray-50 border-dashed border-gray-200 cursor-not-allowed' 
+          ? 'h-[15px] border-dashed border-gray-200 cursor-not-allowed' 
           : 'h-[60px] cursor-pointer'
       } ${
         isOver && canDrop
@@ -98,7 +99,11 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotEvents[0]?.color || '#ffffff',
+        backgroundColor: slotEvents[0]?.color || backgroundColor,
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        setShowColorPicker(true);
       }}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -113,12 +118,13 @@ function TimeSlot({
             value={slotColor}
             onChange={(e) => {
               const newColor = e.target.value;
-              setSlotColor(newColor);
               if (slotEvent) {
                 updateEvent({
                   id: slotEvent.id,
                   color: newColor
                 });
+              } else {
+                setBackgroundColor(newColor);
               }
               setShowColorPicker(false);
             }}
