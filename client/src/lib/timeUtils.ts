@@ -28,11 +28,13 @@ export function generateTimeSlots() {
     const minutes = startTime.minutes();
     const isTransitionTime = minutes === 25 || minutes === 55;
     
-    slots.push({
-      time: timeString,
-      isTransition: isTransitionTime,
-      showTime: !isTransitionTime
-    });
+    if (startTime.hour() < 20 || (startTime.hour() === 20 && startTime.minute() === 0)) {
+      slots.push({
+        time: timeString,
+        isTransition: isTransitionTime,
+        showTime: !isTransitionTime
+      });
+    }
 
     if (timeString === '20:00') {
       break;
