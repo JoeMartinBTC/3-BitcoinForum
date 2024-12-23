@@ -98,7 +98,28 @@ export default function Schedule() {
               onClick={handleExcelExport}
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
             >
-              Export Excel
+              Export All Excel
+            </button>
+            <button
+              onClick={() => {
+                import('xlsx').then(XLSX => {
+                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea) || [];
+                  const data = holdingAreaEvents.map(event => ({
+                    ID: event.id,
+                    Title: event.title,
+                    Description: event.description || '',
+                    TemplateID: event.templateId || '',
+                    Color: event.color || ''
+                  }));
+                  const ws = XLSX.utils.json_to_sheet(data);
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "HoldingArea");
+                  XLSX.writeFile(wb, "holding-area.xlsx");
+                });
+              }}
+              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+            >
+              Export Holding Area
             </button>
             <input
               type="file"
