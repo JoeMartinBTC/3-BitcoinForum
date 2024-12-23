@@ -21,27 +21,28 @@ export function generateTimeSlots() {
   slots.push({ time: '09:55', isTransition: true, showTime: false });
   
   const startTime = moment().set({ hour: 10, minute: 0 });
-  const endTime = moment().set({ hour: 20, minute: 0 });
+  const endTime = moment().set({ hour: 19, minute: 55 });
 
   while (startTime.isSameOrBefore(endTime)) {
     const timeString = startTime.format('HH:mm');
     const minutes = startTime.minutes();
     const isTransitionTime = minutes === 25 || minutes === 55;
     
-    if (startTime.hour() < 20 || (startTime.hour() === 20 && startTime.minute() === 0)) {
-      slots.push({
-        time: timeString,
-        isTransition: isTransitionTime,
-        showTime: !isTransitionTime
-      });
-    }
-
-    if (timeString === '20:00') {
-      break;
-    }
-
+    slots.push({
+      time: timeString,
+      isTransition: isTransitionTime,
+      showTime: !isTransitionTime
+    });
+    
     startTime.add(isTransitionTime ? 5 : 25, 'minutes');
   }
+  
+  // Add final 20:00 slot
+  slots.push({
+    time: '20:00',
+    isTransition: false,
+    showTime: true
+  });
 
   return slots;
 }
