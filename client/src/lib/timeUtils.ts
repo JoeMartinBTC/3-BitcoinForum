@@ -20,7 +20,7 @@ const slots: TimeSlot[] = [];
   slots.push({ time: '09:55', isTransition: true, showTime: false });
   
   const startTime = moment().set({ hour: 10, minute: 0 });
-  const endTime = moment().set({ hour: 22, minute: 0 });
+  const endTime = moment().set({ hour: 20, minute: 0 });
 
   while (startTime.isBefore(endTime)) {
     const timeString = startTime.format('HH:mm');
