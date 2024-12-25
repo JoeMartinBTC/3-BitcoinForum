@@ -48,14 +48,7 @@ const ICONS = {
 export function HoldingArea() {
   const { events, createEvent, updateEvent } = useSchedule();
   const [newEventTitle, setNewEventTitle] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState(EVENT_TEMPLATES[0] || {
-    id: 'default',
-    title: 'Default',
-    duration: 25,
-    color: 'bg-gray-100',
-    description: 'Default template',
-    icon: 'calendar'
-  });
+  const [selectedTemplate, setSelectedTemplate] = useState(EVENT_TEMPLATES[0]);
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [newTemplateTitle, setNewTemplateTitle] = useState('');
   const [newTemplateIcon, setNewTemplateIcon] = useState('users');
@@ -85,8 +78,6 @@ const handleCreateTemplate = () => {
   };
 
   const handleCreateEvent = () => {
-    if (!selectedTemplate) return;
-    
     const now = new Date();
     createEvent({
       title: newEventTitle || selectedTemplate.title,
@@ -101,7 +92,7 @@ const handleCreateTemplate = () => {
   };
 
   return (
-    <div className="space-y-4 min-h-[200px] bg-white rounded-lg">
+    <div className="space-y-4">
       <div> {/* Wrapping div added here */}
         <Dialog>
           <DialogTrigger asChild>
@@ -224,7 +215,7 @@ const handleCreateTemplate = () => {
                           <DialogHeader>
                             <DialogTitle>Edit Event Type</DialogTitle>
                           </DialogHeader>
-                          <div className="space-y-4 min-h-[200px] bg-white rounded-lg">
+                          <div className="space-y-4">
                             <Input
                               value={newTemplateTitle}
                               onChange={(e) => setNewTemplateTitle(e.target.value)}
