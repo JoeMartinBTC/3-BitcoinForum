@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -68,7 +67,8 @@ export default function Schedule() {
         IsBreak: event.isBreak ? 'Yes' : 'No',
         InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
         TemplateID: event.templateId || '',
-        Color: event.color || ''
+        Color: event.color || '',
+        BackgroundColor: document.querySelector(`[data-day="${event.day}"][data-time="${new Date(event.startTime).getHours()}:${String(new Date(event.startTime).getMinutes()).padStart(2, '0')}"]`)?.style.backgroundColor || ''
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
