@@ -7,13 +7,29 @@ import { useState, useContext } from 'react';
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
-import { BookOpen, Wrench, Coffee, Users } from 'lucide-react';
+import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone, Rocket, ShoppingBag, Sun, Zap } from 'lucide-react';
 
 const ICONS = {
   'book-open': BookOpen,
   'wrench': Wrench,
   'coffee': Coffee,
   'users': Users,
+  'calendar': Calendar,
+  'star': Star,
+  'video': Video,
+  'music': Music,
+  'briefcase': Briefcase,
+  'code': Code,
+  'gamepad': Gamepad,
+  'heart': Heart,
+  'image': Image,
+  'mail': Mail,
+  'map': Map,
+  'phone': Phone,
+  'rocket': Rocket,
+  'shopping-bag': ShoppingBag,
+  'sun': Sun,
+  'zap': Zap
 };
 
 interface EventCardProps {
@@ -43,8 +59,8 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     description: 'Default event',
     icon: 'users'
   };
-  const iconKey = template?.icon && Object.keys(ICONS).includes(template.icon) ? template.icon : 'users';
-  const Icon = ICONS[iconKey as keyof typeof ICONS];
+  const iconKey = (template?.icon && template.icon in ICONS) ? template.icon : 'users';
+  const Icon = ICONS[iconKey as keyof typeof ICONS] || ICONS.users;
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
