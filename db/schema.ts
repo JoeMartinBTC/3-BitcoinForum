@@ -22,9 +22,7 @@ export const events = pgTable("events", {
   isBreak: boolean("is_break").default(false).notNull(),
   inHoldingArea: boolean("in_holding_area").default(true).notNull(),
   templateId: text("template_id").notNull().default('lecture'),
-  color: text("color").notNull().default("bg-blue-100"),
-  backgroundColor: text("background_color"),
-  isBackground: boolean("is_background")
+  color: text("color").notNull().default("bg-blue-100")
 });
 
 export const speakers = pgTable("speakers", {
@@ -57,8 +55,6 @@ export type Event = {
   inHoldingArea: boolean;
   templateId: string;
   deleted?: boolean;
-  backgroundColor?: string | null;
-  isBackground?: boolean | null;
 };
 export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
