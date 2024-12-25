@@ -35,8 +35,15 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   }));
 
   const [title, setTitle] = useState(event.title);
-  const template = EVENT_TEMPLATES.find(t => t.id === event.templateId) || EVENT_TEMPLATES[0];
-  const Icon = template.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
+  const template = EVENT_TEMPLATES.find(t => t.id === event.templateId) || EVENT_TEMPLATES[0] || {
+    id: 'default',
+    title: 'Default',
+    duration: 25,
+    color: 'bg-gray-100',
+    description: 'Default event',
+    icon: 'calendar'
+  };
+  const Icon = template?.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
