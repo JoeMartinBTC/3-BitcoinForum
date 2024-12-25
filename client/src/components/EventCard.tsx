@@ -41,9 +41,10 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     duration: 25,
     color: 'bg-gray-100',
     description: 'Default event',
-    icon: 'calendar'
+    icon: 'users'
   };
-  const Icon = template?.icon ? ICONS[template.icon as keyof typeof ICONS] : null;
+  const iconKey = template?.icon && template.icon in ICONS ? template.icon : 'users';
+  const Icon = ICONS[iconKey as keyof typeof ICONS];
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
