@@ -277,6 +277,15 @@ export default function Schedule() {
             </button>
           </div>
         </Card>
+        
+        <Card className="p-4 mt-4 bg-yellow-50">
+          <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
+          <ul className="list-disc pl-6 space-y-2 text-sm">
+            <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
+            <li>Event Type kann nicht importiert werden</li>
+            <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
+          </ul>
+        </Card>
       </div>
     </div>
   );
