@@ -123,6 +123,27 @@ function TimeSlot({
                 });
               } else {
                 setBackgroundColor(newColor);
+                fetch('/api/events', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    day,
+                    startTime: (() => {
+                      const date = new Date();
+                      const [hours, minutes] = slot.time.split(':');
+                      date.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+                      return date;
+                    })(),
+                    endTime: (() => {
+                      const date = new Date();
+                      const [hours, minutes] = slot.time.split(':');
+                      date.setHours(parseInt(hours), parseInt(minutes) + 25, 0, 0);
+                      return date;
+                    })(),
+                    backgroundColor: newColor,
+                    isBackground: true
+                  })
+                });
               }
               setShowColorPicker(false);
             }}
