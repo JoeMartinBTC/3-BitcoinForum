@@ -78,6 +78,8 @@ const handleCreateTemplate = () => {
   };
 
   const handleCreateEvent = () => {
+    if (!selectedTemplate) return;
+    
     const now = new Date();
     createEvent({
       title: newEventTitle || selectedTemplate.title,
