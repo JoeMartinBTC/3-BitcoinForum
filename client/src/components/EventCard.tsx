@@ -43,7 +43,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     description: 'Default event',
     icon: 'users'
   };
-  const iconKey = template?.icon && template.icon in ICONS ? template.icon : 'users';
+  const iconKey = template?.icon && Object.keys(ICONS).includes(template.icon) ? template.icon : 'users';
   const Icon = ICONS[iconKey as keyof typeof ICONS];
 
   return (
