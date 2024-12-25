@@ -12,70 +12,48 @@ export const eventTemplateSchema = z.object({
 
 export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 
-// Load templates from localStorage or use defaults
-const storedTemplates = localStorage.getItem('eventTemplates');
 const defaultTemplates = [
   {
-    id: 'roman-reher',
-    title: 'Roman Reher',
-    duration: 25,
-    color: 'bg-amber-50',
-    description: 'Speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'jack-mallers',
-    title: 'Jack Mallers',
-    duration: 25,
-    color: 'bg-amber-100',
-    description: 'Speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'speaker',
-    title: 'Speaker',
-    duration: 25,
-    color: 'bg-yellow-100',
-    description: 'Guest speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'lecture',
-    title: 'Lecture',
+    id: '1',
+    title: 'Meeting',
     duration: 25,
     color: 'bg-blue-100',
-    description: 'Standard lecture session',
-    icon: 'book-open'
+    description: 'Standard meeting',
+    icon: 'users'
   },
   {
-    id: 'workshop',
-    title: 'Workshop',
-    duration: 25,
-    color: 'bg-green-100',
-    description: 'Interactive workshop session',
-    icon: 'wrench'
-  },
-  {
-    id: 'break',
+    id: '2',
     title: 'Break',
-    duration: 25,
-    color: 'bg-orange-100',
-    description: 'Break or rest period',
+    duration: 15,
+    color: 'bg-gray-100',
+    description: 'Short break',
     icon: 'coffee'
   },
   {
-    id: 'meeting',
-    title: 'Meeting',
-    duration: 25,
-    color: 'bg-purple-100',
-    description: 'Team meeting or discussion',
-    icon: 'users'
+    id: '3',
+    title: 'Workshop',
+    duration: 45,
+    color: 'bg-green-100',
+    description: 'Interactive workshop',
+    icon: 'wrench'
+  },
+  {
+    id: '4',
+    title: 'Presentation',
+    duration: 30,
+    color: 'bg-yellow-100',
+    description: 'Presentation session',
+    icon: 'book-open'
   }
 ];
 
-export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(storedTemplates) : defaultTemplates;
+// Load templates from localStorage or use defaults
+const storedTemplates = localStorage.getItem('eventTemplates');
+export const EVENT_TEMPLATES: EventTemplate[] = storedTemplates 
+  ? JSON.parse(storedTemplates) 
+  : defaultTemplates;
 
-// Function to save templates
-export const saveEventTemplates = () => {
-  localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
-};
+// Save default templates if none exist
+if (!storedTemplates) {
+  localStorage.setItem('eventTemplates', JSON.stringify(defaultTemplates));
+}
