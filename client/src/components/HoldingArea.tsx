@@ -92,7 +92,7 @@ const handleCreateTemplate = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 min-h-[200px] bg-white rounded-lg">
       <div> {/* Wrapping div added here */}
         <Dialog>
           <DialogTrigger asChild>
@@ -215,7 +215,7 @@ const handleCreateTemplate = () => {
                           <DialogHeader>
                             <DialogTitle>Edit Event Type</DialogTitle>
                           </DialogHeader>
-                          <div className="space-y-4">
+                          <div className="space-y-4 min-h-[200px] bg-white rounded-lg">
                             <Input
                               value={newTemplateTitle}
                               onChange={(e) => setNewTemplateTitle(e.target.value)}
