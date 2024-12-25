@@ -78,4 +78,8 @@ export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(store
 // Function to save templates
 export const saveEventTemplates = () => {
   localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
+  if (EVENT_TEMPLATES.length === 0) {
+    EVENT_TEMPLATES = defaultTemplates;
+    localStorage.setItem('eventTemplates', JSON.stringify(defaultTemplates));
+  }
 };
