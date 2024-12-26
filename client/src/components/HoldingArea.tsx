@@ -48,14 +48,15 @@ const ICONS = {
 export function HoldingArea() {
   const { events, createEvent, updateEvent } = useSchedule();
   const [newEventTitle, setNewEventTitle] = useState('');
-  const [selectedTemplate, setSelectedTemplate] = useState(EVENT_TEMPLATES[0] || {
+  const defaultTemplate = {
     id: 'default',
     title: 'Default Event',
     duration: 25,
     color: 'bg-gray-100',
     description: 'Default event template',
     icon: 'calendar'
-  });
+  };
+  const [selectedTemplate, setSelectedTemplate] = useState(EVENT_TEMPLATES?.[0] || defaultTemplate);
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [newTemplateTitle, setNewTemplateTitle] = useState('');
   const [newTemplateIcon, setNewTemplateIcon] = useState('users');
