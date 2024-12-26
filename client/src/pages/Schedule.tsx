@@ -317,7 +317,10 @@ export default function Schedule() {
                     jsonData.forEach((item: any) => {
                       const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
                       if (slot && !slot.querySelector('.event-card')) {
-                        (slot as HTMLElement).style.backgroundColor = item.backgroundColor;
+                        const color = item.backgroundColor.startsWith('rgb') 
+                          ? item.backgroundColor
+                          : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                        (slot as HTMLElement).style.backgroundColor = color;
                       }
                     });
                   };
