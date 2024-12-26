@@ -89,7 +89,7 @@ function TimeSlot({
       data-time={slot.time}
       className={`p-0 transition-all relative ${
         slot.isTransition 
-          ? 'h-[8px] border-dashed border-gray-200 cursor-not-allowed' 
+          ? 'h-[4px] border-dashed border-gray-200 cursor-not-allowed' 
           : 'h-[60px] cursor-pointer'
       } ${
         isOver && canDrop
@@ -218,7 +218,7 @@ export function TimeGrid() {
           <div className="sticky left-0 z-10 bg-background">
             <div className="pt-12">
               {timeSlots.map((slot) => (
-                <div key={slot.time} className={`${slot.isTransition ? 'h-[8px]' : 'h-[60px]'} flex items-start px-2`}>
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[4px]' : 'h-[60px]'} flex items-start px-2`}>
                   {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium -translate-y-3">{slot.time}</span>}
                 </div>
               ))}
