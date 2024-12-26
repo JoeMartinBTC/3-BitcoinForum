@@ -235,7 +235,7 @@ export function TimeGrid() {
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
-          <div key={day} className={`space-y-1 ${
+          <div key={day} className={`space-y-0.5 ${
             day <= 5 ? 'bg-gray-50' : 
             day <= 10 ? 'bg-gray-100' : 
             'bg-gray-200'
