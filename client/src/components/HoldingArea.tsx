@@ -325,7 +325,7 @@ const handleCreateTemplate = () => {
           </DialogContent>
         </Dialog>
         </div> {/* Closing div added here */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-5 gap-2">
           {events
             .filter(e => e.inHoldingArea)
             .map(event => (
