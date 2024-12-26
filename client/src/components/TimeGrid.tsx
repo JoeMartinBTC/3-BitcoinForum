@@ -224,13 +224,13 @@ export function TimeGrid() {
               ))}
             </div>
           </div>
-          <div className="grid flex-1 border p-4 w-full" style={{ 
+          <div className="grid flex-1 border-0 p-0 w-full" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
             minWidth: 'fit-content',
-            gap: '0px',
-            background: '#e5e7eb'
+            gap: '0',
+            background: 'none'
           }}>
         
         {Array.from({length: numDays}, (_, i) => i + 1)
