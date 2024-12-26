@@ -237,7 +237,11 @@ export function TimeGrid() {
           .map((day) => (
           <div key={day} className="space-y-2">
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
-              <h3 className="text-center text-[14px] font-medium">Day {day}</h3>
+              <h3 className="text-center text-[14px] font-medium">
+                {day <= 5 ? 'Do. 09.10' : 
+                 day <= 10 ? 'Fr. 10.10' : 
+                 day <= 16 ? 'Sa. 11.10' : `Day ${day}`}
+              </h3>
             </div>
             <div className="space-y-1">
               {timeSlots.map((slot) => (
