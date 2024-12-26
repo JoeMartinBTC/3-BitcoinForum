@@ -89,7 +89,7 @@ function TimeSlot({
       data-time={slot.time}
       className={`p-0 transition-all relative ${
         slot.isTransition 
-          ? 'h-[15px] border-dashed border-gray-200 cursor-not-allowed' 
+          ? 'h-[8px] border-dashed border-gray-200 cursor-not-allowed' 
           : 'h-[60px] cursor-pointer'
       } ${
         isOver && canDrop
