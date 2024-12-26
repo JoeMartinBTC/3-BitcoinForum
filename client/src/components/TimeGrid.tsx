@@ -87,7 +87,7 @@ function TimeSlot({
       data-slot-info=""
       data-day={day}
       data-time={slot.time}
-      className={`p-1 transition-all relative ${
+      className={`p-0 transition-all relative ${
         slot.isTransition 
           ? 'h-[15px] border-dashed border-gray-200 cursor-not-allowed' 
           : 'h-[60px] cursor-pointer'
@@ -236,7 +236,7 @@ export function TimeGrid() {
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
-          <div key={day} className={`space-y-0.5 ${
+          <div key={day} className={`space-y-0 ${
             day <= 5 ? 'bg-gray-50' : 
             day <= 10 ? 'bg-gray-100' : 
             'bg-gray-200'
