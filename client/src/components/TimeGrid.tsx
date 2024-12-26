@@ -229,7 +229,7 @@ export function TimeGrid() {
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
             minWidth: 'fit-content',
-            gap: '1px',
+            gap: '0px',
             background: '#e5e7eb'
           }}>
         
