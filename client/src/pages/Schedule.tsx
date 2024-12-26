@@ -275,6 +275,64 @@ export default function Schedule() {
             >
               Import to Holding
             </button>
+            <button
+              onClick={async () => {
+                const XLSX = await import('xlsx');
+                const slots = document.querySelectorAll('[data-slot-info]');
+                const backgroundData = Array.from(slots).map(slot => {
+                  const day = slot.getAttribute('data-day');
+                  const time = slot.getAttribute('data-time');
+                  const hasEvent = slot.querySelector('.event-card');
+                  if (!hasEvent) {
+                    const backgroundColor = getComputedStyle(slot).backgroundColor;
+                    return { day, time, backgroundColor };
+                  }
+                  return null;
+                }).filter(Boolean);
+
+                const ws = XLSX.utils.json_to_sheet(backgroundData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
+                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
+              }}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+            >
+              Export Backgrounds
+            </button>
+            <input
+              type="file"
+              accept=".xlsx"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const XLSX = await import('xlsx');
+                  const reader = new FileReader();
+                  reader.onload = async (e) => {
+                    const data = e.target?.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    
+                    jsonData.forEach((item: any) => {
+                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                      if (slot && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = item.backgroundColor;
+                      }
+                    });
+                  };
+                  reader.readAsBinaryString(file);
+                }
+              }}
+              className="hidden"
+              id="backgroundImport"
+            />
+            <button
+              onClick={() => document.getElementById('backgroundImport')?.click()}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+            >
+              Import Backgrounds
+            </button>
           </div>
         </Card>
         
