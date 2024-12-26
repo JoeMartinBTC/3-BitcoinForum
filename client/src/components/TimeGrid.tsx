@@ -211,11 +211,15 @@ export function TimeGrid() {
       </div>
       <div className="relative w-full overflow-x-auto">
         <div className="flex">
-          <div className="sticky left-0 z-10 bg-background">
+          <div className="sticky left-0 z-10 bg-background w-20">
             <div className="pt-12">
               {timeSlots.map((slot) => (
-                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-start px-2 relative`}>
-                  {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium absolute -top-[10px]">{slot.time}</span>}
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-start px-2`}>
+                  {!slot.isTransition && slot.showTime !== false && (
+                    <span className="text-[12px] text-black font-medium" style={{ transform: 'translateY(-50%)' }}>
+                      {slot.time}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
