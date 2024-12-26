@@ -18,7 +18,8 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const bgKey = `bg_${day}_${slot.time}`;
+  const [backgroundColor, setBackgroundColor] = useState(() => localStorage.getItem(bgKey) || '#ffffff');
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);

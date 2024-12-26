@@ -314,12 +314,18 @@ export default function Schedule() {
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
                     
+                    // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
                     jsonData.forEach((item: any) => {
+                      const key = `bg_${item.day}_${item.time}`;
+                      const color = item.backgroundColor.startsWith('rgb') 
+                        ? item.backgroundColor
+                        : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                      localStorage.setItem(key, color);
+                      
+                      // Also apply to currently visible slots
                       const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
                       if (slot && !slot.querySelector('.event-card')) {
-                        const color = item.backgroundColor.startsWith('rgb') 
-                          ? item.backgroundColor
-                          : `rgb(${item.backgroundColor.split(',').join(', ')})`;
                         (slot as HTMLElement).style.backgroundColor = color;
                       }
                     });
