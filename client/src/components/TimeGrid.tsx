@@ -214,7 +214,7 @@ export function TimeGrid() {
           <div className="sticky left-0 z-10 bg-background">
             <div className="pt-12">
               {timeSlots.map((slot) => (
-                <div key={slot.time} className={`${slot.isTransition ? 'h-[15px]' : 'h-[60px]'} flex items-start px-2`}>
+                <div key={slot.time} className={`${slot.isTransition ? 'h-[16.5px]' : 'h-[66px]'} flex items-start px-2`}>
                   {!slot.isTransition && slot.showTime !== false && <span className="text-[12px] text-black font-medium -translate-y-2">{slot.time}</span>}
                 </div>
               ))}
