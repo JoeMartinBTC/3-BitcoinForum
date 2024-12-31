@@ -174,25 +174,24 @@ export function TimeGrid() {
             const day = parseInt(slot.getAttribute('data-day') || '1');
             const time = slot.getAttribute('data-time') || '08:00';
             const [hours, minutes] = time.split(':').map(Number);
-              
-              const startTime = new Date();
-              startTime.setHours(hours, minutes, 0, 0);
-              
-              const endTime = new Date(startTime);
-              endTime.setMinutes(endTime.getMinutes() + 20);
+            
+            const startTime = new Date();
+            startTime.setHours(hours, minutes, 0, 0);
+            
+            const endTime = new Date(startTime);
+            endTime.setMinutes(endTime.getMinutes() + 20);
 
-              createEvent({
-                title: copiedEvent.title,
-                description: copiedEvent.description,
-                day,
-                startTime,
-                endTime,
-                isBreak: false,
-                inHoldingArea: false,
-                templateId: copiedEvent.templateId,
-                color: copiedEvent.color
-              });
-            }
+            createEvent({
+              title: copiedEvent.title,
+              description: copiedEvent.description,
+              day,
+              startTime,
+              endTime,
+              isBreak: false,
+              inHoldingArea: false,
+              templateId: copiedEvent.templateId,
+              color: copiedEvent.color
+            });
           }
         }
       }
