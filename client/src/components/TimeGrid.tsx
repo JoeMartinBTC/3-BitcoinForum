@@ -155,22 +155,25 @@ export function TimeGrid() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey) {
-        const target = e.target as HTMLElement;
-        const eventCard = target.closest('[data-event-id]');
-        if (eventCard) {
-          const eventId = parseInt(eventCard.getAttribute('data-event-id') || '0');
-          
-          if (e.key === 'c') {
+        const target = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement;
+        if (!target) return;
+
+        if (e.key === 'c') {
+          const eventCard = target.closest('[data-event-id]');
+          if (eventCard) {
+            const eventId = parseInt(eventCard.getAttribute('data-event-id') || '0');
             const eventToCopy = events.find(event => event.id === eventId);
             if (eventToCopy) {
               setCopiedEvent(eventToCopy);
+              console.log('Copied event:', eventToCopy);
             }
-          } else if (e.key === 'v' && copiedEvent) {
-            const slot = target.closest('[data-slot-info]');
-            if (slot) {
-              const day = parseInt(slot.getAttribute('data-day') || '1');
-              const time = slot.getAttribute('data-time') || '08:00';
-              const [hours, minutes] = time.split(':').map(Number);
+          }
+        } else if (e.key === 'v' && copiedEvent) {
+          const slot = target.closest('[data-slot-info]');
+          if (slot) {
+            const day = parseInt(slot.getAttribute('data-day') || '1');
+            const time = slot.getAttribute('data-time') || '08:00';
+            const [hours, minutes] = time.split(':').map(Number);
               
               const startTime = new Date();
               startTime.setHours(hours, minutes, 0, 0);
