@@ -153,6 +153,7 @@ const handleCreateTemplate = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {[
+                          'bg-white',
                           'bg-rose-100',
                           'bg-pink-100',
                           'bg-fuchsia-100',
