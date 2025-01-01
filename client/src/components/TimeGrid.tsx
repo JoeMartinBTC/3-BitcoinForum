@@ -249,7 +249,31 @@ export function TimeGrid() {
                  day <= 16 ? 'Sa. 11.10' : `Day ${day}`}
               </h3>
             </div>
-            <div className="space-y-0">
+            <div 
+              className="space-y-0"
+              onContextMenu={(e) => {
+                e.preventDefault();
+                const colors = [
+                  '#ffffff',  // Add white as first option
+                  '#ffe4e6',
+                  '#fce7f3',
+                  '#fae8ff',
+                  '#f3e8ff',
+                  '#ede9fe',
+                  '#e0e7ff',
+                  '#dbeafe',
+                  '#e0f2fe',
+                  '#cffafe',
+                  '#ccfbf1',
+                  '#dcfce7',
+                  '#ecfccb',
+                  '#fef9c3',
+                  '#fef3c7',
+                  '#ffedd5',
+                  '#fee2e2',
+                  '#f5f5f4',
+                  '#f4f4f5'
+                ];
               {timeSlots.map((slot) => (
                 <TimeSlot
                   key={`${day}-${slot.time}`}
