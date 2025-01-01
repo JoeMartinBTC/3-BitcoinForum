@@ -63,7 +63,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   const Icon = ICONS[iconKey as keyof typeof ICONS] || ICONS.users;
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full" data-event-id={event.id}>
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
       <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">

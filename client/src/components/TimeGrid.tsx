@@ -1,9 +1,8 @@
 import { useDrop } from 'react-dnd';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
-import type { Event } from '@db/schema';
 import { generateTimeSlots } from "../lib/timeUtils";
 import type { Event } from '@db/schema';
 
@@ -146,60 +145,11 @@ function TimeSlot({
 }
 
 export function TimeGrid() {
-  const { events, updateEvent, createEvent } = useSchedule();
+  const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(3);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
-  const [copiedEvent, setCopiedEvent] = useState<Event | null>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!e.ctrlKey) return;
-      
-      if (e.key === 'c') {
-        const target = e.target as HTMLElement;
-        const eventCard = target.closest('[data-event-id]');
-        
-        if (eventCard) {
-          const eventId = parseInt(eventCard.getAttribute('data-event-id') || '0');
-          const eventToCopy = events.find(event => event.id === eventId);
-          if (eventToCopy) {
-            setCopiedEvent(eventToCopy);
-            console.log('Event copied:', eventToCopy);
-          }
-        }
-      } else if (e.key === 'v' && copiedEvent) {
-        const slot = target.closest('[data-slot-info]');
-        if (slot) {
-          const day = parseInt(slot.getAttribute('data-day') || '1');
-          const time = slot.getAttribute('data-time') || '08:00';
-          const [hours, minutes] = time.split(':').map(Number);
-          
-          const startTime = new Date();
-          startTime.setHours(hours, minutes, 0, 0);
-          
-          const endTime = new Date(startTime);
-          endTime.setMinutes(endTime.getMinutes() + 20);
-
-          createEvent({
-            title: copiedEvent.title,
-            description: copiedEvent.description,
-            day,
-            startTime,
-            endTime,
-            isBreak: false,
-            inHoldingArea: false,
-            templateId: copiedEvent.templateId,
-            color: copiedEvent.color
-          });
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [events, copiedEvent, createEvent]);
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
