@@ -125,7 +125,6 @@ function TimeSlot({
               setShowColorPicker(false);
             }}
           />
-          <div className="text-center mt-2 text-xs font-mono text-gray-600 border-t pt-1">{slotColor}</div>
         </div>
       )}
       <div className="flex h-full">
