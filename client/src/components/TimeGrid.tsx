@@ -165,9 +165,15 @@ export function TimeGrid() {
   };
 
   const toggleShowAll = () => {
-    setShowAllDays(prev => !prev);
-    if (!showAllDays) {
+    if (showAllDays) {
+      // Hide all days except day 1
+      const allDaysExceptOne = new Set(Array.from({length: numDays}, (_, i) => i + 2));
+      setHiddenDays(allDaysExceptOne);
+      setShowAllDays(false);
+    } else {
+      // Show all days
       setHiddenDays(new Set());
+      setShowAllDays(true);
     }
   };
 
