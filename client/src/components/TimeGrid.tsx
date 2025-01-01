@@ -103,30 +103,88 @@ function TimeSlot({
       }}
       onContextMenu={(e) => {
         e.preventDefault();
-        setShowColorPicker(true);
+        const colorMenu = document.createElement('div');
+        colorMenu.style.position = 'fixed';
+        colorMenu.style.left = `${e.clientX}px`;
+        colorMenu.style.top = `${e.clientY}px`;
+        colorMenu.style.backgroundColor = 'white';
+        colorMenu.style.border = '1px solid #ccc';
+        colorMenu.style.padding = '8px';
+        colorMenu.style.borderRadius = '4px';
+        colorMenu.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        colorMenu.style.zIndex = '1000';
+
+        const colors = [
+          '#ffffff',
+          '#ffe4e6',
+          '#fce7f3',
+          '#fae8ff',
+          '#f3e8ff',
+          '#ede9fe',
+          '#e0e7ff',
+          '#dbeafe',
+          '#e0f2fe',
+          '#cffafe',
+          '#ccfbf1',
+          '#dcfce7',
+          '#ecfccb',
+          '#fef9c3',
+          '#fef3c7',
+          '#ffedd5',
+          '#fee2e2',
+          '#f5f5f4',
+          '#f4f4f5'
+        ];
+
+        const hexDisplay = document.createElement('div');
+        hexDisplay.style.textAlign = 'center';
+        hexDisplay.style.marginTop = '8px';
+        hexDisplay.style.fontSize = '12px';
+        hexDisplay.textContent = `Current: ${backgroundColor}`;
+
+        const colorGrid = document.createElement('div');
+        colorGrid.style.display = 'grid';
+        colorGrid.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        colorGrid.style.gap = '4px';
+
+        colors.forEach(color => {
+          const colorBox = document.createElement('div');
+          colorBox.style.width = '20px';
+          colorBox.style.height = '20px';
+          colorBox.style.backgroundColor = color;
+          colorBox.style.cursor = 'pointer';
+          colorBox.style.border = '1px solid #ddd';
+          
+          colorBox.onmouseover = () => {
+            hexDisplay.textContent = `Current: ${color}`;
+          };
+          
+          colorBox.onclick = () => {
+            localStorage.setItem(bgKey, color);
+            setBackgroundColor(color);
+            document.body.removeChild(colorMenu);
+          };
+          
+          colorGrid.appendChild(colorBox);
+        });
+
+        colorMenu.appendChild(colorGrid);
+        colorMenu.appendChild(hexDisplay);
+        document.body.appendChild(colorMenu);
+
+        const closeMenu = (e: MouseEvent) => {
+          if (!colorMenu.contains(e.target as Node)) {
+            document.body.removeChild(colorMenu);
+            document.removeEventListener('click', closeMenu);
+          }
+        };
+
+        setTimeout(() => {
+          document.addEventListener('click', closeMenu);
+        }, 0);
       }}
     >
-      {showColorPicker && (
-        <div className="absolute top-0 right-0 z-50 p-2 bg-white rounded shadow-lg">
-          <input 
-            type="color"
-            aria-label="Select event color"
-            value={slotColor}
-            onChange={(e) => {
-              const newColor = e.target.value;
-              if (slotEvent) {
-                updateEvent({
-                  id: slotEvent.id,
-                  color: newColor
-                });
-              } else {
-                setBackgroundColor(newColor);
-              }
-              setShowColorPicker(false);
-            }}
-          />
-        </div>
-      )}
+      
       <div className="flex h-full">
         <div className="flex-1 relative">
           {!slot.isTransition && slotEvents.map(event => (
