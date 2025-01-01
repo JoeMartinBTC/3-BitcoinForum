@@ -274,6 +274,9 @@ export function TimeGrid() {
                   '#f5f5f4',
                   '#f4f4f5'
                 ];
+                // TODO: Implement color picker functionality
+              }}
+            >
               {timeSlots.map((slot) => (
                 <TimeSlot
                   key={`${day}-${slot.time}`}
