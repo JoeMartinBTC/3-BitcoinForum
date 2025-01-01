@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
+import type { Event } from '@db/schema';
 import { generateTimeSlots } from "../lib/timeUtils";
 import type { Event } from '@db/schema';
 
@@ -154,17 +155,21 @@ export function TimeGrid() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const eventCard = target.closest('[data-event-id]');
+      if (!e.ctrlKey) return;
       
-      if (e.ctrlKey && e.key === 'c' && eventCard) {
-        const eventId = parseInt(eventCard.getAttribute('data-event-id') || '0');
-        const eventToCopy = events.find(event => event.id === eventId);
-        if (eventToCopy) {
-          setCopiedEvent(eventToCopy);
-          console.log('Event copied:', eventToCopy);
+      if (e.key === 'c') {
+        const target = e.target as HTMLElement;
+        const eventCard = target.closest('[data-event-id]');
+        
+        if (eventCard) {
+          const eventId = parseInt(eventCard.getAttribute('data-event-id') || '0');
+          const eventToCopy = events.find(event => event.id === eventId);
+          if (eventToCopy) {
+            setCopiedEvent(eventToCopy);
+            console.log('Event copied:', eventToCopy);
+          }
         }
-      } else if (e.ctrlKey && e.key === 'v' && copiedEvent) {
+      } else if (e.key === 'v' && copiedEvent) {
         const slot = target.closest('[data-slot-info]');
         if (slot) {
           const day = parseInt(slot.getAttribute('data-day') || '1');
