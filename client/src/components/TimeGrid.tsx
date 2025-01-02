@@ -231,7 +231,13 @@ export function TimeGrid() {
                   : 'bg-primary/10 text-primary'
               }`}
             >
-              Day {day}
+              {[1,6,11].includes(day) ? 'Main Stage' :
+             [2,7,12].includes(day) ? 'Nebenraum' :
+             [3,8,13].includes(day) ? 'Donau Tower' :
+             [4,9,14].includes(day) ? 'Brigk' :
+             [5,10,15].includes(day) ? 'Exerzierhalle' :
+             day === 16 ? 'Eishalle' :
+             [17,18,19,20].includes(day) ? 'VIP' : `Day ${day}`}
             </button>
           ))}
         </div>
