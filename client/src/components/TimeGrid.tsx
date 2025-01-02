@@ -108,23 +108,44 @@ function TimeSlot({
     >
       {showColorPicker && (
         <div className="absolute top-0 right-0 z-50 p-2 bg-white rounded shadow-lg">
-          <input 
-            type="color"
-            aria-label="Select event color"
-            value={slotColor}
-            onChange={(e) => {
-              const newColor = e.target.value;
-              if (slotEvent) {
-                updateEvent({
-                  id: slotEvent.id,
-                  color: newColor
-                });
-              } else {
-                setBackgroundColor(newColor);
-              }
-              setShowColorPicker(false);
-            }}
-          />
+          <div className="flex flex-col gap-2">
+            <input 
+              type="color"
+              aria-label="Select event color"
+              value={slotColor}
+              onChange={(e) => {
+                const newColor = e.target.value;
+                if (slotEvent) {
+                  updateEvent({
+                    id: slotEvent.id,
+                    color: newColor
+                  });
+                } else {
+                  setBackgroundColor(newColor);
+                  localStorage.setItem(bgKey, newColor);
+                }
+                setShowColorPicker(false);
+              }}
+            />
+            <button 
+              className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
+              onClick={() => {
+                const defaultColor = '#ffffff';
+                if (slotEvent) {
+                  updateEvent({
+                    id: slotEvent.id,
+                    color: defaultColor
+                  });
+                } else {
+                  setBackgroundColor(defaultColor);
+                  localStorage.setItem(bgKey, defaultColor);
+                }
+                setShowColorPicker(false);
+              }}
+            >
+              Reset
+            </button>
+          </div>
         </div>
       )}
       <div className="flex h-full">
