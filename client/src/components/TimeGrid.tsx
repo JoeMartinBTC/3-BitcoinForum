@@ -239,7 +239,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+              className="px-3 py-1 rounded bg-red-100 text-red-700 hover:bg-red-200"
             >
               Days 1-5
             </button>
@@ -254,7 +254,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className="px-3 py-1 rounded bg-blue-200 text-blue-800 hover:bg-blue-300"
+              className="px-3 py-1 rounded bg-red-200 text-red-800 hover:bg-red-300"
             >
               Days 6-10
             </button>
@@ -269,7 +269,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className="px-3 py-1 rounded bg-blue-300 text-blue-900 hover:bg-blue-400"
+              className="px-3 py-1 rounded bg-red-300 text-red-900 hover:bg-red-400"
             >
               Days 11-16
             </button>
@@ -284,7 +284,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className="px-3 py-1 rounded bg-blue-400 text-blue-950 hover:bg-blue-500"
+              className="px-3 py-1 rounded bg-red-400 text-red-950 hover:bg-red-500"
             >
               Days 17-20
             </button>
