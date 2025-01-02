@@ -296,25 +296,25 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([1,6,11])}
-              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+              className={`px-3 py-1 rounded ${[1,6,11].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
             >
               Main Stage
             </button>
             <button 
               onClick={() => toggleVenue([2,7,12])}
-              className="px-3 py-1 rounded bg-blue-200 text-blue-800 hover:bg-blue-300"
+              className={`px-3 py-1 rounded ${[2,7,12].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-200 text-blue-800 hover:bg-blue-300'}`}
             >
               Nebenraum
             </button>
             <button 
               onClick={() => toggleVenue([3,8,13])}
-              className="px-3 py-1 rounded bg-blue-300 text-blue-900 hover:bg-blue-400"
+              className={`px-3 py-1 rounded ${[3,8,13].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-300 text-blue-900 hover:bg-blue-400'}`}
             >
               Donau
             </button>
             <button 
               onClick={() => toggleVenue([4,9,14])}
-              className="px-3 py-1 rounded bg-blue-400 text-blue-950 hover:bg-blue-500"
+              className={`px-3 py-1 rounded ${[4,9,14].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-400 text-blue-950 hover:bg-blue-500'}`}
             >
               Brigk
             </button>
