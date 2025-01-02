@@ -332,7 +332,7 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([17,18,19,20])}
-              className="px-3 py-1 rounded bg-blue-700 text-blue-50 hover:bg-blue-800"
+              className="px-3 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300"
             >
               VIP
             </button>
@@ -352,7 +352,7 @@ export function TimeGrid() {
                   : [4,9,14].includes(day) ? 'bg-blue-400 text-blue-950'
                   : [5,10,15].includes(day) ? 'bg-blue-500 text-blue-50'
                   : day === 16 ? 'bg-blue-600 text-blue-50'
-                  : [17,18,19,20].includes(day) ? 'bg-blue-700 text-blue-50'
+                  : [17,18,19,20].includes(day) ? 'bg-green-200 text-green-800'
                   : 'bg-primary/10 text-primary'
               }`}
             >
