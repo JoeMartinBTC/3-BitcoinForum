@@ -229,6 +229,51 @@ export function TimeGrid() {
           </div>
           <div className="flex items-center gap-2">
             <button
+              onClick={() => {
+                const days = Array.from({length: 5}, (_, i) => i + 1);
+                const allHidden = days.every(day => hiddenDays.has(day));
+                setHiddenDays(prev => {
+                  const next = new Set(prev);
+                  days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                  return next;
+                });
+                setShowAllDays(false);
+              }}
+              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
+              Days 1-5
+            </button>
+            <button
+              onClick={() => {
+                const days = Array.from({length: 5}, (_, i) => i + 6);
+                const allHidden = days.every(day => hiddenDays.has(day));
+                setHiddenDays(prev => {
+                  const next = new Set(prev);
+                  days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                  return next;
+                });
+                setShowAllDays(false);
+              }}
+              className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
+            >
+              Days 6-10
+            </button>
+            <button
+              onClick={() => {
+                const days = Array.from({length: 6}, (_, i) => i + 11);
+                const allHidden = days.every(day => hiddenDays.has(day));
+                setHiddenDays(prev => {
+                  const next = new Set(prev);
+                  days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                  return next;
+                });
+                setShowAllDays(false);
+              }}
+              className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
+            >
+              Days 11-16
+            </button>
+            <button
               onClick={toggleShowAll}
               className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
             >
