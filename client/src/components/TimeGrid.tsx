@@ -318,7 +318,7 @@ export function TimeGrid() {
               ))}
             </div>
           </div>
-          <div className="grid flex-1 border p-0 w-full bg-gray-200" style={{ 
+          <div className="grid flex-1 p-0 w-full bg-gray-200" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
