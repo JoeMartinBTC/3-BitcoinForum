@@ -87,7 +87,7 @@ function TimeSlot({
       data-slot-info=""
       data-day={day}
       data-time={slot.time}
-      className={`p-0 transition-all relative h-[48px] cursor-pointer ${
+      className={`p-0 transition-all relative h-[48px] cursor-pointer rounded-none ${
         isOver && canDrop
           ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
           : canDrop
@@ -247,7 +247,7 @@ export function TimeGrid() {
               ))}
             </div>
           </div>
-          <div className="grid flex-1 border rounded-lg p-0 w-full bg-gray-200" style={{ 
+          <div className="grid flex-1 border p-0 w-full bg-gray-200" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
