@@ -264,6 +264,18 @@ export function TimeGrid() {
             >
               Exerzierhalle
             </button>
+            <button 
+              onClick={() => toggleVenue([16])}
+              className="px-3 py-1 rounded bg-cyan-100 text-cyan-700 hover:bg-cyan-200"
+            >
+              Eishalle
+            </button>
+            <button 
+              onClick={() => toggleVenue([17,18,19,20])}
+              className="px-3 py-1 rounded bg-amber-100 text-amber-700 hover:bg-amber-200"
+            >
+              VIP
+            </button>
           </div>
         </div>
         <div className="flex gap-2 flex-wrap">
