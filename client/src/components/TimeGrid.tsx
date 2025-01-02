@@ -390,21 +390,19 @@ export function TimeGrid() {
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
           <div key={day} className={`space-y-0.5 ${
-            day <= 5 ? 'bg-gray-50' : 
-            day <= 10 ? 'bg-gray-100' : 
-            day <= 16 ? 'bg-gray-200' :
-            day <= 18 ? 'bg-gray-300' :
-            day <= 20 ? 'bg-gray-400' : 'bg-gray-200'
+            day <= 5 ? 'bg-blue-50' : 
+            day <= 10 ? 'bg-blue-100' : 
+            day <= 16 ? 'bg-blue-200' :
+            day <= 18 ? 'bg-blue-300' :
+            day <= 20 ? 'bg-blue-400' : 'bg-blue-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
-              [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' :
-              [2,7,12].includes(day) ? 'bg-green-100 text-green-700' :
-              [3,8,13].includes(day) ? 'bg-purple-100 text-purple-700' :
-              [4,9,14].includes(day) ? 'bg-orange-100 text-orange-700' :
-              [5,10,15].includes(day) ? 'bg-rose-100 text-rose-700' :
-              day === 16 ? 'bg-cyan-100 text-cyan-700' :
-              [17,18,19,20].includes(day) ? 'bg-amber-100 text-amber-700' :
-              'bg-gray-100'
+              day <= 5 ? 'bg-blue-100 text-blue-700' :
+              day <= 10 ? 'bg-blue-200 text-blue-800' :
+              day <= 16 ? 'bg-blue-300 text-blue-900' :
+              day <= 18 ? 'bg-blue-400 text-blue-900' :
+              day <= 20 ? 'bg-blue-500 text-blue-50' :
+              'bg-blue-100 text-blue-700'
             }`}>
               <h3 className="text-center text-[14px] font-medium">
                 {day <= 5 ? 'Do. 09.10' : 
