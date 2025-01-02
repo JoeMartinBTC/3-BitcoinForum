@@ -320,13 +320,13 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([5,10,15])}
-              className="px-3 py-1 rounded bg-yellow-200 text-yellow-800 hover:bg-yellow-300"
+              className="px-3 py-1 rounded bg-gray-200 text-gray-800"
             >
               Exerzierhalle
             </button>
             <button 
               onClick={() => toggleVenue([16])}
-              className="px-3 py-1 rounded bg-yellow-400 text-yellow-900 hover:bg-yellow-500"
+              className="px-3 py-1 rounded bg-gray-400 text-gray-900 hover:bg-gray-500"
             >
               Eishalle
             </button>
@@ -350,8 +350,8 @@ export function TimeGrid() {
                   : [2,7,12].includes(day) ? 'bg-blue-200 text-blue-800'
                   : [3,8,13].includes(day) ? 'bg-blue-300 text-blue-900'
                   : [4,9,14].includes(day) ? 'bg-blue-400 text-blue-950'
-                  : [5,10,15].includes(day) ? 'bg-yellow-200 text-yellow-800'
-                  : day === 16 ? 'bg-yellow-400 text-yellow-900'
+                  : [5,10,15].includes(day) ? 'bg-gray-200 text-gray-800'
+                  : day === 16 ? 'bg-gray-400 text-gray-900'
                   : [17,18,19,20].includes(day) ? 'bg-green-200 text-green-800'
                   : 'bg-primary/10 text-primary'
               }`}
