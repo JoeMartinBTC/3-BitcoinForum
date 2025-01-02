@@ -187,15 +187,29 @@ export function TimeGrid() {
 
   const toggleShowAll = () => {
     if (showAllDays) {
-      // Hide all days except day 1
       const allDaysExceptOne = new Set(Array.from({length: numDays}, (_, i) => i + 2));
       setHiddenDays(allDaysExceptOne);
       setShowAllDays(false);
     } else {
-      // Show all days
       setHiddenDays(new Set());
       setShowAllDays(true);
     }
+  };
+
+  const toggleVenue = (days: number[]) => {
+    setHiddenDays(prev => {
+      const next = new Set(prev);
+      const allDaysHidden = days.every(day => next.has(day));
+      
+      if (allDaysHidden) {
+        days.forEach(day => next.delete(day));
+      } else {
+        days.forEach(day => next.add(day));
+      }
+      
+      setShowAllDays(false);
+      return next;
+    });
   };
 
   return (
@@ -220,19 +234,34 @@ export function TimeGrid() {
             >
               {showAllDays ? 'Hide Days' : 'Show All'}
             </button>
-            <button className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200">
+            <button 
+              onClick={() => toggleVenue([1,6,11])}
+              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
               Main Stage
             </button>
-            <button className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200">
+            <button 
+              onClick={() => toggleVenue([2,7,12])}
+              className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
+            >
               Nebenraum
             </button>
-            <button className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200">
+            <button 
+              onClick={() => toggleVenue([3,8,13])}
+              className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
+            >
               Donau
             </button>
-            <button className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200">
+            <button 
+              onClick={() => toggleVenue([4,9,14])}
+              className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200"
+            >
               Brigk
             </button>
-            <button className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200">
+            <button 
+              onClick={() => toggleVenue([5,10,15])}
+              className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200"
+            >
               Exerzierhalle
             </button>
           </div>
