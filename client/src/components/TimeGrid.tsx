@@ -267,13 +267,11 @@ export function TimeGrid() {
           }`}>
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
               <h3 className="text-center text-[14px] font-medium">
-                {[1,6,11].includes(day) ? 'Main Stage' :
-                 [2,7,12].includes(day) ? 'Nebenraum' :
-                 [3,8,13].includes(day) ? 'Donau Tower' :
-                 [4,9,14].includes(day) ? 'Brigk' :
-                 [5,10,15].includes(day) ? 'Exerzierhalle' :
-                 day === 16 ? 'Eishalle' :
-                 [17,18,19,20].includes(day) ? 'VIP' : `Day ${day}`}
+                {day <= 5 ? 'Do. 09.10' : 
+                 day <= 10 ? 'Fr. 10.10' : 
+                 day <= 16 ? 'Sa. 11.10' : 
+                 day <= 18 ? 'VIP 10.10' :
+                 day <= 20 ? 'VIP 11.10' : `Day ${day}`}
               </h3>
             </div>
             <div className="space-y-0">
