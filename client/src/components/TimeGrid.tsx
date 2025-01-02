@@ -201,7 +201,7 @@ export function TimeGrid() {
   return (
     <div className="w-full min-h-[600px]">
       <div className="mb-4 space-y-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium">Number of Days:</label>
             <input 
@@ -212,6 +212,28 @@ export function TimeGrid() {
               onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
               className="w-20 px-2 py-1 border rounded"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-blue-100 text-blue-700">
+              <label className="text-sm">Main Stage</label>
+              <Switch size="sm" className="data-[state=checked]:bg-blue-500" />
+            </div>
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-green-100 text-green-700">
+              <label className="text-sm">Nebenraum</label>
+              <Switch size="sm" className="data-[state=checked]:bg-green-500" />
+            </div>
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-purple-100 text-purple-700">
+              <label className="text-sm">Donau</label>
+              <Switch size="sm" className="data-[state=checked]:bg-purple-500" />
+            </div>
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-orange-100 text-orange-700">
+              <label className="text-sm">Brigk</label>
+              <Switch size="sm" className="data-[state=checked]:bg-orange-500" />
+            </div>
+            <div className="flex items-center gap-2 px-2 py-1 rounded bg-rose-100 text-rose-700">
+              <label className="text-sm">Exerzierhalle</label>
+              <Switch size="sm" className="data-[state=checked]:bg-rose-500" />
+            </div>
           </div>
           <button
             onClick={toggleShowAll}
