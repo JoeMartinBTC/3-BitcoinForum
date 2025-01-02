@@ -213,12 +213,29 @@ export function TimeGrid() {
               className="w-20 px-2 py-1 border rounded"
             />
           </div>
-          <button
-            onClick={toggleShowAll}
-            className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
-          >
-            {showAllDays ? 'Hide Days' : 'Show All'}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleShowAll}
+              className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
+            >
+              {showAllDays ? 'Hide Days' : 'Show All'}
+            </button>
+            <button className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200">
+              Main Stage
+            </button>
+            <button className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200">
+              Nebenraum
+            </button>
+            <button className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200">
+              Donau
+            </button>
+            <button className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200">
+              Brigk
+            </button>
+            <button className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200">
+              Exerzierhalle
+            </button>
+          </div>
         </div>
         <div className="flex gap-2 flex-wrap">
           {Array.from({length: numDays}, (_, i) => i + 1).map(day => (
