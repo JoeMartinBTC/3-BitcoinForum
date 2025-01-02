@@ -261,8 +261,10 @@ export function TimeGrid() {
           <div key={day} className={`space-y-0.5 ${
             day <= 5 ? 'bg-gray-50' : 
             day <= 10 ? 'bg-gray-100' : 
-            'bg-gray-200'
-          } ${day >= 17 && day <= 20 ? 'bg-amber-50' : ''}`}>
+            day <= 16 ? 'bg-gray-200' :
+            day <= 18 ? 'bg-gray-300' :
+            day <= 20 ? 'bg-gray-400' : 'bg-gray-200'
+          }`}>
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
               <h3 className="text-center text-[14px] font-medium">
                 {day <= 5 ? 'Do. 09.10' : 
