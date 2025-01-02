@@ -274,6 +274,21 @@ export function TimeGrid() {
               Days 11-16
             </button>
             <button
+              onClick={() => {
+                const days = Array.from({length: 4}, (_, i) => i + 17);
+                const allHidden = days.every(day => hiddenDays.has(day));
+                setHiddenDays(prev => {
+                  const next = new Set(prev);
+                  days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                  return next;
+                });
+                setShowAllDays(false);
+              }}
+              className="px-3 py-1 rounded bg-amber-100 text-amber-700 hover:bg-amber-200"
+            >
+              Days 17-20
+            </button>
+            <button
               onClick={toggleShowAll}
               className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
             >
