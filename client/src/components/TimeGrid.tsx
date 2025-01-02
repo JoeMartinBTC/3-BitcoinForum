@@ -228,6 +228,56 @@ export function TimeGrid() {
             />
           </div>
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4 mr-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">09.10</span>
+                <Toggle
+                  pressed={!Array.from({length: 5}, (_, i) => i + 1).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 1);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                  }}
+                  variant="outline"
+                  size="sm"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">10.10</span>
+                <Toggle
+                  pressed={!Array.from({length: 5}, (_, i) => i + 6).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 6);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                  }}
+                  variant="outline"
+                  size="sm"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">11.10</span>
+                <Toggle
+                  pressed={!Array.from({length: 5}, (_, i) => i + 11).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 11);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                  }}
+                  variant="outline"
+                  size="sm"
+                />
+              </div>
+            </div>
             <button
               onClick={toggleShowAll}
               className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
