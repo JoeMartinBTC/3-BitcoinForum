@@ -318,7 +318,7 @@ export function TimeGrid() {
               ))}
             </div>
           </div>
-          <div className="grid flex-1 p-0 w-full bg-gray-200" style={{ 
+          <div className="grid flex-1 border p-0 w-full bg-gray-200" style={{ 
             gridTemplateColumns: `repeat(${Array.from({length: numDays}, (_, i) => i + 1)
               .filter(day => showAllDays || !hiddenDays.has(day))
               .length}, minmax(0, 1fr))`,
@@ -329,12 +329,12 @@ export function TimeGrid() {
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
-          <div key={day} className={`space-y-0.5 border-r last:border-r-0 ${
-            day <= 5 ? 'bg-white' : 
-            day <= 10 ? 'bg-gray-50/50' : 
-            day <= 16 ? 'bg-white' :
-            day <= 18 ? 'bg-gray-50/50' :
-            'bg-white'
+          <div key={day} className={`space-y-0.5 ${
+            day <= 5 ? 'bg-gray-50' : 
+            day <= 10 ? 'bg-gray-100' : 
+            day <= 16 ? 'bg-gray-200' :
+            day <= 18 ? 'bg-gray-300' :
+            day <= 20 ? 'bg-gray-400' : 'bg-gray-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
               [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' :
