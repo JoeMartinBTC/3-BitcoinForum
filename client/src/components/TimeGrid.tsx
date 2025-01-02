@@ -227,45 +227,43 @@ export function TimeGrid() {
               className="w-20 px-2 py-1 border rounded"
             />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <button
               onClick={toggleShowAll}
               className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
             >
               {showAllDays ? 'Hide Days' : 'Show All'}
             </button>
-            <div className="flex items-center gap-2 border rounded-lg p-2 bg-white/50">
-              <button 
-                onClick={() => toggleVenue([1,6,11])}
-                className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
-              >
-                Main Stage
-              </button>
-              <button 
-                onClick={() => toggleVenue([2,7,12])}
-                className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
-              >
-                Nebenraum
-              </button>
-              <button 
-                onClick={() => toggleVenue([3,8,13])}
-                className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
-              >
-                Donau Tower
-              </button>
-              <button 
-                onClick={() => toggleVenue([4,9,14])}
-                className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200"
-              >
-                Brigk
-              </button>
-              <button 
-                onClick={() => toggleVenue([5,10,15])}
-                className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200"
-              >
-                Exerzierhalle
-              </button>
-            </div>
+            <button 
+              onClick={() => toggleVenue([1,6,11])}
+              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+            >
+              Main Stage
+            </button>
+            <button 
+              onClick={() => toggleVenue([2,7,12])}
+              className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
+            >
+              Nebenraum
+            </button>
+            <button 
+              onClick={() => toggleVenue([3,8,13])}
+              className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
+            >
+              Donau
+            </button>
+            <button 
+              onClick={() => toggleVenue([4,9,14])}
+              className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200"
+            >
+              Brigk
+            </button>
+            <button 
+              onClick={() => toggleVenue([5,10,15])}
+              className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200"
+            >
+              Exerzierhalle
+            </button>
             <button 
               onClick={() => toggleVenue([16])}
               className="px-3 py-1 rounded bg-cyan-100 text-cyan-700 hover:bg-cyan-200"
