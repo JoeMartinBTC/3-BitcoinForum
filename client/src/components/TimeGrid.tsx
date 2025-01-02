@@ -215,69 +215,78 @@ export function TimeGrid() {
   return (
     <div className="w-full min-h-[600px]">
       <div className="mb-4 space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <label className="text-sm font-medium">Number of Days:</label>
-            <input 
-              type="number" 
-              min="1" 
-              max="20"
-              value={numDays} 
-              onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
-              className="w-20 px-2 py-1 border rounded"
-            />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium">Number of Days:</label>
+              <input 
+                type="number" 
+                min="1" 
+                max="20"
+                value={numDays} 
+                onChange={(e) => setNumDays(Math.min(20, Math.max(1, parseInt(e.target.value) || 1)))}
+                className="w-20 px-2 py-1 border rounded"
+              />
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const days = [1, 2, 3, 4, 5];
+                    const allHidden = days.every(day => hiddenDays.has(day));
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  className="px-3 py-1 rounded bg-secondary hover:bg-secondary/80"
+                >
+                  09.10
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const days = [6, 7, 8, 9, 10];
+                    const allHidden = days.every(day => hiddenDays.has(day));
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  className="px-3 py-1 rounded bg-secondary hover:bg-secondary/80"
+                >
+                  10.10
+                </button>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const days = [11, 12, 13, 14, 15];
+                    const allHidden = days.every(day => hiddenDays.has(day));
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => allHidden ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  className="px-3 py-1 rounded bg-secondary hover:bg-secondary/80"
+                >
+                  11.10
+                </button>
+              </div>
+              <button
+                onClick={toggleShowAll}
+                className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
+              >
+                {showAllDays ? 'Hide Days' : 'Show All'}
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={toggleShowAll}
-              className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
-            >
-              {showAllDays ? 'Hide Days' : 'Show All'}
-            </button>
-            <button 
-              onClick={() => toggleVenue([1,6,11])}
-              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
-            >
-              Main Stage
-            </button>
-            <button 
-              onClick={() => toggleVenue([2,7,12])}
-              className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
-            >
-              Nebenraum
-            </button>
-            <button 
-              onClick={() => toggleVenue([3,8,13])}
-              className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
-            >
-              Donau
-            </button>
-            <button 
-              onClick={() => toggleVenue([4,9,14])}
-              className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200"
-            >
-              Brigk
-            </button>
-            <button 
-              onClick={() => toggleVenue([5,10,15])}
-              className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200"
-            >
-              Exerzierhalle
-            </button>
-            <button 
-              onClick={() => toggleVenue([16])}
-              className="px-3 py-1 rounded bg-cyan-100 text-cyan-700 hover:bg-cyan-200"
-            >
-              Eishalle
-            </button>
-            <button 
-              onClick={() => toggleVenue([17,18,19,20])}
-              className="px-3 py-1 rounded bg-amber-100 text-amber-700 hover:bg-amber-200"
-            >
-              VIP
-            </button>
-          </div>
-        </div>
         <div className="flex gap-2 flex-wrap">
           {Array.from({length: numDays}, (_, i) => i + 1).map(day => (
             <button
