@@ -68,9 +68,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             {Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
-            <span className={`font-medium line-clamp-2 text-pretty break-words transition-all ${
-              event.title.length > 50 ? 'text-[8px]' : event.title.length > 30 ? 'text-[10px]' : 'text-sm'
-            }`}>{event.title}</span>
+            <span className="font-medium line-clamp-2 text-pretty break-words text-[14px]">{event.title}</span>
           </div>
           <div className="flex flex-col gap-0.5">
             <Button 
