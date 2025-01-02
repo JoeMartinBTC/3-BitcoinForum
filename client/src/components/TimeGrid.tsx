@@ -344,19 +344,19 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([5,10,15])}
-              className="px-3 py-1 rounded bg-gray-200 text-gray-800"
+              className={`px-3 py-1 rounded ${[5,10,15].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
             >
               Exerzierhalle
             </button>
             <button 
               onClick={() => toggleVenue([16])}
-              className="px-3 py-1 rounded bg-gray-400 text-gray-900 hover:bg-gray-500"
+              className={`px-3 py-1 rounded ${[16].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-gray-400 text-gray-900 hover:bg-gray-500'}`}
             >
               Eishalle
             </button>
             <button 
               onClick={() => toggleVenue([17,18,19,20])}
-              className="px-3 py-1 rounded bg-green-200 text-green-800 hover:bg-green-300"
+              className={`px-3 py-1 rounded ${[17,18,19,20].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-green-200 text-green-800 hover:bg-green-300'}`}
             >
               VIP
             </button>
