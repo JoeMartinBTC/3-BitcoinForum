@@ -67,15 +67,10 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
       <Card className={`py-1 px-2 cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
-            <div className="flex items-center w-full min-w-0 gap-1">
-              {event.title.length <= 20 && Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
-              <span className={`font-medium line-clamp-2 text-pretty break-words ${
-                event.title.length > 40 ? 'text-[10px]' : 
-                event.title.length > 30 ? 'text-[11px]' : 
-                event.title.length > 20 ? 'text-[12px]' : 
-                'text-[14px]'
-              }`}>{event.title}</span>
-            </div>
+            {Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
+            <span className={`font-medium line-clamp-2 text-pretty break-words transition-all ${
+              event.title.length > 50 ? 'text-[8px]' : event.title.length > 30 ? 'text-[10px]' : 'text-sm'
+            }`}>{event.title}</span>
           </div>
           <div className="flex flex-col gap-0.5">
             <Button 
