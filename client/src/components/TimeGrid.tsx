@@ -1,6 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
 import { generateTimeSlots } from "../lib/timeUtils";
