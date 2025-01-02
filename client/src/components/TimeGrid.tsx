@@ -262,12 +262,14 @@ export function TimeGrid() {
             day <= 5 ? 'bg-gray-50' : 
             day <= 10 ? 'bg-gray-100' : 
             'bg-gray-200'
-          }`}>
+          } ${day >= 17 && day <= 20 ? 'bg-amber-50' : ''}`}>
             <div className="flex flex-col items-center gap-1 mb-2 px-2">
               <h3 className="text-center text-[14px] font-medium">
                 {day <= 5 ? 'Do. 09.10' : 
                  day <= 10 ? 'Fr. 10.10' : 
-                 day <= 16 ? 'Sa. 11.10' : `Day ${day}`}
+                 day <= 16 ? 'Sa. 11.10' : 
+                 day <= 18 ? 'VIP 10.10' :
+                 day <= 20 ? 'VIP 11.10' : `Day ${day}`}
               </h3>
             </div>
             <div className="space-y-0">
