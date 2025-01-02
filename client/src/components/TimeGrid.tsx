@@ -296,19 +296,19 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([1,6,11])}
-              className="px-3 py-1 rounded bg-blue-100 text-blue-700 hover:bg-blue-200"
+              className="px-3 py-1 rounded bg-white border border-black text-gray-700 hover:bg-gray-50"
             >
               Main Stage
             </button>
             <button 
               onClick={() => toggleVenue([2,7,12])}
-              className="px-3 py-1 rounded bg-blue-200 text-blue-800 hover:bg-blue-300"
+              className="px-3 py-1 rounded bg-white border border-black text-gray-700 hover:bg-gray-50"
             >
               Nebenraum
             </button>
             <button 
               onClick={() => toggleVenue([3,8,13])}
-              className="px-3 py-1 rounded bg-blue-300 text-blue-900 hover:bg-blue-400"
+              className="px-3 py-1 rounded bg-white border border-black text-gray-700 hover:bg-gray-50"
             >
               Donau
             </button>
