@@ -302,37 +302,37 @@ export function TimeGrid() {
             </button>
             <button 
               onClick={() => toggleVenue([2,7,12])}
-              className="px-3 py-1 rounded bg-green-100 text-green-700 hover:bg-green-200"
+              className="px-3 py-1 rounded bg-blue-200 text-blue-800 hover:bg-blue-300"
             >
               Nebenraum
             </button>
             <button 
               onClick={() => toggleVenue([3,8,13])}
-              className="px-3 py-1 rounded bg-purple-100 text-purple-700 hover:bg-purple-200"
+              className="px-3 py-1 rounded bg-blue-300 text-blue-900 hover:bg-blue-400"
             >
               Donau
             </button>
             <button 
               onClick={() => toggleVenue([4,9,14])}
-              className="px-3 py-1 rounded bg-orange-100 text-orange-700 hover:bg-orange-200"
+              className="px-3 py-1 rounded bg-blue-400 text-blue-950 hover:bg-blue-500"
             >
               Brigk
             </button>
             <button 
               onClick={() => toggleVenue([5,10,15])}
-              className="px-3 py-1 rounded bg-rose-100 text-rose-700 hover:bg-rose-200"
+              className="px-3 py-1 rounded bg-blue-500 text-blue-50 hover:bg-blue-600"
             >
               Exerzierhalle
             </button>
             <button 
               onClick={() => toggleVenue([16])}
-              className="px-3 py-1 rounded bg-cyan-100 text-cyan-700 hover:bg-cyan-200"
+              className="px-3 py-1 rounded bg-blue-600 text-blue-50 hover:bg-blue-700"
             >
               Eishalle
             </button>
             <button 
               onClick={() => toggleVenue([17,18,19,20])}
-              className="px-3 py-1 rounded bg-amber-100 text-amber-700 hover:bg-amber-200"
+              className="px-3 py-1 rounded bg-blue-700 text-blue-50 hover:bg-blue-800"
             >
               VIP
             </button>
@@ -347,12 +347,12 @@ export function TimeGrid() {
                 !showAllDays && hiddenDays.has(day) 
                   ? 'bg-gray-100 text-gray-400' 
                   : [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' 
-                  : [2,7,12].includes(day) ? 'bg-green-100 text-green-700'
-                  : [3,8,13].includes(day) ? 'bg-purple-100 text-purple-700'
-                  : [4,9,14].includes(day) ? 'bg-orange-100 text-orange-700'
-                  : [5,10,15].includes(day) ? 'bg-rose-100 text-rose-700'
-                  : day === 16 ? 'bg-cyan-100 text-cyan-700'
-                  : [17,18,19,20].includes(day) ? 'bg-amber-100 text-amber-700'
+                  : [2,7,12].includes(day) ? 'bg-blue-200 text-blue-800'
+                  : [3,8,13].includes(day) ? 'bg-blue-300 text-blue-900'
+                  : [4,9,14].includes(day) ? 'bg-blue-400 text-blue-950'
+                  : [5,10,15].includes(day) ? 'bg-blue-500 text-blue-50'
+                  : day === 16 ? 'bg-blue-600 text-blue-50'
+                  : [17,18,19,20].includes(day) ? 'bg-blue-700 text-blue-50'
                   : 'bg-primary/10 text-primary'
               }`}
             >
