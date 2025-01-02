@@ -290,7 +290,7 @@ export function TimeGrid() {
             </button>
             <button
               onClick={toggleShowAll}
-              className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
+              className="px-3 py-1 rounded bg-white border border-black text-gray-700 hover:bg-gray-50"
             >
               {showAllDays ? 'Hide Days' : 'Show All'}
             </button>
