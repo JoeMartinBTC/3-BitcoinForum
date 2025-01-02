@@ -228,6 +228,13 @@ export function TimeGrid() {
               className={`px-2 py-1 rounded text-sm ${
                 !showAllDays && hiddenDays.has(day) 
                   ? 'bg-gray-100 text-gray-400' 
+                  : [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' 
+                  : [2,7,12].includes(day) ? 'bg-green-100 text-green-700'
+                  : [3,8,13].includes(day) ? 'bg-purple-100 text-purple-700'
+                  : [4,9,14].includes(day) ? 'bg-orange-100 text-orange-700'
+                  : [5,10,15].includes(day) ? 'bg-rose-100 text-rose-700'
+                  : day === 16 ? 'bg-cyan-100 text-cyan-700'
+                  : [17,18,19,20].includes(day) ? 'bg-amber-100 text-amber-700'
                   : 'bg-primary/10 text-primary'
               }`}
             >
