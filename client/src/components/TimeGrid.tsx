@@ -390,11 +390,11 @@ export function TimeGrid() {
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
           <div key={day} className={`space-y-0.5 ${
-            day <= 5 ? 'bg-blue-50' : 
-            day <= 10 ? 'bg-blue-100' : 
-            day <= 16 ? 'bg-blue-200' :
-            day <= 18 ? 'bg-blue-300' :
-            day <= 20 ? 'bg-blue-400' : 'bg-blue-200'
+            day <= 5 ? 'bg-green-50' : 
+            day <= 10 ? 'bg-green-100' : 
+            day <= 16 ? 'bg-green-200' :
+            day <= 18 ? 'bg-green-300' :
+            day <= 20 ? 'bg-green-400' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
               day <= 5 ? 'bg-blue-100 text-blue-700' :
