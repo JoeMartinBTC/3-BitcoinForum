@@ -1,6 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
+import { Toggle } from "@/components/ui/toggle";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
 import { generateTimeSlots } from "../lib/timeUtils";
@@ -227,7 +228,61 @@ export function TimeGrid() {
               className="w-20 px-2 py-1 border rounded"
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <label className="text-sm">09.10</label>
+                <Toggle 
+                  pressed={!Array.from({length: 5}, (_, i) => i + 1).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 1);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  size="sm"
+                  className="bg-gray-200"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-sm">10.10</label>
+                <Toggle 
+                  pressed={!Array.from({length: 5}, (_, i) => i + 6).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 6);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  size="sm"
+                  className="bg-gray-200"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="text-sm">11.10</label>
+                <Toggle 
+                  pressed={!Array.from({length: 5}, (_, i) => i + 11).some(day => hiddenDays.has(day))}
+                  onPressedChange={(pressed) => {
+                    const days = Array.from({length: 5}, (_, i) => i + 11);
+                    setHiddenDays(prev => {
+                      const next = new Set(prev);
+                      days.forEach(day => pressed ? next.delete(day) : next.add(day));
+                      return next;
+                    });
+                    setShowAllDays(false);
+                  }}
+                  size="sm"
+                  className="bg-gray-200"
+                />
+              </div>
+            </div>
+            <div className="h-4 w-px bg-gray-200" />
             <button
               onClick={toggleShowAll}
               className={`px-3 py-1 rounded ${showAllDays ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}
