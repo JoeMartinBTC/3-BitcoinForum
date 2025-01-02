@@ -68,13 +68,13 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
         <div className="flex items-center gap-1">
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <div className="flex items-center w-full min-w-0 gap-1">
-              {event.title.length <= 25 && Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
+              {event.title.length <= 20 && Icon && <Icon className="h-3 w-3 flex-shrink-0" />}
               <span className={`font-medium line-clamp-2 text-pretty break-words ${
                 event.title.length > 40 ? 'text-[10px]' : 
-                event.title.length > 25 ? 'text-[11px]' : 
-                event.title.length > 15 ? 'text-[12px]' : 
+                event.title.length > 30 ? 'text-[11px]' : 
+                event.title.length > 20 ? 'text-[12px]' : 
                 'text-[14px]'
-              } transition-all`}>{event.title}</span>
+              }`}>{event.title}</span>
             </div>
           </div>
           <div className="flex flex-col gap-0.5">
