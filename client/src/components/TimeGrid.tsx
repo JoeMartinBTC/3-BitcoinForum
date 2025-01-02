@@ -400,8 +400,7 @@ export function TimeGrid() {
               day <= 5 ? 'bg-blue-100 text-blue-700' :
               day <= 10 ? 'bg-blue-200 text-blue-800' :
               day <= 16 ? 'bg-blue-300 text-blue-900' :
-              day <= 18 ? 'bg-blue-400 text-blue-900' :
-              day <= 20 ? 'bg-blue-500 text-blue-50' :
+              day <= 20 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
               <h3 className="text-center text-[14px] font-medium">
