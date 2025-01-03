@@ -427,7 +427,7 @@ export function TimeGrid() {
               day <= 20 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
-              <div className="flex flex-col items-center text-center text-[14px] font-medium leading-tight py-1">
+              <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
                 <span>{day <= 5 ? 'Do.' : 
                        day <= 10 ? 'Fr.' : 
                        day <= 16 ? 'Sa.' : 
