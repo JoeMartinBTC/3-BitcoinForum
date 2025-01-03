@@ -370,9 +370,9 @@ export function TimeGrid() {
               className={`px-2 py-1 rounded text-sm ${
                 !showAllDays && hiddenDays.has(day) 
                   ? 'bg-gray-100 border border-gray-300 text-gray-400' 
-                  : [1,6,11].includes(day) ? 'bg-yellow-50 text-yellow-800' 
-                  : [2,7,12].includes(day) ? 'bg-yellow-100 text-yellow-800'
-                  : [3,8,13].includes(day) ? 'bg-yellow-200 text-yellow-800'
+                  : [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' 
+                  : [2,7,12].includes(day) ? 'bg-blue-200 text-blue-800'
+                  : [3,8,13].includes(day) ? 'bg-blue-300 text-blue-900'
                   : [4,9,14].includes(day) ? 'bg-blue-400 text-blue-950'
                   : [5,10,15].includes(day) ? 'bg-gray-200 text-gray-800'
                   : day === 16 ? 'bg-gray-400 text-gray-900'
