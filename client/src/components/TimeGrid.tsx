@@ -431,13 +431,11 @@ export function TimeGrid() {
                 <span>{day <= 5 ? 'Do.' : 
                        day <= 10 ? 'Fr.' : 
                        day <= 16 ? 'Sa.' : 
-                       day <= 18 ? 'VIP' :
-                       day === 20 ? 'VIP' : ''}</span>
+                       day <= 18 ? 'VIP' : ''}</span>
                 <span>{day <= 5 ? '09.10' : 
                        day <= 10 ? '10.10' : 
                        day <= 16 ? '11.10' : 
-                       day <= 18 ? '10.10' :
-                       day === 20 ? '11.10' : ''}</span>
+                       day <= 18 ? '11.10' : ''}</span>
               </div>
             </div>
             <div className="space-y-0">
