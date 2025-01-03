@@ -427,13 +427,18 @@ export function TimeGrid() {
               day <= 20 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
-              <h3 className="text-center text-[14px] font-medium">
-                {day <= 5 ? 'Do. 09.10' : 
-                 day <= 10 ? 'Fr. 10.10' : 
-                 day <= 16 ? 'Sa. 11.10' : 
-                 day <= 18 ? 'VIP 10.10' :
-                 day <= 20 ? 'VIP 11.10' : `Day ${day}`}
-              </h3>
+              <div className="flex flex-col items-center text-center text-[14px] font-medium leading-tight py-1">
+                <span>{day <= 5 ? 'Do.' : 
+                       day <= 10 ? 'Fr.' : 
+                       day <= 16 ? 'Sa.' : 
+                       day <= 18 ? 'VIP' :
+                       day <= 20 ? 'VIP' : 'Day'}</span>
+                <span>{day <= 5 ? '09.10' : 
+                       day <= 10 ? '10.10' : 
+                       day <= 16 ? '11.10' : 
+                       day <= 18 ? '10.10' :
+                       day <= 20 ? '11.10' : day}</span>
+              </div>
             </div>
             <div className="space-y-0">
               {timeSlots.map((slot) => (
