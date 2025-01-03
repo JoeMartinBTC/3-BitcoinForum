@@ -18,12 +18,6 @@
   font-size: 0.6rem !important;
 }
 
-@layer utilities {
-  .text-fit {
-    font-size: clamp(0.7rem, 1.5vw, 1rem);
-  }
-}
-
 @layer base {
   * {
     @apply border-border;
