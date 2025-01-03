@@ -64,13 +64,21 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
-      <Card className={`py-0.5 px-1 cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
-        <div className="flex items-center">
-          <div className="flex items-center flex-1 min-w-0">
-            {Icon && <Icon className="h-2 w-2 shrink-0 hidden lg:block mr-0.5" />}
-            <span className="font-medium truncate text-[0.6rem] leading-none">{event.title}</span>
+      <Card className={`p-0.5 cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
+        <div className="flex h-full items-center">
+          <div className="flex flex-1 min-w-0 items-center">
+            {event.title.length <= 20 && Icon && (
+              <Icon className="h-2 w-2 shrink-0 mr-0.5" />
+            )}
+            <span className={`font-medium text-left text-ellipsis ${
+              event.title.length > 40 ? 'text-[0.6rem]' : 
+              event.title.length > 25 ? 'text-[0.7rem]' : 
+              'text-[0.75rem]'
+            } leading-tight line-clamp-3 whitespace-normal`}>
+              {event.title}
+            </span>
           </div>
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col gap-0.5 ml-0.5">
             <Button 
               variant="ghost" 
               size="sm" 
