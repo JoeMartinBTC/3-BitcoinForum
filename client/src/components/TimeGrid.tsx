@@ -355,8 +355,8 @@ export function TimeGrid() {
               Eishalle
             </button>
             <button 
-              onClick={() => toggleVenue([17,18,19,20])}
-              className={`px-3 py-1 rounded ${[17,18,19,20].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
+              onClick={() => toggleVenue([17,18])}
+              className={`px-3 py-1 rounded ${[17,18].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
             >
               VIP
             </button>
@@ -376,7 +376,7 @@ export function TimeGrid() {
                   : [4,9,14].includes(day) ? 'bg-yellow-100 text-yellow-800'
                   : [5,10,15].includes(day) ? 'bg-yellow-50 text-yellow-800'
                   : day === 16 ? 'bg-yellow-100 text-yellow-800'
-                  : [17,18,19,20].includes(day) ? 'bg-yellow-200 text-yellow-800'
+                  : [17,18].includes(day) ? 'bg-yellow-200 text-yellow-800'
                   : 'bg-primary/10 text-primary'
               }`}
             >
