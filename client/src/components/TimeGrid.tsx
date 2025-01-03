@@ -308,7 +308,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({length: 4}, (_, i) => i + 17).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-400 text-red-950 hover:bg-red-500'}`}
+              className={`px-3 py-1 rounded ${Array.from({length: 4}, (_, i) => i + 17).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-green-200 text-green-800 hover:bg-green-300'}`}
             >
               Days 17-20
             </button>
