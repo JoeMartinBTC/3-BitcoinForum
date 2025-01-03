@@ -373,7 +373,7 @@ export function TimeGrid() {
                   : [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' 
                   : [2,7,12].includes(day) ? 'bg-blue-200 text-blue-800'
                   : [3,8,13].includes(day) ? 'bg-blue-300 text-blue-900'
-                  : [4,9,14].includes(day) ? 'bg-blue-400 text-blue-950'
+                  : [4,9,14].includes(day) ? 'bg-yellow-100 text-yellow-800'
                   : [5,10,15].includes(day) ? 'bg-yellow-50 text-yellow-800'
                   : day === 16 ? 'bg-yellow-100 text-yellow-800'
                   : [17,18,19,20].includes(day) ? 'bg-yellow-200 text-yellow-800'
