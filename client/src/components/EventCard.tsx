@@ -64,7 +64,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
-      <Card className={`p-0.5 cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
+      <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
         <div className="flex h-full items-center">
           <div className="flex flex-1 min-w-0 items-center">
             {event.title.length <= 20 && Icon && (
@@ -133,7 +133,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
             </Dialog>
           </div>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
