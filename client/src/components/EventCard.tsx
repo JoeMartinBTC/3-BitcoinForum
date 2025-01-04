@@ -78,7 +78,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               {event.title}
             </span>
           </div>
-          <div className="flex flex-col gap-0.5 ml-0.5">
+          <div className="flex flex-col gap-0.5 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
             <Button 
               variant="ghost" 
               size="sm" 
