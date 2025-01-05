@@ -1,25 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Event } from '@db/schema';
 
-interface User {
-  id: number;
-  role: string;
-  replitUsername: string;
-}
-
 export function useSchedule() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    fetch('/api/users/me')
-      .then(res => res.json())
-      .then(setUser)
-      .catch(console.error);
-  }, []);
-
-  const canEdit = user?.role === 'editor' || user?.role === 'admin';
-  const isAdmin = user?.role === 'admin';
   const dayTitlesQuery = useQuery({
     queryKey: ['dayTitles'],
     queryFn: () => fetch('/api/day-titles').then(res => res.json()),
