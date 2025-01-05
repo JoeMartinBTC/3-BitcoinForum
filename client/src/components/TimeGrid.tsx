@@ -432,12 +432,14 @@ export function TimeGrid() {
               <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
                 <span>{day <= 6 ? 'Do.' : 
                        day <= 11 ? 'Fr.' : 
+                       day === 12 ? 'Fr.' :
                        day <= 17 ? 'Sa.' : 
                        day === 20 ? 'Do.' :
                        day === 18 ? 'Fr.' :
                        day === 19 ? 'Sa.' : ''}</span>
                 <span>{day <= 6 ? '09.10' : 
                        day <= 11 ? '10.10' : 
+                       day === 12 ? '11.10' :
                        day <= 17 ? '11.10' : 
                        day === 20 ? '09.10' :
                        day === 18 ? '10.10' :
