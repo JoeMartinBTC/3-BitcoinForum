@@ -230,9 +230,9 @@ export function TimeGrid() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
-                const days = Array.from({length: 5}, (_, i) => i + 1);
+                const days = Array.from({length: 6}, (_, i) => i + 1);
                 const allHidden = days.every(day => hiddenDays.has(day));
-                const otherDays = Array.from({length: 20}, (_, i) => i + 1).filter(d => !days.includes(d));
+                const otherDays = Array.from({length: 19}, (_, i) => i + 1).filter(d => !days.includes(d));
                 setHiddenDays(prev => {
                   const next = new Set(prev);
                   if (allHidden) {
@@ -245,15 +245,15 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({length: 5}, (_, i) => i + 1).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
+              className={`px-3 py-1 rounded ${Array.from({length: 6}, (_, i) => i + 1).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
             >
-              Days 1-5
+              Days 1-6
             </button>
             <button
               onClick={() => {
-                const days = Array.from({length: 5}, (_, i) => i + 6);
+                const days = Array.from({length: 6}, (_, i) => i + 7);
                 const allHidden = days.every(day => hiddenDays.has(day));
-                const otherDays = Array.from({length: 20}, (_, i) => i + 1).filter(d => !days.includes(d));
+                const otherDays = Array.from({length: 19}, (_, i) => i + 1).filter(d => !days.includes(d));
                 setHiddenDays(prev => {
                   const next = new Set(prev);
                   if (allHidden) {
@@ -266,15 +266,15 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({length: 5}, (_, i) => i + 6).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-200 text-red-800 hover:bg-red-300'}`}
+              className={`px-3 py-1 rounded ${Array.from({length: 6}, (_, i) => i + 7).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-200 text-red-800 hover:bg-red-300'}`}
             >
-              Days 6-10
+              Days 7-12
             </button>
             <button
               onClick={() => {
-                const days = Array.from({length: 6}, (_, i) => i + 11);
+                const days = Array.from({length: 7}, (_, i) => i + 13);
                 const allHidden = days.every(day => hiddenDays.has(day));
-                const otherDays = Array.from({length: 20}, (_, i) => i + 1).filter(d => !days.includes(d));
+                const otherDays = Array.from({length: 19}, (_, i) => i + 1).filter(d => !days.includes(d));
                 setHiddenDays(prev => {
                   const next = new Set(prev);
                   if (allHidden) {
@@ -287,30 +287,9 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({length: 6}, (_, i) => i + 11).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-300 text-red-900 hover:bg-red-400'}`}
+              className={`px-3 py-1 rounded ${Array.from({length: 7}, (_, i) => i + 13).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-300 text-red-900 hover:bg-red-400'}`}
             >
-              Days 11-16
-            </button>
-            <button
-              onClick={() => {
-                const days = Array.from({length: 4}, (_, i) => i + 17);
-                const allHidden = days.every(day => hiddenDays.has(day));
-                const otherDays = Array.from({length: 20}, (_, i) => i + 1).filter(d => !days.includes(d));
-                setHiddenDays(prev => {
-                  const next = new Set(prev);
-                  if (allHidden) {
-                    days.forEach(day => next.delete(day));
-                    otherDays.forEach(day => next.add(day));
-                  } else {
-                    days.forEach(day => next.add(day));
-                  }
-                  return next;
-                });
-                setShowAllDays(false);
-              }}
-              className={`px-3 py-1 rounded ${Array.from({length: 4}, (_, i) => i + 17).every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-red-400 text-red-950 hover:bg-red-500'}`}
-            >
-              Days 17-20
+              Days 13-19
             </button>
             <button
               onClick={toggleShowAll}
