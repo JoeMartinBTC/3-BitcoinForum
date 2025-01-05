@@ -168,7 +168,7 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-  const [numDays, setNumDays] = useState(5);
+  const [numDays, setNumDays] = useState(6); //Increased number of days
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
 
@@ -414,32 +414,32 @@ export function TimeGrid() {
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
           <div key={day} className={`space-y-0.5 ${
-            day <= 5 ? 'bg-green-50' : 
-            day <= 10 ? 'bg-green-100' : 
-            day <= 16 ? 'bg-green-200' :
-            day <= 18 ? 'bg-green-300' :
+            day <= 6 ? 'bg-green-50' : 
+            day <= 11 ? 'bg-green-100' : 
+            day <= 17 ? 'bg-green-200' :
+            day <= 19 ? 'bg-green-300' :
             day <= 20 ? 'bg-green-400' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
-              day <= 5 ? 'bg-blue-100 text-blue-700' :
-              day <= 10 ? 'bg-blue-200 text-blue-800' :
-              day <= 16 ? 'bg-blue-300 text-blue-900' :
+              day <= 6 ? 'bg-blue-100 text-blue-700' :
+              day <= 11 ? 'bg-blue-200 text-blue-800' :
+              day <= 17 ? 'bg-blue-300 text-blue-900' :
               day <= 20 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
               <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
-                <span>{day <= 5 ? 'Do.' : 
-                       day <= 10 ? 'Fr.' : 
-                       day <= 16 ? 'Sa.' : 
-                       day === 19 ? 'Do.' :
-                       day === 17 ? 'Fr.' :
-                       day === 18 ? 'Sa.' : ''}</span>
-                <span>{day <= 5 ? '09.10' : 
-                       day <= 10 ? '10.10' : 
-                       day <= 16 ? '11.10' : 
-                       day === 19 ? '09.10' :
-                       day === 17 ? '10.10' :
-                       day === 18 ? '11.10' : ''}</span>
+                <span>{day <= 6 ? 'Do.' : 
+                       day <= 11 ? 'Fr.' : 
+                       day <= 17 ? 'Sa.' : 
+                       day === 20 ? 'Do.' :
+                       day === 18 ? 'Fr.' :
+                       day === 19 ? 'Sa.' : ''}</span>
+                <span>{day <= 6 ? '09.10' : 
+                       day <= 11 ? '10.10' : 
+                       day <= 17 ? '11.10' : 
+                       day === 20 ? '09.10' :
+                       day === 18 ? '10.10' :
+                       day === 19 ? '11.10' : ''}</span>
               </div>
             </div>
             <div className="space-y-0">
