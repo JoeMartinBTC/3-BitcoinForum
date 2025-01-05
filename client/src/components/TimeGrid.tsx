@@ -298,46 +298,46 @@ export function TimeGrid() {
               {showAllDays ? 'Hide Days' : 'Show All'}
             </button>
             <button 
-              onClick={() => toggleVenue([1,6,11])}
-              className={`px-3 py-1 rounded ${[1,6,11].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
+              onClick={() => toggleVenue([1,7,13])}
+              className={`px-3 py-1 rounded ${[1,7,13].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}`}
             >
               Main Stage
             </button>
             <button 
-              onClick={() => toggleVenue([2,7,12])}
-              className={`px-3 py-1 rounded ${[2,7,12].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-200 text-blue-800 hover:bg-blue-300'}`}
+              onClick={() => toggleVenue([2,8,14])}
+              className={`px-3 py-1 rounded ${[2,8,14].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-200 text-blue-800 hover:bg-blue-300'}`}
             >
               Nebenraum
             </button>
             <button 
-              onClick={() => toggleVenue([3,8,13])}
-              className={`px-3 py-1 rounded ${[3,8,13].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-300 text-blue-900 hover:bg-blue-400'}`}
+              onClick={() => toggleVenue([3,9,15])}
+              className={`px-3 py-1 rounded ${[3,9,15].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-blue-300 text-blue-900 hover:bg-blue-400'}`}
             >
-              Donau
+              Donau Tower
             </button>
             <button 
-              onClick={() => toggleVenue([4,9,14])}
-              className={`px-3 py-1 rounded ${[4,9,14].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-50 text-yellow-800 hover:bg-yellow-100'}`}
+              onClick={() => toggleVenue([4,10,16])}
+              className={`px-3 py-1 rounded ${[4,10,16].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-50 text-yellow-800 hover:bg-yellow-100'}`}
             >
               Brigk
             </button>
             <button 
-              onClick={() => toggleVenue([5,10,15,19,17,18])}
-              className={`px-3 py-1 rounded ${[5,10,15,19,17,18].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}
+              onClick={() => toggleVenue([5,11,17])}
+              className={`px-3 py-1 rounded ${[5,11,17].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}
             >
               Exerzierhalle
             </button>
             <button 
-              onClick={() => toggleVenue([16])}
-              className={`px-3 py-1 rounded ${[16].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}
-            >
-              Eishalle
-            </button>
-            <button 
-              onClick={() => toggleVenue([20])}
-              className={`px-3 py-1 rounded ${[20].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
+              onClick={() => toggleVenue([6,12,18])}
+              className={`px-3 py-1 rounded ${[6,12,18].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-green-100 text-green-800 hover:bg-green-200'}`}
             >
               VIP
+            </button>
+            <button 
+              onClick={() => toggleVenue([19])}
+              className={`px-3 py-1 rounded ${[19].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
+            >
+              Eishalle
             </button>
           </div>
         </div>
@@ -349,23 +349,22 @@ export function TimeGrid() {
               className={`px-2 py-1 rounded text-sm ${
                 !showAllDays && hiddenDays.has(day) 
                   ? 'bg-gray-100 border border-gray-300 text-gray-400' 
-                  : [1,6,11].includes(day) ? 'bg-blue-100 text-blue-700' 
-                  : [2,7,12].includes(day) ? 'bg-blue-200 text-blue-800'
-                  : [3,8,13].includes(day) ? 'bg-blue-300 text-blue-900'
-                  : [4,9,14].includes(day) ? 'bg-yellow-50 text-yellow-800'
-                  : [5,10,15].includes(day) ? 'bg-yellow-100 text-yellow-800'
-                  : day === 16 ? 'bg-yellow-100 text-yellow-800'
-                  : [17,18,19,20].includes(day) ? 'bg-yellow-200 text-yellow-800'
-                  : 'bg-primary/10 text-primary'
+                  : [1,7,13].includes(day) ? 'bg-blue-100 text-blue-700' 
+                  : [2,8,14].includes(day) ? 'bg-blue-200 text-blue-800'
+                  : [3,9,15].includes(day) ? 'bg-blue-300 text-blue-900'
+                  : [4,10,16].includes(day) ? 'bg-yellow-50 text-yellow-800'
+                  : [5,11,17].includes(day) ? 'bg-yellow-100 text-yellow-800'
+                  : day === 19 ? 'bg-yellow-200 text-yellow-800'
+                  : [6,12,18].includes(day) ? 'bg-green-100 text-green-800' : 'bg-primary/10 text-primary'
               }`}
             >
-              {[1,6,11].includes(day) ? 'Main Stage' :
-             [2,7,12].includes(day) ? 'Nebenraum' :
-             [3,8,13].includes(day) ? 'Donau Tower' :
-             [4,9,14].includes(day) ? 'Brigk' :
-             [5,10,15].includes(day) ? 'Exerzierhalle' :
-             day === 16 ? 'Eishalle' :
-             [17,18,19,20].includes(day) ? 'VIP' : `Day ${day}`}
+              {[1,7,13].includes(day) ? 'Main Stage' :
+             [2,8,14].includes(day) ? 'Nebenraum' :
+             [3,9,15].includes(day) ? 'Donau Tower' :
+             [4,10,16].includes(day) ? 'Brigk' :
+             [5,11,17].includes(day) ? 'Exerzierhalle' :
+             day === 19 ? 'Eishalle' :
+             [6,12,18].includes(day) ? 'VIP' : `Day ${day}`}
             </button>
           ))}
         </div>
