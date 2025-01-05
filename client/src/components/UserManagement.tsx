@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
-import { toast } from './ui/use-toast';
+import { toast } from '../hooks/use-toast';
 
 interface User {
   id: number;
