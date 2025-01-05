@@ -425,7 +425,7 @@ export function TimeGrid() {
               day <= 6 ? 'bg-blue-100 text-blue-700' :
               day <= 11 ? 'bg-blue-200 text-blue-800' :
               day <= 17 ? 'bg-blue-300 text-blue-900' :
-              day === 19 ? 'bg-green-200 text-green-800' :
+              day === 19 ? 'bg-yellow-100 text-yellow-800' :
               'bg-blue-100 text-blue-700'
             }`}>
               <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
