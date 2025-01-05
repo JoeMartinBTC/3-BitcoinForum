@@ -343,8 +343,8 @@ export function TimeGrid() {
               Brigk
             </button>
             <button 
-              onClick={() => toggleVenue([5,10,15])}
-              className={`px-3 py-1 rounded ${[5,10,15].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}
+              onClick={() => toggleVenue([5,10,15,19,17,18])}
+              className={`px-3 py-1 rounded ${[5,10,15,19,17,18].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'}`}
             >
               Exerzierhalle
             </button>
@@ -355,8 +355,8 @@ export function TimeGrid() {
               Eishalle
             </button>
             <button 
-              onClick={() => toggleVenue([17,18,19,20])}
-              className={`px-3 py-1 rounded ${[17,18,19,20].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
+              onClick={() => toggleVenue([20])}
+              className={`px-3 py-1 rounded ${[20].every(day => hiddenDays.has(day)) ? 'bg-gray-100 border border-gray-300 text-gray-400' : 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300'}`}
             >
               VIP
             </button>
@@ -431,10 +431,13 @@ export function TimeGrid() {
                 <span>{day <= 5 ? 'Do.' : 
                        day <= 10 ? 'Fr.' : 
                        day <= 16 ? 'Sa.' : 
-                       day <= 18 ? 'VIP' : ''}</span>
+                       day === 19 ? 'Do.' :
+                       day === 17 ? 'Fr.' :
+                       day === 18 ? 'Sa.' : ''}</span>
                 <span>{day <= 5 ? '09.10' : 
                        day <= 10 ? '10.10' : 
                        day <= 16 ? '11.10' : 
+                       day === 19 ? '09.10' :
                        day === 17 ? '10.10' :
                        day === 18 ? '11.10' : ''}</span>
               </div>
