@@ -168,7 +168,7 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-  const [numDays, setNumDays] = useState(21); // Increased for new day
+  const [numDays, setNumDays] = useState(19); // Limited to 19 days
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
 
@@ -418,8 +418,7 @@ export function TimeGrid() {
             day <= 11 ? 'bg-green-100' : 
             day === 12 ? 'bg-green-100' :
             day <= 18 ? 'bg-green-200' :
-            day <= 20 ? 'bg-green-300' :
-            day <= 21 ? 'bg-green-400' : 'bg-green-200'
+            day === 19 ? 'bg-green-300' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
               day <= 6 ? 'bg-blue-100 text-blue-700' :
