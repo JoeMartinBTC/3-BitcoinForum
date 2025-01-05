@@ -38,13 +38,6 @@ export default function Schedule() {
   if (!userRole) {
     return <Login onLogin={setUserRole} />;
   }
-    filename: 'event-schedule.pdf',
-    page: {
-      format: 'A4',
-      orientation: 'landscape',
-      margin: 5
-    }
-  });
 
   React.useEffect(() => {
     const element = targetRef.current;
