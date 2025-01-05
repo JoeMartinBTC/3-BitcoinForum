@@ -384,9 +384,9 @@ export function TimeGrid() {
              [2,7,12].includes(day) ? 'Nebenraum' :
              [3,8,13].includes(day) ? 'Donau Tower' :
              [4,9,14].includes(day) ? 'Brigk' :
-             [5,19,10,17,15,18].includes(day) ? 'Exerzierhalle/VIP' :
+             [5,10,15].includes(day) ? 'Exerzierhalle' :
              day === 16 ? 'Eishalle' :
-             day === 20 ? 'VIP' : `Day ${day}`}
+             [17,18,19,20].includes(day) ? 'VIP' : `Day ${day}`}
             </button>
           ))}
         </div>
