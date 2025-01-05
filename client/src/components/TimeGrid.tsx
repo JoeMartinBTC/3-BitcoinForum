@@ -168,7 +168,7 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-  const [numDays, setNumDays] = useState(6); //Increased number of days
+  const [numDays, setNumDays] = useState(21); // Increased for new day
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
 
@@ -416,15 +416,17 @@ export function TimeGrid() {
           <div key={day} className={`space-y-0.5 ${
             day <= 6 ? 'bg-green-50' : 
             day <= 11 ? 'bg-green-100' : 
-            day <= 17 ? 'bg-green-200' :
-            day <= 19 ? 'bg-green-300' :
-            day <= 20 ? 'bg-green-400' : 'bg-green-200'
+            day === 12 ? 'bg-green-100' :
+            day <= 18 ? 'bg-green-200' :
+            day <= 20 ? 'bg-green-300' :
+            day <= 21 ? 'bg-green-400' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
               day <= 6 ? 'bg-blue-100 text-blue-700' :
               day <= 11 ? 'bg-blue-200 text-blue-800' :
-              day <= 17 ? 'bg-blue-300 text-blue-900' :
-              day <= 20 ? 'bg-green-200 text-green-800' :
+              day === 12 ? 'bg-blue-200 text-blue-800' :
+              day <= 18 ? 'bg-blue-300 text-blue-900' :
+              day <= 21 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
               <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
