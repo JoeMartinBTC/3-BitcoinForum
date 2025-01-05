@@ -19,7 +19,8 @@ export async function authMiddleware(req: AuthRequest, res: Response, next: Next
   const replitUsername = req.headers["x-replit-user-name"];
   
   if (!replitUserId || !replitUsername) {
-    return res.status(401).json({ error: "Unauthorized" });
+    req.user = null;
+    return next();
   }
 
   const existingUser = await db.select().from(users).where(eq(users.replitUserId, replitUserId.toString())).limit(1);

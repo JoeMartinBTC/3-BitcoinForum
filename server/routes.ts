@@ -9,6 +9,13 @@ export function registerRoutes(app: Express) {
   app.use(authMiddleware);
 
   // User management routes
+  app.get("/api/users/me", async (req: AuthRequest, res) => {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    res.json(req.user);
+  });
+
   app.get("/api/users", requireRole(["admin"]), async (req, res) => {
     const allUsers = await db.select().from(users);
     res.json(allUsers);
