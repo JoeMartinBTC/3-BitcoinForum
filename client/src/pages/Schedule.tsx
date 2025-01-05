@@ -26,12 +26,18 @@ import { UserRole, canEditEvents, canImportData } from '@/lib/auth';
 
 export default function Schedule() {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const { toPDF, targetRef } = usePDF({
+    filename: 'event-schedule.pdf',
+    page: {
+      format: 'A4',
+      orientation: 'landscape',
+      margin: 5
+    }
+  });
 
   if (!userRole) {
     return <Login onLogin={setUserRole} />;
   }
-
-  const { toPDF, targetRef } = usePDF({
     filename: 'event-schedule.pdf',
     page: {
       format: 'A4',
