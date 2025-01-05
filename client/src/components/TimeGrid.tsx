@@ -414,10 +414,10 @@ export function TimeGrid() {
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
           <div key={day} className={`space-y-0.5 ${
+            [6, 12, 18].includes(day) ? 'bg-green-100' :
             day <= 6 ? 'bg-green-50' : 
             day <= 11 ? 'bg-green-100' : 
-            day === 12 ? 'bg-green-100' :
-            day <= 18 ? 'bg-green-200' :
+            day <= 17 ? 'bg-green-200' :
             day === 19 ? 'bg-green-300' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
