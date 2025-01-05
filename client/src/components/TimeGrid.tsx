@@ -421,11 +421,11 @@ export function TimeGrid() {
             day === 19 ? 'bg-green-300' : 'bg-green-200'
           }`}>
             <div className={`flex flex-col items-center gap-1 mb-2 px-2 ${
+              [6, 12, 18].includes(day) ? 'bg-green-100 text-green-700' :
               day <= 6 ? 'bg-blue-100 text-blue-700' :
               day <= 11 ? 'bg-blue-200 text-blue-800' :
-              day === 12 ? 'bg-blue-200 text-blue-800' :
-              day <= 18 ? 'bg-blue-300 text-blue-900' :
-              day <= 21 ? 'bg-green-200 text-green-800' :
+              day <= 17 ? 'bg-blue-300 text-blue-900' :
+              day === 19 ? 'bg-green-200 text-green-800' :
               'bg-blue-100 text-blue-700'
             }`}>
               <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
