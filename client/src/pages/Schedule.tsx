@@ -20,7 +20,17 @@ import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
 
+import { useState } from 'react';
+import { Login } from '../components/Login';
+import { UserRole, canEditEvents, canImportData } from '@/lib/auth';
+
 export default function Schedule() {
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
+
+  if (!userRole) {
+    return <Login onLogin={setUserRole} />;
+  }
+
   const { toPDF, targetRef } = usePDF({
     filename: 'event-schedule.pdf',
     page: {
@@ -263,12 +273,14 @@ export default function Schedule() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Calendar
-            </button>
+            {canImportData(userRole) && (
+              <button
+                onClick={() => document.getElementById('excelImport')?.click()}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+              >
+                Import Calendar
+              </button>
+            )}
             <button
               onClick={() => document.getElementById('holdingImport')?.click()}
               className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"

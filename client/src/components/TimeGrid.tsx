@@ -165,7 +165,7 @@ function TimeSlot({
   );
 }
 
-export function TimeGrid() {
+export function TimeGrid({ canEdit = false }) {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(19); // Limited to 19 days
