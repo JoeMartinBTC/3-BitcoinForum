@@ -1,6 +1,7 @@
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
+import { UserManagement } from "@/components/UserManagement";
 import { useRef } from "react";
 import {
   AlertDialog,
@@ -83,6 +84,7 @@ export default function Schedule() {
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <VersionBadge />
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.2</span></h1>
+      <UserManagement />
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
