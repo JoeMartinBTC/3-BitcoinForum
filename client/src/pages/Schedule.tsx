@@ -2,7 +2,7 @@ import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
 import { UserManagement } from "@/components/UserManagement";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,9 +19,40 @@ import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function Schedule() {
-  const { toPDF, targetRef } = usePDF({
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Check if user is logged in
+    fetch('/api/users/me')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setUser(data));
+  }, []);
+
+  const handleLogin = () => {
+    const width = 350;
+    const height = 500;
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+    
+    const popup = window.open(
+      `https://replit.com/auth_with_repl_site?domain=${location.host}`,
+      'Login',
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+
+    window.addEventListener('message', (e) => {
+      if (e.data === 'auth_complete') {
+        popup?.close();
+        window.location.reload();
+      }
+    });
+  };
+
+  const { toPDF, targetRef: pdfTargetRef } = usePDF({
     filename: 'event-schedule.pdf',
     page: {
       format: 'A4',
@@ -31,7 +62,7 @@ export default function Schedule() {
   });
 
   React.useEffect(() => {
-    const element = targetRef.current;
+    const element = pdfTargetRef.current;
     if (element) {
       element.classList.add('pdf-export');
     }
@@ -40,10 +71,10 @@ export default function Schedule() {
         element.classList.remove('pdf-export');
       }
     };
-  }, [targetRef]);
+  }, [pdfTargetRef]);
 
   const handlePDFExport = useCallback(() => {
-    const element = targetRef.current;
+    const element = pdfTargetRef.current;
     if (element) {
       element.classList.add('pdf-export');
       toPDF();
@@ -51,7 +82,7 @@ export default function Schedule() {
         element.classList.remove('pdf-export');
       }, 100);
     }
-  }, [targetRef, toPDF]);
+  }, [pdfTargetRef, toPDF]);
 
   const { events, createEvent } = useSchedule();
 
@@ -78,10 +109,18 @@ export default function Schedule() {
     });
   }, [events]);
 
-  const isAdmin = true; // Placeholder -  This needs to be replaced with actual authentication logic
+  const isAdmin = user?.isAdmin || false; // Use user data for admin check
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Button onClick={handleLogin}>Login with Replit</Button>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
+    <div className="w-auto mx-4 p-4 relative" ref={pdfTargetRef}>
       <VersionBadge />
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.2</span></h1>
       <UserManagement />
