@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -78,6 +77,8 @@ export default function Schedule() {
     });
   }, [events]);
 
+  const isAdmin = true; // Placeholder -  This needs to be replaced with actual authentication logic
+
   return (
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <VersionBadge />
@@ -102,6 +103,14 @@ export default function Schedule() {
             >
               Export Calendar
             </button>
+            {isAdmin && (
+              <button
+                onClick={() => document.getElementById('excelImport')?.click()}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+              >
+                Import Calendar
+              </button>
+            )}
             <button
               onClick={() => {
                 import('xlsx').then(XLSX => {

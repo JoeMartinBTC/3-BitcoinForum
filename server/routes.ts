@@ -1,10 +1,31 @@
 import type { Express } from "express";
 import { db } from "../db";
+import { authMiddleware, requireRole, type AuthRequest } from "./middleware/auth";
 import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 export function registerRoutes(app: Express) {
+  app.use(authMiddleware);
+
+  // User management routes
+  app.get("/api/users", requireRole(["admin"]), async (req, res) => {
+    const allUsers = await db.select().from(users);
+    res.json(allUsers);
+  });
+
+  app.put("/api/users/:id", requireRole(["admin"]), async (req, res) => {
+    const { role } = req.body;
+    if (!["viewer", "editor", "admin"].includes(role)) {
+      return res.status(400).json({ error: "Invalid role" });
+    }
+    
+    const updated = await db.update(users)
+      .set({ role })
+      .where(eq(users.id, parseInt(req.params.id)))
+      .returning();
+    res.json(updated[0]);
+  });
   // Get all events
   app.get("/api/events", async (req, res) => {
     try {
@@ -16,7 +37,7 @@ export function registerRoutes(app: Express) {
   });
 
   // Create new event
-  app.post("/api/events", async (req, res) => {
+  app.post("/api/events", requireRole(["admin"]), async (req, res) => {
     try {
       const eventData = insertEventSchema.parse(req.body);
       const newEvent = await db.insert(events).values(eventData).returning();
@@ -38,7 +59,7 @@ export function registerRoutes(app: Express) {
   });
 
   // Update event
-  app.put("/api/events/:id", async (req, res) => {
+  app.put("/api/events/:id", requireRole(["editor", "admin"]), async (req, res) => {
     try {
       const eventId = parseInt(req.params.id);
       if (isNaN(eventId)) {

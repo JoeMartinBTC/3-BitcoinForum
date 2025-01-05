@@ -2,6 +2,15 @@ import { pgTable, text, integer, timestamp, boolean, varchar } from "drizzle-orm
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
+export const users = pgTable("users", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  email: text("email").notNull().unique(),
+  role: text("role").notNull().default("viewer"), // viewer, editor, admin
+  replitUserId: text("replit_user_id").notNull().unique(),
+  replitUsername: text("replit_username").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const dayTitles = pgTable("day_titles", {
   day: integer("day").primaryKey(),
   title1: text("title1").default("").notNull(),
