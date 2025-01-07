@@ -79,16 +79,6 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
             </span>
           </div>
           <div className="flex flex-col gap-0.5 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-6 px-1.5 hover:bg-red-100"
-              onClick={() => fetch(`/api/events/${event.id}`, { method: 'DELETE' })
-                .then(() => onUpdate({ id: event.id, deleted: true }))
-              }
-            >
-              ✕
-            </Button>
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-6 px-1.5">✎</Button>
