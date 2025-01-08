@@ -21,6 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 // Session configuration
 import session from 'express-session';
 import memorystore from 'memorystore';
+import './types';
+
 const MemoryStore = memorystore(session);
 
 app.use(session({
@@ -30,7 +32,8 @@ app.use(session({
   }),
   resave: false,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  saveUninitialized: false
+  saveUninitialized: false,
+  name: 'session'
 }));
 
 // Authentication middleware
