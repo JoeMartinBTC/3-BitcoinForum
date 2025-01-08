@@ -18,48 +18,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session configuration
-const MemoryStore = require('memorystore')(require('express-session'));
-app.use(require('express-session')({
-  cookie: { maxAge: 86400000 },
-  store: new MemoryStore({
-    checkPeriod: 86400000
-  }),
-  resave: false,
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  saveUninitialized: false
-}));
-
-// Authentication middleware
-app.use((req, res, next) => {
-  const auth = req.session.authenticated;
-  if (req.path === '/login' || auth) {
-    return next();
-  }
-  res.redirect('/login');
-});
-
-// Login endpoint
-app.get('/login', (req, res) => {
-  res.send(`
-    <form method="POST" action="/login" style="max-width: 300px; margin: 50px auto;">
-      <h2>Login Required</h2>
-      <input type="password" name="password" placeholder="Password" style="width: 100%; padding: 8px; margin: 10px 0;" required>
-      <button type="submit" style="width: 100%; padding: 8px; background: #0066cc; color: white; border: none;">Login</button>
-    </form>
-  `);
-});
-
-app.post('/login', (req, res) => {
-  const password = process.env.SITE_PASSWORD || '123';
-  if (req.body.password === password) {
-    req.session.authenticated = true;
-    res.redirect('/');
-  } else {
-    res.redirect('/login');
-  }
-});
-
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
