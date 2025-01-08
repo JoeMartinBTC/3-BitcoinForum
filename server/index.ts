@@ -26,23 +26,29 @@ import './types';
 const MemoryStore = memorystore(session);
 
 app.use(session({
-  cookie: { maxAge: 86400000 },
+  cookie: { 
+    maxAge: 86400000,
+    secure: false,
+    httpOnly: true
+  },
   store: new MemoryStore({
     checkPeriod: 86400000
   }),
   resave: true,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  saveUninitialized: true,
+  saveUninitialized: false,
   name: 'session'
 }));
 
 // Authentication middleware
 app.use((req, res, next) => {
-  const auth = req.session.authenticated;
-  if (req.path === '/login' || auth) {
+  if (req.path === '/login' || req.path.startsWith('/api')) {
     return next();
   }
-  res.redirect('/login');
+  if (!req.session.authenticated) {
+    return res.redirect('/login');
+  }
+  next();
 });
 
 // Login endpoint
