@@ -19,36 +19,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Session configuration
-import session from 'express-session';
-import memorystore from 'memorystore';
-import './types';
-
-const MemoryStore = memorystore(session);
-
-app.use(session({
-  cookie: { 
-    maxAge: 86400000,
-    secure: false,
-    httpOnly: true
-  },
+const MemoryStore = require('memorystore')(require('express-session'));
+app.use(require('express-session')({
+  cookie: { maxAge: 86400000 },
   store: new MemoryStore({
     checkPeriod: 86400000
   }),
-  resave: true,
+  resave: false,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  saveUninitialized: false,
-  name: 'session'
+  saveUninitialized: false
 }));
 
 // Authentication middleware
 app.use((req, res, next) => {
-  if (req.path === '/login' || req.path.startsWith('/api')) {
+  const auth = req.session.authenticated;
+  if (req.path === '/login' || auth) {
     return next();
   }
-  if (!req.session.authenticated) {
-    return res.redirect('/login');
-  }
-  next();
+  res.redirect('/login');
 });
 
 // Login endpoint
@@ -66,9 +54,7 @@ app.post('/login', (req, res) => {
   const password = process.env.SITE_PASSWORD || '123';
   if (req.body.password === password) {
     req.session.authenticated = true;
-    req.session.save(() => {
-      res.redirect('/');
-    });
+    res.redirect('/');
   } else {
     res.redirect('/login');
   }
