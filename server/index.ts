@@ -19,8 +19,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Session configuration
-const MemoryStore = require('memorystore')(require('express-session'));
-app.use(require('express-session')({
+import session from 'express-session';
+import memorystore from 'memorystore';
+const MemoryStore = memorystore(session);
+
+app.use(session({
   cookie: { maxAge: 86400000 },
   store: new MemoryStore({
     checkPeriod: 86400000
