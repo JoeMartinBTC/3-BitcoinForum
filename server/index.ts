@@ -18,23 +18,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Basic password protection middleware
-app.use((req, res, next) => {
-  const PASSWORD = '123';
-  const providedPassword = req.headers['x-password'] || req.query.password;
-  
-  // Skip auth for auth-related endpoints
-  if (req.path.startsWith('/auth')) {
-    return next();
-  }
-
-  if (providedPassword === PASSWORD) {
-    next();
-  } else {
-    res.status(401).json({ error: 'Unauthorized' });
-  }
-});
-
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;

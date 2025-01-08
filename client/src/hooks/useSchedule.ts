@@ -11,11 +11,7 @@ export function useSchedule() {
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
     queryFn: async () => {
-      const res = await fetch('/api/events', {
-        headers: {
-          'x-password': '123'
-        }
-      });
+      const res = await fetch('/api/events');
       if (!res.ok) {
         throw new Error('Failed to fetch events');
       }
@@ -35,7 +31,7 @@ export function useSchedule() {
       };
       return fetch('/api/events', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-password': '123' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       }).then(res => {
         if (!res.ok) {
@@ -67,7 +63,7 @@ export function useSchedule() {
     mutationFn: ({ id, ...updates }: Partial<Event> & { id: number }) =>
       fetch(`/api/events/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-password': '123' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       }).then(res => res.json()),
     onMutate: ({ id, deleted }) => {
