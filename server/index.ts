@@ -30,9 +30,9 @@ app.use(session({
   store: new MemoryStore({
     checkPeriod: 86400000
   }),
-  resave: false,
+  resave: true,
   secret: process.env.SESSION_SECRET || 'your-secret-key',
-  saveUninitialized: false,
+  saveUninitialized: true,
   name: 'session'
 }));
 
@@ -60,7 +60,9 @@ app.post('/login', (req, res) => {
   const password = process.env.SITE_PASSWORD || '123';
   if (req.body.password === password) {
     req.session.authenticated = true;
-    res.redirect('/');
+    req.session.save(() => {
+      res.redirect('/');
+    });
   } else {
     res.redirect('/login');
   }
