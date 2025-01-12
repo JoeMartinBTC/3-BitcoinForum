@@ -325,7 +325,7 @@ export default function Schedule() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            {localStorage.getItem('schedule-password') === '3' && (
+            {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
                 <button
                   onClick={() => document.getElementById('excelImport')?.click()}
