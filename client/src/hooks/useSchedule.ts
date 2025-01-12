@@ -11,7 +11,12 @@ export function useSchedule() {
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
     queryFn: async () => {
-      const res = await fetch('/api/events');
+      const password = localStorage.getItem('schedule-password');
+      const res = await fetch('/api/events', {
+        headers: {
+          'x-password': password || ''
+        }
+      });
       if (!res.ok) {
         throw new Error('Failed to fetch events');
       }

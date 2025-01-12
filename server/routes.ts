@@ -8,9 +8,16 @@ export function registerRoutes(app: Express) {
   // Get all events
   app.get("/api/events", async (req, res) => {
     try {
+      const password = req.headers['x-password'];
+      if (!password) {
+        return res.status(401).json({ error: "Password required" });
+      }
+
       const allEvents = await db.select().from(events);
+      console.log(`Fetched ${allEvents.length} events`);
       res.json(allEvents);
     } catch (error) {
+      console.error('Error fetching events:', error);
       res.status(500).json({ error: "Failed to fetch events" });
     }
   });
