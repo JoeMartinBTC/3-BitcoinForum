@@ -136,7 +136,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
             {isAdmin && (
               <button 
                 onClick={handleDelete}
-                className="absolute top-1 right-4 p-1.5 text-red-500 hover:text-red-700"
+                className="absolute top-1 left-1 p-1.5 text-red-500 hover:text-red-700"
               >
                 🗑️
               </button>
