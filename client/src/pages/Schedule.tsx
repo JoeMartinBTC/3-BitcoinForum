@@ -302,7 +302,15 @@ export default function Schedule() {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}>
+                  <AlertDialogAction onClick={() => {
+                    const password = localStorage.getItem('schedule-password');
+                    fetch('/api/events', { 
+                      method: 'DELETE',
+                      headers: {
+                        'x-password': password || ''
+                      }
+                    }).then(() => window.location.reload())
+                  }}>
                     Clear Events
                   </AlertDialogAction>
                 </AlertDialogFooter>

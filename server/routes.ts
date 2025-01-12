@@ -131,6 +131,10 @@ export function registerRoutes(app: Express) {
   // Delete all events
   app.delete("/api/events", async (req, res) => {
     try {
+      const password = req.headers['x-password'];
+      if (password !== '3') {
+        return res.status(401).json({ error: "Admin access required" });
+      }
       await db.delete(events);
       res.json({ success: true });
     } catch (error) {
