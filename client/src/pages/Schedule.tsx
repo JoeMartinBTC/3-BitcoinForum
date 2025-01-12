@@ -120,7 +120,7 @@ export default function Schedule() {
         </Card>
         <Card className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
-          <HoldingArea level={password} />
+          <HoldingArea />
           <div className="flex gap-2 mt-4">
             <button
               onClick={handlePDFExport}

@@ -133,7 +133,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                 </div>
               </DialogContent>
             </Dialog>
-            {localStorage.getItem('schedule-password') === '3' && (
+            {isAdmin && (
               <button 
                 onClick={handleDelete}
                 className="absolute top-1 right-1 p-1 text-red-500 hover:text-red-700"
