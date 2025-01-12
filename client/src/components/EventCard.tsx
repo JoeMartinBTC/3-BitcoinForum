@@ -90,7 +90,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               {event.title}
             </span>
           </div>
-          <div className="flex flex-col gap-0.5 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex flex-col gap-2 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-6 px-1.5">✎</Button>
@@ -136,7 +136,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
             {isAdmin && (
               <button 
                 onClick={handleDelete}
-                className="absolute top-1 right-1 p-1 text-red-500 hover:text-red-700"
+                className="absolute top-1 right-2 p-1.5 text-red-500 hover:text-red-700"
               >
                 🗑️
               </button>
