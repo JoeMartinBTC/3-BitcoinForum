@@ -29,9 +29,10 @@ export function useSchedule() {
         startTime: newEvent.startTime?.toISOString(),
         endTime: newEvent.endTime?.toISOString(),
       };
+      const password = 'admin'; // Replace with actual password retrieval method.  This is a placeholder.
       return fetch('/api/events', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-password': password },
         body: JSON.stringify(payload),
       }).then(res => {
         if (!res.ok) {
@@ -60,12 +61,14 @@ export function useSchedule() {
   });
 
   const updateEventMutation = useMutation({
-    mutationFn: ({ id, ...updates }: Partial<Event> & { id: number }) =>
-      fetch(`/api/events/${id}`, {
+    mutationFn: ({ id, ...updates }: Partial<Event> & { id: number }) => {
+      const password = 'admin'; // Replace with actual password retrieval method. This is a placeholder.
+      return fetch(`/api/events/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-password': password },
         body: JSON.stringify(updates),
-      }).then(res => res.json()),
+      }).then(res => res.json());
+    },
     onMutate: ({ id, deleted }) => {
       if (deleted) {
         const previousEvents = queryClient.getQueryData(['events']);
