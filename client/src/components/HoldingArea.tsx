@@ -103,22 +103,23 @@ const handleCreateTemplate = () => {
   return (
     <div className="space-y-4">
       <div>
+        <div>
         {canCreateEvents && (
           <Dialog>
             <DialogTrigger asChild>
               <Button className="w-full">Add Events or Speakers</Button>
             </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Event</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              <div className="flex justify-between mb-4">
-                <h3 className="text-lg font-medium">Event Types</h3>
-                <Button variant="outline" onClick={() => setIsCreatingTemplate(!isCreatingTemplate)}>
-                  {isCreatingTemplate ? 'Cancel' : 'New Type'}
-                </Button>
-              </div>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Event</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-4">
+                <div className="flex justify-between mb-4">
+                  <h3 className="text-lg font-medium">Event Types</h3>
+                  <Button variant="outline" onClick={() => setIsCreatingTemplate(!isCreatingTemplate)}>
+                    {isCreatingTemplate ? 'Cancel' : 'New Type'}
+                  </Button>
+                </div>
 
               {isCreatingTemplate && (
                 <div className="space-y-4 mb-4 p-4 border rounded-lg">
@@ -325,8 +326,8 @@ const handleCreateTemplate = () => {
               <Button onClick={handleCreateEvent}>Create Event</Button>
             </div>
           </DialogContent>
-        </Dialog>
-        </div> {/* Closing div added here */}
+          </Dialog>
+        )}
         <div className="grid grid-cols-6 gap-2">
           {events
             .filter(e => e.inHoldingArea)
