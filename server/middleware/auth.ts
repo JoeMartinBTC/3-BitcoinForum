@@ -1,4 +1,3 @@
-
 const PASSWORDS = {
   VIEW: 'bip25',
   EDIT: '2',
@@ -7,8 +6,8 @@ const PASSWORDS = {
 
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
-  
-  // Always allow GET requests (view only)
+
+  // Allow GET requests with correct password
   if (req.method === 'GET') {
     if (!password || password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
