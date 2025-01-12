@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -140,18 +139,144 @@ export default function Schedule() {
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
           <HoldingArea />
           <div className="flex gap-2 mt-4">
-            <button
-              onClick={handlePDFExport}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-            >
-              Export PDF
-            </button>
-            <button
-              onClick={handleExcelExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Export Calendar
-            </button>
+            {level !== '1' && (
+              <>
+                <button
+                  onClick={handlePDFExport}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                >
+                  Export PDF
+                </button>
+                <button
+                  onClick={handleExcelExport}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Export Calendar
+                </button>
+              </>
+            )}
+            {level === '3' && (
+              <>
+                <input
+                  type="file"
+                  accept=".xlsx"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const XLSX = await import('xlsx');
+                      const reader = new FileReader();
+                      reader.onload = async (e) => {
+                        // Clear existing calendar data first
+                        await fetch('/api/events', { method: 'DELETE' });
+
+                        const data = e.target?.result;
+                        const workbook = XLSX.read(data, { type: 'binary' });
+                        const sheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                        // Process and import the data
+                        for (const event of jsonData as any[]) {
+                          try {
+                            await fetch('/api/events', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                title: event.Title,
+                                description: event.Description,
+                                day: event.Day,
+                                startTime: event.StartTime,
+                                endTime: event.EndTime,
+                                isBreak: event.IsBreak === 'Yes',
+                                inHoldingArea: event.InHoldingArea === 'Yes',
+                                templateId: event.TemplateID,
+                                color: event.Color
+                              })
+                            });
+                          } catch (error) {
+                            console.error('Failed to import event:', error);
+                          }
+                        }
+                        window.location.reload();
+                      };
+                      reader.readAsBinaryString(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="excelImport"
+                />
+                <input
+                  type="file"
+                  accept=".xlsx"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const XLSX = await import('xlsx');
+                      const reader = new FileReader();
+                      reader.onload = async (e) => {
+                        const data = e.target?.result;
+                        const workbook = XLSX.read(data, { type: 'binary' });
+                        const sheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                        // Store the background colors in local storage for persistence
+                        const backgroundColors = {};
+                        jsonData.forEach((item: any) => {
+                          const key = `bg_${item.day}_${item.time}`;
+                          const color = item.backgroundColor.startsWith('rgb') 
+                            ? item.backgroundColor
+                            : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                          localStorage.setItem(key, color);
+
+                          // Also apply to currently visible slots
+                          const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                          if (slot && !slot.querySelector('.event-card')) {
+                            (slot as HTMLElement).style.backgroundColor = color;
+                          }
+                        });
+                      };
+                      reader.readAsBinaryString(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="backgroundImport"
+                />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                      Clear All Events
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Clear All Events</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will remove all events from the schedule. This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}>
+                        Clear Events
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <button
+                  onClick={() => document.getElementById('excelImport')?.click()}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Import Calendar
+                </button>
+                <button
+                  onClick={() => document.getElementById('holdingImport')?.click()}
+                  className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+                >
+                  Import to Holding
+                </button>
+              </>
+            )}
             <button
               onClick={() => {
                 import('xlsx').then(XLSX => {
@@ -208,7 +333,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
+
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -216,7 +341,7 @@ export default function Schedule() {
                         startTime.setHours(startTime.getHours() + 1);
                         const endTime = new Date(startTime);
                         endTime.setMinutes(endTime.getMinutes() + 25);
-                        
+
                         await fetch('/api/events', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
@@ -244,148 +369,6 @@ export default function Schedule() {
               className="hidden"
               id="holdingImport"
             />
-            <input
-              type="file"
-              accept=".xlsx"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const XLSX = await import('xlsx');
-                  const reader = new FileReader();
-                  reader.onload = async (e) => {
-                    // Clear existing calendar data first
-                    await fetch('/api/events', { method: 'DELETE' });
-                    
-                    const data = e.target?.result;
-                    const workbook = XLSX.read(data, { type: 'binary' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
-                    // Process and import the data
-                    for (const event of jsonData as any[]) {
-                      try {
-                        await fetch('/api/events', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            title: event.Title,
-                            description: event.Description,
-                            day: event.Day,
-                            startTime: event.StartTime,
-                            endTime: event.EndTime,
-                            isBreak: event.IsBreak === 'Yes',
-                            inHoldingArea: event.InHoldingArea === 'Yes',
-                            templateId: event.TemplateID,
-                            color: event.Color
-                          })
-                        });
-                      } catch (error) {
-                        console.error('Failed to import event:', error);
-                      }
-                    }
-                    window.location.reload();
-                  };
-                  reader.readAsBinaryString(file);
-                }
-              }}
-              className="hidden"
-              id="excelImport"
-            />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
-                  Clear All Events
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Clear All Events</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will remove all events from the schedule. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => fetch('/api/events', { method: 'DELETE' }).then(() => window.location.reload())}>
-                    Clear Events
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Calendar
-            </button>
-            <button
-              onClick={() => document.getElementById('holdingImport')?.click()}
-              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
-            >
-              Import to Holding
-            </button>
-            <button
-              onClick={async () => {
-                const XLSX = await import('xlsx');
-                const slots = document.querySelectorAll('[data-slot-info]');
-                const backgroundData = Array.from(slots).map(slot => {
-                  const day = slot.getAttribute('data-day');
-                  const time = slot.getAttribute('data-time');
-                  const hasEvent = slot.querySelector('.event-card');
-                  if (!hasEvent) {
-                    const backgroundColor = getComputedStyle(slot).backgroundColor;
-                    return { day, time, backgroundColor };
-                  }
-                  return null;
-                }).filter(Boolean);
-
-                const ws = XLSX.utils.json_to_sheet(backgroundData);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
-                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
-              }}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-            >
-              Export Backgrounds
-            </button>
-            <input
-              type="file"
-              accept=".xlsx"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const XLSX = await import('xlsx');
-                  const reader = new FileReader();
-                  reader.onload = async (e) => {
-                    const data = e.target?.result;
-                    const workbook = XLSX.read(data, { type: 'binary' });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
-                    // Store the background colors in local storage for persistence
-                    const backgroundColors = {};
-                    jsonData.forEach((item: any) => {
-                      const key = `bg_${item.day}_${item.time}`;
-                      const color = item.backgroundColor.startsWith('rgb') 
-                        ? item.backgroundColor
-                        : `rgb(${item.backgroundColor.split(',').join(', ')})`;
-                      localStorage.setItem(key, color);
-                      
-                      // Also apply to currently visible slots
-                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
-                      if (slot && !slot.querySelector('.event-card')) {
-                        (slot as HTMLElement).style.backgroundColor = color;
-                      }
-                    });
-                  };
-                  reader.readAsBinaryString(file);
-                }
-              }}
-              className="hidden"
-              id="backgroundImport"
-            />
             <button
               onClick={() => document.getElementById('backgroundImport')?.click()}
               className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
@@ -394,7 +377,7 @@ export default function Schedule() {
             </button>
           </div>
         </Card>
-        
+
         <Card className="p-4 mt-4 bg-yellow-50">
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm">

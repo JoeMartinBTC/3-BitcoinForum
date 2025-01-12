@@ -45,8 +45,9 @@ const ICONS = {
   'zap': Zap
 };
 
-export function HoldingArea() {
+export function HoldingArea({ level }: { level: string }) {
   const { events, createEvent, updateEvent } = useSchedule();
+  const canCreateEvents = level === '2' || level === '3';
   const [newEventTitle, setNewEventTitle] = useState('');
   const defaultTemplate = {
     id: 'default',
@@ -101,11 +102,12 @@ const handleCreateTemplate = () => {
 
   return (
     <div className="space-y-4">
-      <div> {/* Wrapping div added here */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="w-full">Add Events or Speakers</Button>
-          </DialogTrigger>
+      <div>
+        {canCreateEvents && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full">Add Events or Speakers</Button>
+            </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Create New Event</DialogTitle>
