@@ -37,13 +37,19 @@ export default function Schedule() {
       return;
     }
     if (lowercasePassword === 'bip25') setLevel('1');
-    else if (lowercasePassword === '130jahre') setLevel('2');
-    else if (lowercasePassword === '99ballons') setLevel('3');
+    else if (lowercasePassword === '130jahre') {
+      setLevel('2');
+      localStorage.setItem('schedule-password', '2');
+    }
+    else if (lowercasePassword === '99ballons') {
+      setLevel('3');
+      localStorage.setItem('schedule-password', '3');
+    }
     else {
       setError('Invalid password');
       return;
     }
-    localStorage.setItem('schedule-password', password);
+    localStorage.setItem('schedule-password', level);
     setShowPasswordDialog(false);
   };
 
