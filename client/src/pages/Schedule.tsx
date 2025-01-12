@@ -29,8 +29,13 @@ export default function Schedule() {
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const lowercasePassword = password.toLowerCase();
-    if (lowercasePassword === 'bip25' || lowercasePassword === '130jahre' || lowercasePassword === '99ballons') {
-      localStorage.setItem('schedule-password', lowercasePassword);
+    let level = '';
+    if (lowercasePassword === 'bip25') level = '1';
+    else if (lowercasePassword === '130jahre') level = '2';
+    else if (lowercasePassword === '99ballons') level = '3';
+    
+    if (level) {
+      localStorage.setItem('schedule-password', level);
       setShowPasswordDialog(false);
     }
   };

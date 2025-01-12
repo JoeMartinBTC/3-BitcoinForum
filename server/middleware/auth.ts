@@ -1,12 +1,15 @@
 
 const PASSWORDS = {
-  VIEW: 'bip25',
-  EDIT: '130jahre',
-  ADMIN: '99ballons'
+  '1': 'bip25',
+  '2': '130jahre',
+  '3': '99ballons'
 };
 
-// Helper function to make password checks case-insensitive
-const matchPassword = (input: string, target: string) => input.toLowerCase() === target.toLowerCase();
+// Helper function to make password checks case-insensitive and handle numeric levels
+const matchPassword = (input: string, target: string) => {
+  const inputLower = input.toLowerCase();
+  return inputLower === target.toLowerCase() || PASSWORDS[inputLower] === target.toLowerCase();
+};
 
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
