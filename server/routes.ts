@@ -3,6 +3,7 @@ import { db } from "../db";
 import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { PASSWORDS } from "./middleware/auth";
 
 export function registerRoutes(app: Express) {
   // Get all events
@@ -132,7 +133,7 @@ export function registerRoutes(app: Express) {
   app.delete("/api/events", async (req, res) => {
     try {
       const password = req.headers['x-password'];
-      if (password !== '3') {
+      if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
       await db.delete(events);
