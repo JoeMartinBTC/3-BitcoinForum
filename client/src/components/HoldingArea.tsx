@@ -1,4 +1,3 @@
-
 import { ScrollArea } from "./ui/scroll-area";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
@@ -68,7 +67,7 @@ export function HoldingArea() {
 
 const handleCreateTemplate = () => {
     if (!newTemplateTitle) return;
-    
+
     const newTemplate: EventTemplate = {
       id: newTemplateTitle.toLowerCase().replace(/\s+/g, '-'),
       title: newTemplateTitle,
@@ -77,7 +76,7 @@ const handleCreateTemplate = () => {
       description: 'Custom event type',
       icon: newTemplateIcon
     };
-    
+
     EVENT_TEMPLATES.push(newTemplate);
     localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
     setSelectedTemplate(newTemplate);
@@ -98,6 +97,8 @@ const handleCreateTemplate = () => {
     });
     setNewEventTitle('');
   };
+
+  const level = '1'; // Replace with actual user level retrieval
 
   return (
     <div className="space-y-4">
@@ -289,23 +290,25 @@ const handleCreateTemplate = () => {
                                   Save Changes
                                 </Button>
                               </DialogPrimitive.Close>
-                              <DialogPrimitive.Close asChild>
-                                <Button 
-                                  variant="destructive" 
-                                  onClick={() => {
-                                    fetch(`/api/events/${template.id}`, { method: 'DELETE' })
-                                      .then(() => {
-                                        const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
-                                        EVENT_TEMPLATES.splice(index, 1);
-                                        saveEventTemplates();
-                                        setSelectedTemplate(EVENT_TEMPLATES[0]);
-                                      });
-                                  }}
-                                  className="flex-1"
-                                >
-                                  Delete
-                                </Button>
-                              </DialogPrimitive.Close>
+                              {level === '3' && (
+                                <DialogPrimitive.Close asChild>
+                                  <Button 
+                                    variant="destructive" 
+                                    onClick={() => {
+                                      fetch(`/api/events/${template.id}`, { method: 'DELETE' })
+                                        .then(() => {
+                                          const index = EVENT_TEMPLATES.findIndex(t => t.id === template.id);
+                                          EVENT_TEMPLATES.splice(index, 1);
+                                          saveEventTemplates();
+                                          setSelectedTemplate(EVENT_TEMPLATES[0]);
+                                        });
+                                    }}
+                                    className="flex-1"
+                                  >
+                                    Delete
+                                  </Button>
+                                </DialogPrimitive.Close>
+                              )}
                             </div>
                           </div>
                         </DialogContent>
