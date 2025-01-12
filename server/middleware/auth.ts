@@ -1,16 +1,16 @@
 
 const PASSWORDS = {
   VIEW: '1',
-  EDIT: '2',
+  EDIT: '2', 
   ADMIN: '3'
 };
 
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
   
-  // Always allow GET requests (view only)
+  // GET requests for viewing data
   if (req.method === 'GET') {
-    if (!password || password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
+    if (password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
     }
     return res.status(401).json({ error: 'Invalid password' });
@@ -24,5 +24,5 @@ export function authMiddleware(req: any, res: any, next: any) {
     return res.status(401).json({ error: 'Insufficient permissions' });
   }
 
-  res.status(401).json({ error: 'Unauthorized' });
+  return res.status(401).json({ error: 'Unauthorized' });
 }
