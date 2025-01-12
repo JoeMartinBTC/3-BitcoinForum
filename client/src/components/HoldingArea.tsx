@@ -98,7 +98,7 @@ const handleCreateTemplate = () => {
     setNewEventTitle('');
   };
 
-  const level = '1'; // Replace with actual user level retrieval
+  const level = localStorage.getItem('schedule-password') || '1';
 
   return (
     <div className="space-y-4">
