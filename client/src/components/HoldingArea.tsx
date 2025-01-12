@@ -44,7 +44,7 @@ const ICONS = {
   'zap': Zap
 };
 
-export function HoldingArea() {
+export function HoldingArea({ level }: { level: string }) {
   const { events, createEvent, updateEvent } = useSchedule();
   const [newEventTitle, setNewEventTitle] = useState('');
   const defaultTemplate = {
@@ -288,8 +288,7 @@ const handleCreateTemplate = () => {
                                   Save Changes
                                 </Button>
                               </DialogPrimitive.Close>
-                              {/*This button is always hidden because there is no authorization level check implemented*/}
-                              {false && (
+                              {level === '3' && (
                                 <DialogPrimitive.Close asChild>
                                   <Button 
                                     variant="destructive" 
