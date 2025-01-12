@@ -62,6 +62,21 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   const iconKey = (template?.icon && template.icon in ICONS) ? template.icon : 'users';
   const Icon = ICONS[iconKey as keyof typeof ICONS] || ICONS.users;
 
+  const password = localStorage.getItem('schedule-password');
+  const isAdmin = password === '3';
+
+  const handleDelete = async () => {
+    try {
+      await fetch(`/api/events/${event.id}`, {
+        method: 'DELETE',
+        headers: { 'x-password': password || '' }
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to delete event:', error);
+    }
+  };
+
   return (
     <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
       <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
@@ -121,6 +136,14 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                 </div>
               </DialogContent>
             </Dialog>
+            {isAdmin && (
+              <button 
+                onClick={handleDelete}
+                className="absolute top-1 right-1 p-1 text-red-500 hover:text-red-700"
+              >
+                🗑️
+              </button>
+            )}
           </div>
         </div>
       </div>
