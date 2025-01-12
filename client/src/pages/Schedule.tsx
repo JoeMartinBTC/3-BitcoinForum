@@ -295,18 +295,22 @@ export default function Schedule() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Calendar
-            </button>
-            <button
-              onClick={() => document.getElementById('holdingImport')?.click()}
-              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
-            >
-              Import to Holding
-            </button>
+            {localStorage.getItem('schedule-password') === '3' && (
+              <>
+                <button
+                  onClick={() => document.getElementById('excelImport')?.click()}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Import Calendar
+                </button>
+                <button
+                  onClick={() => document.getElementById('holdingImport')?.click()}
+                  className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+                >
+                  Import to Holding
+                </button>
+              </>
+            )}
             <button
               onClick={async () => {
                 const XLSX = await import('xlsx');
