@@ -5,17 +5,20 @@ const PASSWORDS = {
   ADMIN: '3'
 };
 
+export { PASSWORDS };
+
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
-
-  // Always require password
-  if (!password || typeof password !== 'string') {
+  
+  if (!password) {
     return res.status(401).json({ error: 'Password required' });
   }
 
   // For GET requests (viewing)
   if (req.method === 'GET') {
-    if ([PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password)) {
+    if (password === PASSWORDS.VIEW || 
+        password === PASSWORDS.EDIT || 
+        password === PASSWORDS.ADMIN) {
       return next();
     }
     return res.status(401).json({ error: 'Invalid password' });
@@ -23,7 +26,7 @@ export function authMiddleware(req: any, res: any, next: any) {
 
   // For modification requests
   if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
-    if ([PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password)) {
+    if (password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
     }
     return res.status(401).json({ error: 'Insufficient permissions' });
