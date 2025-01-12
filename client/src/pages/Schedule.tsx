@@ -21,6 +21,28 @@ import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
 
 export default function Schedule() {
+  const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
+  const [level, setLevel] = React.useState('1');
+
+  const handlePasswordSubmit = () => {
+    if (!password) {
+      setError('Please enter a password');
+      return;
+    }
+    const lowercasePassword = password.toLowerCase();
+    if (lowercasePassword === 'bip25') setLevel('1');
+    else if (lowercasePassword === '130jahre') setLevel('2');
+    else if (lowercasePassword === '99ballons') setLevel('3');
+    else {
+      setError('Invalid password');
+      return;
+    }
+    localStorage.setItem('schedule-password', level);
+    setShowPasswordDialog(false);
+  };
+
   const { toPDF, targetRef } = usePDF({
     filename: 'event-schedule.pdf',
     page: {
@@ -79,7 +101,32 @@ export default function Schedule() {
   }, [events]);
 
   return (
-    <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
+    <>
+      {showPasswordDialog && (
+        <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Enter Password</DialogTitle>
+            </DialogHeader>
+            <Input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handlePasswordSubmit();
+                }
+              }}
+            />
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <DialogFooter>
+              <Button onClick={handlePasswordSubmit}>Submit</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+      <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <VersionBadge />
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.3</span></h1>
       <div className="flex flex-col gap-4">
@@ -355,5 +402,6 @@ export default function Schedule() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
