@@ -28,16 +28,8 @@ export default function Schedule() {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const lowercasePassword = password.toLowerCase();
-    let level = '';
-    if (lowercasePassword === 'bip25') level = '1';
-    else if (lowercasePassword === '130jahre') level = '2';
-    else if (lowercasePassword === '99ballons') level = '3';
-    
-    if (level) {
-      localStorage.setItem('schedule-password', level);
-      setShowPasswordDialog(false);
-    }
+    localStorage.setItem('schedule-password', password);
+    setShowPasswordDialog(false);
   };
 
   const { toPDF, targetRef } = usePDF({
@@ -107,9 +99,9 @@ export default function Schedule() {
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <Input
               type="password"
-              placeholder="Enter password"
+              placeholder="Enter password (1, 2, or 3)"
               value={password}
-              onChange={(e) => setPassword(e.target.value.toLowerCase())}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button 
               type="submit"
