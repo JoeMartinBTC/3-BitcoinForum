@@ -1,6 +1,6 @@
 
 const PASSWORDS = {
-  VIEW: '1',
+  VIEW: 'bip25',
   EDIT: '2',
   ADMIN: '3'
 };
@@ -8,9 +8,9 @@ const PASSWORDS = {
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
   
-  // Always allow GET requests (view only)
+  // GET requests require valid VIEW/EDIT/ADMIN password
   if (req.method === 'GET') {
-    if (!password || password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
+    if (password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
     }
     return res.status(401).json({ error: 'Invalid password' });
