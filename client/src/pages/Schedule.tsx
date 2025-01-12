@@ -239,8 +239,14 @@ export default function Schedule() {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
                   reader.onload = async (e) => {
+                    const password = localStorage.getItem('schedule-password');
                     // Clear existing calendar data first
-                    await fetch('/api/events', { method: 'DELETE' });
+                    await fetch('/api/events', { 
+                      method: 'DELETE',
+                      headers: {
+                        'x-password': password || ''
+                      }
+                    });
                     
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
@@ -253,7 +259,10 @@ export default function Schedule() {
                       try {
                         await fetch('/api/events', {
                           method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
+                          headers: { 
+                            'Content-Type': 'application/json',
+                            'x-password': password || ''
+                          },
                           body: JSON.stringify({
                             title: event.Title,
                             description: event.Description,
