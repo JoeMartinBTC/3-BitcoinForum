@@ -29,10 +29,10 @@ export function useSchedule() {
         startTime: newEvent.startTime?.toISOString(),
         endTime: newEvent.endTime?.toISOString(),
       };
-      const password = localStorage.getItem('schedule-password');
+      const password = 'admin'; // Replace with actual password retrieval method.  This is a placeholder.
       return fetch('/api/events', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-password': password || '' },
+        headers: { 'Content-Type': 'application/json', 'x-password': password },
         body: JSON.stringify(payload),
       }).then(res => {
         if (!res.ok) {
@@ -62,10 +62,10 @@ export function useSchedule() {
 
   const updateEventMutation = useMutation({
     mutationFn: ({ id, ...updates }: Partial<Event> & { id: number }) => {
-      const password = localStorage.getItem('schedule-password');
+      const password = 'admin'; // Replace with actual password retrieval method. This is a placeholder.
       return fetch(`/api/events/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-password': password || '' },
+        headers: { 'Content-Type': 'application/json', 'x-password': password },
         body: JSON.stringify(updates),
       }).then(res => res.json());
     },

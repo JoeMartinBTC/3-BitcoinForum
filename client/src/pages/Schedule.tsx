@@ -19,19 +19,8 @@ import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 
 export default function Schedule() {
-  const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
-  const [password, setPassword] = React.useState('');
-
-  const handlePasswordSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('schedule-password', password);
-    setShowPasswordDialog(false);
-  };
-
   const { toPDF, targetRef } = usePDF({
     filename: 'event-schedule.pdf',
     page: {
@@ -91,27 +80,6 @@ export default function Schedule() {
 
   return (
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
-      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enter Password</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handlePasswordSubmit} className="space-y-4">
-            <Input
-              type="password"
-              placeholder="Enter password (1, 2, or 3)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button 
-              type="submit"
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Submit
-            </button>
-          </form>
-        </DialogContent>
-      </Dialog>
       <VersionBadge />
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.3</span></h1>
       <div className="flex flex-col gap-4">
