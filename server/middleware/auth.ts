@@ -1,6 +1,6 @@
 
 const PASSWORDS = {
-  VIEW: '1',
+  VIEW: 'bip25',
   EDIT: '2',
   ADMIN: '3'
 };
