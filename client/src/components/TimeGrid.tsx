@@ -10,14 +10,12 @@ function TimeSlot({
   day, 
   slot, 
   events, 
-  updateEvent,
-  canMoveEvents 
+  updateEvent 
 }: { 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
-  canMoveEvents: boolean;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const bgKey = `bg_${day}_${slot.time}`;
@@ -36,7 +34,7 @@ function TimeSlot({
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'EVENT',
-    canDrop: () => !slot.isTransition && canMoveEvents,
+    canDrop: () => !slot.isTransition,
     drop: (item: Event) => {
       // Create a new Date object for today
       const today = new Date();
@@ -167,9 +165,8 @@ function TimeSlot({
   );
 }
 
-export function TimeGrid({ level }: { level: string }) {
+export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
-  const canMoveEvents = level === '2' || level === '3';
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(19); // Limited to 19 days
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
@@ -429,7 +426,6 @@ export function TimeGrid({ level }: { level: string }) {
                   slot={slot}
                   events={events}
                   updateEvent={updateEvent}
-                  canMoveEvents={canMoveEvents}
                 />
               ))}
             </div>

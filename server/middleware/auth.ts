@@ -1,8 +1,8 @@
 
 const PASSWORDS = {
-  VIEW: 'bip25',
-  EDIT: '130jahre',
-  ADMIN: '99ballons'
+  VIEW: '1',
+  EDIT: '2',
+  ADMIN: '3'
 };
 
 export function authMiddleware(req: any, res: any, next: any) {
