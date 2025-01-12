@@ -7,8 +7,11 @@ const PASSWORDS = {
 export function authMiddleware(req: any, res: any, next: any) {
   const password = req.headers['x-password'];
 
-  // Only allow GET requests with correct password
+  // For GET requests, allow with correct password
   if (req.method === 'GET') {
+    if (!password) {
+      return res.status(401).json({ error: 'Password required' });
+    }
     if (password === PASSWORDS.VIEW || password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
     }
@@ -17,6 +20,9 @@ export function authMiddleware(req: any, res: any, next: any) {
 
   // POST/PUT/DELETE requires EDIT or ADMIN password
   if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
+    if (!password) {
+      return res.status(401).json({ error: 'Password required' });
+    }
     if (password === PASSWORDS.EDIT || password === PASSWORDS.ADMIN) {
       return next();
     }
