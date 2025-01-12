@@ -28,8 +28,12 @@ export default function Schedule() {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem('schedule-password', password);
-    setShowPasswordDialog(false);
+    if (password === '1' || password === '2' || password === '3') {
+      localStorage.setItem('schedule-password', password);
+      setShowPasswordDialog(false);
+    } else {
+      alert('Invalid password');
+    }
   };
 
   const { toPDF, targetRef } = usePDF({
