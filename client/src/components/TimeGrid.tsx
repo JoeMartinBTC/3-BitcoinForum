@@ -87,9 +87,9 @@ function TimeSlot({
       data-slot-info=""
       data-day={day}
       data-time={slot.time}
-      className={`p-0 transition-all relative h-[48px] cursor-pointer rounded-none ${
+      className={`p-0 transition-all relative h-[48px] cursor-pointer rounded-none z-[1] ${
         isOver && canDrop
-          ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20'
+          ? 'border-2 border-primary bg-primary/10 ring-2 ring-primary/20 z-[10]'
           : canDrop
           ? 'border border-primary/50 hover:border-primary'
           : ''
