@@ -48,6 +48,14 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
       const didDrop = monitor.didDrop();
       console.log('Drag ended:', { didDrop, item });
     },
+    options: {
+      dropEffect: 'move'
+    },
+    previewOptions: {
+      captureDraggingState: true,
+      anchorX: 0,
+      anchorY: 0
+    }
   }));
 
   const [title, setTitle] = useState(event.title);
