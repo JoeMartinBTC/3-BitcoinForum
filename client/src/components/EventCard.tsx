@@ -71,7 +71,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
         method: 'DELETE',
         headers: { 'x-password': password || '' }
       });
-      window.location.reload();
+      onUpdate({ id: event.id, deleted: true });
     } catch (error) {
       console.error('Failed to delete event:', error);
     }
