@@ -133,7 +133,7 @@ export default function Schedule() {
       <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.3</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
-          <TimeGrid />
+          <TimeGrid level={level} />
         </Card>
         <Card className="p-4">
           <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
