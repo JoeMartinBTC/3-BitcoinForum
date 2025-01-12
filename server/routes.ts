@@ -9,8 +9,8 @@ export function registerRoutes(app: Express) {
   app.get("/api/events", async (req, res) => {
     try {
       const password = req.headers['x-password'];
-      if (!password) {
-        return res.status(401).json({ error: "Password required" });
+      if (!password || ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
+        return res.status(401).json({ error: "Invalid password" });
       }
 
       const allEvents = await db.select().from(events);

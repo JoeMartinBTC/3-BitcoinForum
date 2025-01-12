@@ -26,13 +26,22 @@ export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
 
-  const handlePasswordSubmit = (e: React.FormEvent) => {
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === '1' || password === '2' || password === '3') {
-      localStorage.setItem('schedule-password', password);
-      setShowPasswordDialog(false);
-    } else {
-      alert('Invalid password');
+    try {
+      const response = await fetch('/api/events', {
+        headers: {
+          'x-password': password
+        }
+      });
+      if (response.ok) {
+        localStorage.setItem('schedule-password', password);
+        setShowPasswordDialog(false);
+      } else {
+        alert('Invalid password');
+      }
+    } catch (error) {
+      alert('Error validating password');
     }
   };
 
