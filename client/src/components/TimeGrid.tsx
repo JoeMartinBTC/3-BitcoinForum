@@ -10,12 +10,14 @@ function TimeSlot({
   day, 
   slot, 
   events, 
-  updateEvent 
+  updateEvent,
+  canMoveEvents 
 }: { 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
+  canMoveEvents: boolean;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const bgKey = `bg_${day}_${slot.time}`;
@@ -427,6 +429,7 @@ export function TimeGrid({ level }: { level: string }) {
                   slot={slot}
                   events={events}
                   updateEvent={updateEvent}
+                  canMoveEvents={canMoveEvents}
                 />
               ))}
             </div>
