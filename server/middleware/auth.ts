@@ -1,8 +1,8 @@
 
 const PASSWORDS = {
-  VIEW: '1',
-  EDIT: '2',
-  ADMIN: '3'
+  VIEW: 'bip25',
+  EDIT: '130jahr',
+  ADMIN: '99ballons'
 };
 
 export { PASSWORDS };
