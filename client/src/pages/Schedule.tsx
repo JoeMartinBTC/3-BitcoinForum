@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -13,7 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
@@ -24,32 +25,10 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
-  const [error, setError] = useState(''); // Added state for error messages
-  const [level, setLevel] = useState(''); // Added state for access level
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const lowercasePassword = password.toLowerCase();
-    setError(''); // Clear previous errors
-
-    if (!lowercasePassword) {
-      setError('Please enter a password');
-      return;
-    }
-    if (lowercasePassword === 'bip25') setLevel('1');
-    else if (lowercasePassword === '130jahre') {
-      setLevel('2');
-      localStorage.setItem('schedule-password', '2');
-    }
-    else if (lowercasePassword === '99ballons') {
-      setLevel('3');
-      localStorage.setItem('schedule-password', '3');
-    }
-    else {
-      setError('Invalid password');
-      return;
-    }
-    localStorage.setItem('schedule-password', level);
+    localStorage.setItem('schedule-password', password);
     setShowPasswordDialog(false);
   };
 
@@ -120,11 +99,10 @@ export default function Schedule() {
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <Input
               type="password"
-              placeholder="Enter password (bip25, 130jahre, or 99ballons)"
+              placeholder="Enter password (1, 2, or 3)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>} {/* Display error message */}
             <button 
               type="submit"
               className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -212,7 +190,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
+                    
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -220,7 +198,7 @@ export default function Schedule() {
                         startTime.setHours(startTime.getHours() + 1);
                         const endTime = new Date(startTime);
                         endTime.setMinutes(endTime.getMinutes() + 25);
-
+                        
                         await fetch('/api/events', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
@@ -259,13 +237,13 @@ export default function Schedule() {
                   reader.onload = async (e) => {
                     // Clear existing calendar data first
                     await fetch('/api/events', { method: 'DELETE' });
-
+                    
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
+                    
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -317,18 +295,22 @@ export default function Schedule() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <button
-              onClick={() => document.getElementById('excelImport')?.click()}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Import Calendar
-            </button>
-            <button
-              onClick={() => document.getElementById('holdingImport')?.click()}
-              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
-            >
-              Import to Holding
-            </button>
+            {localStorage.getItem('schedule-password') === '3' && (
+              <>
+                <button
+                  onClick={() => document.getElementById('excelImport')?.click()}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Import Calendar
+                </button>
+                <button
+                  onClick={() => document.getElementById('holdingImport')?.click()}
+                  className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+                >
+                  Import to Holding
+                </button>
+              </>
+            )}
             <button
               onClick={async () => {
                 const XLSX = await import('xlsx');
@@ -353,6 +335,14 @@ export default function Schedule() {
             >
               Export Backgrounds
             </button>
+            {localStorage.getItem('schedule-password') === '3' && (
+              <button
+                onClick={() => document.getElementById('backgroundImport')?.click()}
+                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+              >
+                Import Backgrounds
+              </button>
+            )}
             <input
               type="file"
               accept=".xlsx"
@@ -367,7 +357,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
+                    
                     // Store the background colors in local storage for persistence
                     const backgroundColors = {};
                     jsonData.forEach((item: any) => {
@@ -376,7 +366,7 @@ export default function Schedule() {
                         ? item.backgroundColor
                         : `rgb(${item.backgroundColor.split(',').join(', ')})`;
                       localStorage.setItem(key, color);
-
+                      
                       // Also apply to currently visible slots
                       const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
                       if (slot && !slot.querySelector('.event-card')) {
@@ -390,15 +380,9 @@ export default function Schedule() {
               className="hidden"
               id="backgroundImport"
             />
-            <button
-              onClick={() => document.getElementById('backgroundImport')?.click()}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-            >
-              Import Backgrounds
-            </button>
           </div>
         </Card>
-
+        
         <Card className="p-4 mt-4 bg-yellow-50">
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm">
