@@ -290,7 +290,7 @@ const handleCreateTemplate = () => {
                                   Save Changes
                                 </Button>
                               </DialogPrimitive.Close>
-                              {level === '3' && (
+                              {localStorage.getItem('schedule-password') === '99ballons' && (
                                 <DialogPrimitive.Close asChild>
                                   <Button 
                                     variant="destructive" 
