@@ -365,7 +365,7 @@ export default function Schedule() {
             >
               Export Backgrounds
             </button>
-            {localStorage.getItem('schedule-password') === '3' && (
+            {localStorage.getItem('schedule-password') === '99ballons' && (
               <button
                 onClick={() => document.getElementById('backgroundImport')?.click()}
                 className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
