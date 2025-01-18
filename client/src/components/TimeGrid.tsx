@@ -209,12 +209,8 @@ export function TimeGrid() {
       }
     };
     
-    // Call loadBackgroundColors whenever the component updates
-    useEffect(() => {
-      loadBackgroundColors();
-    }, [events]); // Reload when events change
     loadBackgroundColors();
-  }, []);
+  }, [events]); // Reload when events change
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
