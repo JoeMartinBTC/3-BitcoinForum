@@ -63,7 +63,7 @@ export function registerRoutes(app: Express) {
       const updateData: any = { 
         ...req.body
       };
-      
+
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
         if (isNaN(startTime.getTime())) {
@@ -142,13 +142,21 @@ export function registerRoutes(app: Express) {
       console.error('Failed to delete all events:', error);
       res.status(500).json({ error: "Failed to delete all events" });
     }
+  });
 
   // Background colors API endpoints
   app.get("/api/background-colors", async (req, res) => {
     try {
-      const colors = await db.select().from(backgroundColors);
+      const colors = await db
+        .select({
+          day: backgroundColors.day,
+          timeSlot: backgroundColors.timeSlot,
+          color: backgroundColors.color,
+        })
+        .from(backgroundColors);
       res.json(colors);
     } catch (error) {
+      console.error('Error fetching background colors:', error);
       res.status(500).json({ error: "Failed to fetch background colors" });
     }
   });
@@ -171,8 +179,6 @@ export function registerRoutes(app: Express) {
       console.error('Error saving background color:', error);
       res.status(500).json({ error: "Failed to save background color" });
     }
-  });
-
   });
 
   // Day titles API endpoints

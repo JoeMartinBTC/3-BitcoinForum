@@ -194,9 +194,12 @@ export function TimeGrid() {
         colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
           const bgKey = `bg_${day}_${timeSlot}`;
           localStorage.setItem(bgKey, color);
-          const slots = document.querySelectorAll(`[data-day="${day}"][data-time="${timeSlot}"]`);
+          
+          // Find all matching time slots and update their background color
+          const selector = `[data-day="${day}"][data-time="${timeSlot}"]`;
+          const slots = document.querySelectorAll(selector);
           slots.forEach(slot => {
-            if (slot && !slot.querySelector('.event-card')) {
+            if (!slot.querySelector('.event-card')) {
               (slot as HTMLElement).style.backgroundColor = color;
             }
           });
@@ -205,6 +208,11 @@ export function TimeGrid() {
         console.error('Failed to load background colors:', error);
       }
     };
+    
+    // Call loadBackgroundColors whenever the component updates
+    useEffect(() => {
+      loadBackgroundColors();
+    }, [events]); // Reload when events change
     loadBackgroundColors();
   }, []);
 
