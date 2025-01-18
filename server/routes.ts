@@ -155,12 +155,12 @@ export function registerRoutes(app: Express) {
 
   app.post("/api/background-colors", async (req, res) => {
     try {
-      const { day, time, color } = req.body;
+      const { day, timeSlot, color } = req.body;
       await db
         .insert(backgroundColors)
-        .values({ day, time, color })
+        .values({ day, timeSlot, color })
         .onConflictDoUpdate({
-          target: [backgroundColors.day, backgroundColors.time],
+          target: [backgroundColors.day, backgroundColors.timeSlot],
           set: { color }
         });
       res.json({ success: true });
