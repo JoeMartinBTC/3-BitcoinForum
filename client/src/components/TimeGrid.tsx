@@ -1,5 +1,5 @@
 import { useDrop } from 'react-dnd';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
@@ -39,11 +39,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      
+
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-      
+
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -168,9 +168,27 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-  const [numDays, setNumDays] = useState(19); // Limited to 19 days
+  const [numDays, setNumDays] = useState(19);
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
+
+  useEffect(() => {
+    const loadBackgroundColors = async () => {
+      try {
+        const response = await fetch('/api/background-colors');
+        const colors = await response.json();
+        colors.forEach(({ day, timeSlot, color }) => {
+          const slot = document.querySelector(`[data-day="${day}"][data-time="${timeSlot}"]`);
+          if (slot && !slot.querySelector('.event-card')) {
+            (slot as HTMLElement).style.backgroundColor = color;
+          }
+        });
+      } catch (error) {
+        console.error('Failed to load background colors:', error);
+      }
+    };
+    loadBackgroundColors();
+  }, []);
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
@@ -200,13 +218,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-      
+
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-      
+
       setShowAllDays(false);
       return next;
     });
@@ -387,7 +405,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-        
+
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
