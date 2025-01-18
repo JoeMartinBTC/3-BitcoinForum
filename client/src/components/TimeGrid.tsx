@@ -200,7 +200,6 @@ export function TimeGrid() {
               (slot as HTMLElement).style.backgroundColor = color;
             }
           });
-          }
         });
       } catch (error) {
         console.error('Failed to load background colors:', error);
