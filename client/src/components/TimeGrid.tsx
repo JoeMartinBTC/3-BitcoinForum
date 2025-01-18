@@ -199,7 +199,7 @@ export function TimeGrid() {
 
         // Update the DOM after a short delay to ensure elements are rendered
         setTimeout(() => {
-          colors.forEach(({ day, timeSlot, color }) => {
+          colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
             const slots = document.querySelectorAll(`[data-day="${day}"][data-time="${timeSlot}"]`);
             slots.forEach(slot => {
               if (!slot.querySelector('.event-card')) {
