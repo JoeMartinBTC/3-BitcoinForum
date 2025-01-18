@@ -123,6 +123,17 @@ function TimeSlot({
                 } else {
                   setBackgroundColor(newColor);
                   localStorage.setItem(bgKey, newColor);
+                  
+                  // Save to database
+                  fetch('/api/background-colors', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      day,
+                      timeSlot: slot.time,
+                      color: newColor
+                    })
+                  }).catch(err => console.error('Failed to save background color:', err));
                 }
                 setShowColorPicker(false);
               }}
