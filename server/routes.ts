@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, backgroundColors, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
@@ -63,7 +63,7 @@ export function registerRoutes(app: Express) {
       const updateData: any = { 
         ...req.body
       };
-
+      
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
         if (isNaN(startTime.getTime())) {
@@ -141,43 +141,6 @@ export function registerRoutes(app: Express) {
     } catch (error) {
       console.error('Failed to delete all events:', error);
       res.status(500).json({ error: "Failed to delete all events" });
-    }
-  });
-
-  // Background colors API endpoints
-  app.get("/api/background-colors", async (req, res) => {
-    try {
-      const colors = await db
-        .select({
-          day: backgroundColors.day,
-          timeSlot: backgroundColors.timeSlot,
-          color: backgroundColors.color,
-        })
-        .from(backgroundColors);
-      res.json(colors);
-    } catch (error) {
-      console.error('Error fetching background colors:', error);
-      res.status(500).json({ error: "Failed to fetch background colors" });
-    }
-  });
-
-  app.post("/api/background-colors", async (req, res) => {
-    try {
-      const { day, time, color } = req.body;
-      if (!day || !time || !color) {
-        return res.status(400).json({ error: "Missing required fields" });
-      }
-      await db
-        .insert(backgroundColors)
-        .values({ day, timeSlot: time, color })
-        .onConflictDoUpdate({
-          target: [backgroundColors.day, backgroundColors.timeSlot],
-          set: { color }
-        });
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Error saving background color:', error);
-      res.status(500).json({ error: "Failed to save background color" });
     }
   });
 

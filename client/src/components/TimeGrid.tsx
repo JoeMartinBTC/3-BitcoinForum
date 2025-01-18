@@ -1,5 +1,5 @@
 import { useDrop } from 'react-dnd';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
@@ -39,11 +39,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-
+      
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-
+      
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -123,17 +123,6 @@ function TimeSlot({
                 } else {
                   setBackgroundColor(newColor);
                   localStorage.setItem(bgKey, newColor);
-                  
-                  // Save to database
-                  fetch('/api/background-colors', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      day,
-                      timeSlot: slot.time,
-                      color: newColor
-                    })
-                  }).catch(err => console.error('Failed to save background color:', err));
                 }
                 setShowColorPicker(false);
               }}
@@ -179,42 +168,9 @@ function TimeSlot({
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const timeSlots = generateTimeSlots();
-  const [numDays, setNumDays] = useState(19);
+  const [numDays, setNumDays] = useState(19); // Limited to 19 days
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
   const [showAllDays, setShowAllDays] = useState(true);
-
-  useEffect(() => {
-    const loadBackgroundColors = async () => {
-      try {
-        const response = await fetch('/api/background-colors');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const colors = await response.json();
-        
-        colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
-          const bgKey = `bg_${day}_${timeSlot}`;
-          localStorage.setItem(bgKey, color);
-        });
-
-        // Update the DOM after a short delay to ensure elements are rendered
-        setTimeout(() => {
-          colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
-            const slots = document.querySelectorAll(`[data-day="${day}"][data-time="${timeSlot}"]`);
-            slots.forEach(slot => {
-              if (!slot.querySelector('.event-card')) {
-                (slot as HTMLElement).style.backgroundColor = color;
-              }
-            });
-          });
-        }, 100);
-      } catch (error) {
-        console.error('Failed to load background colors:', error);
-      }
-    };
-
-    loadBackgroundColors();
-  }, [events, numDays, hiddenDays]); // Reload when events change
 
   const toggleDayVisibility = (day: number) => {
     setHiddenDays(prev => {
@@ -244,13 +200,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-
+      
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-
+      
       setShowAllDays(false);
       return next;
     });
@@ -431,7 +387,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-
+        
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (

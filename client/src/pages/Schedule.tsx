@@ -1,3 +1,4 @@
+
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -202,7 +203,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
+                    
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -210,7 +211,7 @@ export default function Schedule() {
                         startTime.setHours(startTime.getHours() + 1);
                         const endTime = new Date(startTime);
                         endTime.setMinutes(endTime.getMinutes() + 25);
-
+                        
                         await fetch('/api/events', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
@@ -255,13 +256,13 @@ export default function Schedule() {
                         'x-password': password || ''
                       }
                     });
-
+                    
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
+                    
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -386,29 +387,22 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-                    // Store the background colors in database for persistence
-                    for (const item of jsonData as any[]) {
+                    
+                    // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
+                    jsonData.forEach((item: any) => {
+                      const key = `bg_${item.day}_${item.time}`;
                       const color = item.backgroundColor.startsWith('rgb') 
                         ? item.backgroundColor
                         : `rgb(${item.backgroundColor.split(',').join(', ')})`;
-
-                      await fetch('/api/background-colors', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                          day: item.day,
-                          time: item.time,
-                          color
-                        })
-                      });
-
+                      localStorage.setItem(key, color);
+                      
                       // Also apply to currently visible slots
                       const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
                       if (slot && !slot.querySelector('.event-card')) {
                         (slot as HTMLElement).style.backgroundColor = color;
                       }
-                    }
+                    });
                   };
                   reader.readAsBinaryString(file);
                 }
@@ -418,7 +412,7 @@ export default function Schedule() {
             />
           </div>
         </Card>
-
+        
         <Card className="p-4 mt-4 bg-yellow-50">
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm">

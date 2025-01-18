@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp, boolean, varchar, serial } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, timestamp, boolean, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -11,13 +11,6 @@ export const dayTitles = pgTable("day_titles", {
 export const insertDayTitleSchema = createInsertSchema(dayTitles);
 export const selectDayTitleSchema = createSelectSchema(dayTitles);
 export type DayTitle = z.infer<typeof selectDayTitleSchema>;
-
-export const backgroundColors = pgTable("background_colors", {
-  id: serial("id").primaryKey(),
-  day: integer("day").notNull(),
-  timeSlot: varchar("time_slot", { length: 50 }).notNull(), // Adjust length as needed
-  color: text("color").notNull()
-});
 
 export const events = pgTable("events", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
