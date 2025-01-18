@@ -156,6 +156,9 @@ export function registerRoutes(app: Express) {
   app.post("/api/background-colors", async (req, res) => {
     try {
       const { day, timeSlot, color } = req.body;
+      if (!day || !timeSlot || !color) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
       await db
         .insert(backgroundColors)
         .values({ day, timeSlot, color })
@@ -165,6 +168,7 @@ export function registerRoutes(app: Express) {
         });
       res.json({ success: true });
     } catch (error) {
+      console.error('Error saving background color:', error);
       res.status(500).json({ error: "Failed to save background color" });
     }
   });

@@ -187,8 +187,13 @@ export function TimeGrid() {
     const loadBackgroundColors = async () => {
       try {
         const response = await fetch('/api/background-colors');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const colors = await response.json();
         colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
+          const bgKey = `bg_${day}_${timeSlot}`;
+          localStorage.setItem(bgKey, color);
           const slot = document.querySelector(`[data-day="${day}"][data-time="${timeSlot}"]`);
           if (slot && !slot.querySelector('.event-card')) {
             (slot as HTMLElement).style.backgroundColor = color;
