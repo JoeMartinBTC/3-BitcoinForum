@@ -13,7 +13,7 @@ export const selectDayTitleSchema = createSelectSchema(dayTitles);
 export type DayTitle = z.infer<typeof selectDayTitleSchema>;
 
 export const backgroundColors = pgTable("background_colors", {
-  id: integer("id").primaryKey().autoincrement(),
+  id: serial("id").primaryKey(),
   day: integer("day").notNull(),
   timeSlot: varchar("time_slot", { length: 50 }).notNull(), // Adjust length as needed
   color: text("color").notNull()
