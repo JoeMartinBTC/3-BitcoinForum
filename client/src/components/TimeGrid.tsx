@@ -194,9 +194,12 @@ export function TimeGrid() {
         colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
           const bgKey = `bg_${day}_${timeSlot}`;
           localStorage.setItem(bgKey, color);
-          const slot = document.querySelector(`[data-day="${day}"][data-time="${timeSlot}"]`);
-          if (slot && !slot.querySelector('.event-card')) {
-            (slot as HTMLElement).style.backgroundColor = color;
+          const slots = document.querySelectorAll(`[data-day="${day}"][data-time="${timeSlot}"]`);
+          slots.forEach(slot => {
+            if (slot && !slot.querySelector('.event-card')) {
+              (slot as HTMLElement).style.backgroundColor = color;
+            }
+          });
           }
         });
       } catch (error) {

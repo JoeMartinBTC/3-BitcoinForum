@@ -155,13 +155,13 @@ export function registerRoutes(app: Express) {
 
   app.post("/api/background-colors", async (req, res) => {
     try {
-      const { day, timeSlot, color } = req.body;
-      if (!day || !timeSlot || !color) {
+      const { day, time, color } = req.body;
+      if (!day || !time || !color) {
         return res.status(400).json({ error: "Missing required fields" });
       }
       await db
         .insert(backgroundColors)
-        .values({ day, timeSlot, color })
+        .values({ day, timeSlot: time, color })
         .onConflictDoUpdate({
           target: [backgroundColors.day, backgroundColors.timeSlot],
           set: { color }
