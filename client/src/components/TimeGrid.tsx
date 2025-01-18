@@ -177,7 +177,7 @@ export function TimeGrid() {
       try {
         const response = await fetch('/api/background-colors');
         const colors = await response.json();
-        colors.forEach(({ day, timeSlot, color }) => {
+        colors.forEach(({ day, timeSlot, color }: { day: number; timeSlot: string; color: string }) => {
           const slot = document.querySelector(`[data-day="${day}"][data-time="${timeSlot}"]`);
           if (slot && !slot.querySelector('.event-card')) {
             (slot as HTMLElement).style.backgroundColor = color;
