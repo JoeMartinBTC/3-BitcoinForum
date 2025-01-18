@@ -12,6 +12,13 @@ export const insertDayTitleSchema = createInsertSchema(dayTitles);
 export const selectDayTitleSchema = createSelectSchema(dayTitles);
 export type DayTitle = z.infer<typeof selectDayTitleSchema>;
 
+export const backgroundColors = pgTable("background_colors", {
+  id: integer("id").primaryKey().autoincrement(),
+  day: integer("day").notNull(),
+  timeSlot: varchar("time_slot", { length: 50 }).notNull(), // Adjust length as needed
+  color: text("color").notNull()
+});
+
 export const events = pgTable("events", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: text("title").notNull(),

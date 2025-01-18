@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { events, dayTitles, backgroundColors, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
@@ -142,6 +142,33 @@ export function registerRoutes(app: Express) {
       console.error('Failed to delete all events:', error);
       res.status(500).json({ error: "Failed to delete all events" });
     }
+
+  // Background colors API endpoints
+  app.get("/api/background-colors", async (req, res) => {
+    try {
+      const colors = await db.select().from(backgroundColors);
+      res.json(colors);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch background colors" });
+    }
+  });
+
+  app.post("/api/background-colors", async (req, res) => {
+    try {
+      const { day, time, color } = req.body;
+      await db
+        .insert(backgroundColors)
+        .values({ day, time, color })
+        .onConflictDoUpdate({
+          target: [backgroundColors.day, backgroundColors.time],
+          set: { color }
+        });
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to save background color" });
+    }
+  });
+
   });
 
   // Day titles API endpoints
