@@ -192,6 +192,13 @@ export function registerRoutes(app: Express) {
         .onConflictDoUpdate({
           target: [timeGrid.day, timeGrid.time],
           set: { backgroundColor }
+        });
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to save time grid:', error);
+      res.status(500).json({ error: "Failed to save time grid" });
+    }
+  });
 
   // Event templates endpoints
   app.get("/api/event-templates", async (req, res) => {
@@ -220,8 +227,6 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to save event template" });
     }
   });
-
-        });
       res.json({ success: true });
     } catch (error) {
       console.error('Failed to save time grid:', error);
