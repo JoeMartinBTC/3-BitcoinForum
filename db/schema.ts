@@ -66,6 +66,19 @@ export const timeGrid = pgTable("time_grid", {
   backgroundColor: text("background_color").notNull().default('#ffffff'),
 });
 
+export const eventTemplates = pgTable("event_templates", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  duration: integer("duration").notNull(),
+  color: text("color").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon"),
+});
+
 export const insertTimeGridSchema = createInsertSchema(timeGrid);
 export const selectTimeGridSchema = createSelectSchema(timeGrid);
 export type TimeGrid = z.infer<typeof selectTimeGridSchema>;
+
+export const insertEventTemplateSchema = createInsertSchema(eventTemplates);
+export const selectEventTemplateSchema = createSelectSchema(eventTemplates);
+export type EventTemplate = z.infer<typeof selectEventTemplateSchema>;
