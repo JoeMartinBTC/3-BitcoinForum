@@ -18,8 +18,13 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const bgKey = `bg_${day}_${slot.time}`;
-  const [backgroundColor, setBackgroundColor] = useState(() => localStorage.getItem(bgKey) || '#ffffff');
+  const { data: gridData = [] } = useQuery({
+    queryKey: ['timeGrid'],
+    queryFn: () => fetch('/api/time-grid').then(res => res.json())
+  });
+  
+  const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
+  const [backgroundColor, setBackgroundColor] = useState(gridItem?.backgroundColor || '#ffffff');
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
@@ -122,7 +127,11 @@ function TimeSlot({
                   });
                 } else {
                   setBackgroundColor(newColor);
-                  localStorage.setItem(bgKey, newColor);
+                  fetch('/api/time-grid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
+                  });
                 }
                 setShowColorPicker(false);
               }}
@@ -138,7 +147,11 @@ function TimeSlot({
                   });
                 } else {
                   setBackgroundColor(defaultColor);
-                  localStorage.setItem(bgKey, defaultColor);
+                  fetch('/api/time-grid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
+                  });
                 }
                 setShowColorPicker(false);
               }}

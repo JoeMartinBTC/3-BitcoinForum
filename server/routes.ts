@@ -171,4 +171,46 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to save day titles" });
     }
   });
+
+  // Time grid API endpoints
+  app.get("/api/time-grid", async (req, res) => {
+    try {
+      const gridData = await db.select().from(timeGrid);
+      res.json(gridData);
+    } catch (error) {
+      console.error('Failed to fetch time grid:', error);
+      res.status(500).json({ error: "Failed to fetch time grid" });
+    }
+  });
+
+  app.post("/api/time-grid", async (req, res) => {
+    try {
+      const { day, time, backgroundColor } = req.body;
+      await db
+        .insert(timeGrid)
+        .values({ day, time, backgroundColor })
+        .onConflictDoUpdate({
+          target: [timeGrid.day, timeGrid.time],
+          set: { backgroundColor }
+        });
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to save time grid:', error);
+      res.status(500).json({ error: "Failed to save time grid" });
+    }
+  });
+
+  app.post("/api/time-grid/import", async (req, res) => {
+    try {
+      const data = req.body;
+      await db.delete(timeGrid);
+      if (data.length > 0) {
+        await db.insert(timeGrid).values(data);
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to import time grid:', error);
+      res.status(500).json({ error: "Failed to import time grid" });
+    }
+  });
 }
