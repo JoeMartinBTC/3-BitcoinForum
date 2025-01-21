@@ -259,15 +259,38 @@ export function registerRoutes(app: Express) {
       if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
+
       const data = req.body;
-      await db.delete(eventTemplates);
-      if (data.length > 0) {
-        await db.insert(eventTemplates).values(data);
+      if (!Array.isArray(data)) {
+        return res.status(400).json({ error: "Import data must be an array" });
       }
-      res.json({ success: true });
-    } catch (error) {
+
+      const validTemplates = data.map(item => ({
+        id: String(item.id || '').trim(),
+        title: String(item.title || '').trim(),
+        duration: parseInt(item.duration) || 25,
+        color: String(item.color || '').trim(),
+        description: String(item.description || '').trim(),
+        icon: item.icon ? String(item.icon).trim() : null
+      })).filter(t => t.id && t.title && t.color && t.description);
+
+      if (validTemplates.length === 0) {
+        return res.status(400).json({ error: "No valid templates found in import data" });
+      }
+
+      await db.delete(eventTemplates);
+      await db.insert(eventTemplates).values(validTemplates);
+
+      res.json({ 
+        success: true,
+        imported: validTemplates.length
+      });
+    } catch (error: any) {
       console.error('Failed to import event templates:', error);
-      res.status(500).json({ error: "Failed to import event templates" });
+      res.status(500).json({ 
+        error: "Failed to import event templates",
+        details: error?.message
+      });
     }
   });
 
