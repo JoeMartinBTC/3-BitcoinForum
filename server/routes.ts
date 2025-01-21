@@ -259,32 +259,15 @@ export function registerRoutes(app: Express) {
       if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
-      
       const data = req.body;
-      if (!Array.isArray(data)) {
-        return res.status(400).json({ error: "Data must be an array" });
-      }
-
-      // Basic validation of required fields
-      const validData = data.map(item => ({
-        id: String(item.id || ''),
-        title: String(item.title || ''),
-        duration: Number(item.duration || 25),
-        color: String(item.color || ''),
-        description: String(item.description || ''),
-        icon: item.icon || null
-      }));
-
       await db.delete(eventTemplates);
-      await db.insert(eventTemplates).values(validData);
-      
-      res.json({ success: true, count: validData.length });
+      if (data.length > 0) {
+        await db.insert(eventTemplates).values(data);
+      }
+      res.json({ success: true });
     } catch (error) {
       console.error('Failed to import event templates:', error);
-      res.status(500).json({ 
-        error: "Failed to import event templates",
-        details: error instanceof Error ? error.message : 'Unknown error'
-      });
+      res.status(500).json({ error: "Failed to import event templates" });
     }
   });
 

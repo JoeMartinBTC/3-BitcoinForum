@@ -52,15 +52,6 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  try {
-    const { migrate } = await import('../db/migrate.js');
-    await migrate();
-    log('Database migrations completed');
-  } catch (error) {
-    log('Failed to run migrations: ' + error);
-    process.exit(1);
-  }
-  
   registerRoutes(app);
   const server = createServer(app);
 
