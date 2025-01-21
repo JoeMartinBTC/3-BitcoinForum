@@ -52,7 +52,7 @@ function Badge({ className, variant, ...props }: BadgeProps) {
 const VersionBadge = () => {
   return (
     <div className={versionBadgeVariants()}>
-      v0.8.7.beta
+      v0.8.1
     </div>
   )
 }
