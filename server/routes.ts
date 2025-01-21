@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, timeGrid, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { events, dayTitles, timeGrid, eventTemplates, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
