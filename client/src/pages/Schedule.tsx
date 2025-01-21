@@ -427,9 +427,9 @@ export default function Schedule() {
                       headers: { 'x-password': password || '' }
                     });
                     const data = await response.json();
-                    const dataArray = Array.isArray(data) ? data : [];
+                    const dataArray = Array.isArray(data) && data.length > 0 ? data : EVENT_TEMPLATES;
                     const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.json_to_sheet(dataArray.length ? dataArray : [{ id: '', title: '', color: '' }]);
+                    const ws = XLSX.utils.json_to_sheet(dataArray);
                     XLSX.utils.book_append_sheet(wb, ws, "EventTypes");
                     XLSX.writeFile(wb, "event-types.xlsx");
                   }}

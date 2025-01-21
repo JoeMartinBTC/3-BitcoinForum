@@ -207,7 +207,45 @@ export function registerRoutes(app: Express) {
       if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
-      const templates = await db.select().from(eventTemplates);
+      let templates = await db.select().from(eventTemplates);
+      if (templates.length === 0) {
+        const defaultTemplates = [
+          {
+            id: 'roman-reher',
+            title: 'Roman Reher',
+            duration: 25,
+            color: 'bg-amber-50',
+            description: 'Speaker session',
+            icon: 'users'
+          },
+          {
+            id: 'jack-mallers',
+            title: 'Jack Mallers',
+            duration: 25,
+            color: 'bg-amber-100',
+            description: 'Speaker session',
+            icon: 'users'
+          },
+          {
+            id: 'speaker',
+            title: 'Speaker',
+            duration: 25,
+            color: 'bg-yellow-100',
+            description: 'Guest speaker session',
+            icon: 'users'
+          },
+          {
+            id: 'break',
+            title: 'Break',
+            duration: 25,
+            color: 'bg-orange-100',
+            description: 'Break or rest period',
+            icon: 'coffee'
+          }
+        ];
+        await db.insert(eventTemplates).values(defaultTemplates);
+        templates = defaultTemplates;
+      }
       res.json(templates);
     } catch (error) {
       console.error('Failed to export event templates:', error);
