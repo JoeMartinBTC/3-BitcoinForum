@@ -274,7 +274,12 @@ export function registerRoutes(app: Express) {
         } else {
           res.status(500).json({ error: "Failed to import event templates" });
         }
+      }
+    } catch (error) {
+      console.error('Failed to import event templates:', error);
+      res.status(500).json({ error: "Failed to import event templates" });
     }
+  });
   });
 
   app.post("/api/time-grid/import", async (req, res) => {
