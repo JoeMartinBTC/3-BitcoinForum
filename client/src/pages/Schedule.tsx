@@ -1,4 +1,3 @@
-
 import { TimeGrid } from "../components/TimeGrid";
 import { HoldingArea } from "../components/HoldingArea";
 import { Card } from "@/components/ui/card";
@@ -203,7 +202,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
+
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -211,7 +210,7 @@ export default function Schedule() {
                         startTime.setHours(startTime.getHours() + 1);
                         const endTime = new Date(startTime);
                         endTime.setMinutes(endTime.getMinutes() + 25);
-                        
+
                         await fetch('/api/events', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
@@ -256,13 +255,13 @@ export default function Schedule() {
                         'x-password': password || ''
                       }
                     });
-                    
+
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
+
                     // Process and import the data
                     for (const event of jsonData as any[]) {
                       try {
@@ -387,7 +386,7 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                    
+
                     // Store the background colors in local storage for persistence
                     const backgroundColors = {};
                     jsonData.forEach((item: any) => {
@@ -396,7 +395,7 @@ export default function Schedule() {
                         ? item.backgroundColor
                         : `rgb(${item.backgroundColor.split(',').join(', ')})`;
                       localStorage.setItem(key, color);
-                      
+
                       // Also apply to currently visible slots
                       const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
                       if (slot && !slot.querySelector('.event-card')) {
@@ -412,7 +411,7 @@ export default function Schedule() {
             />
           </div>
         </Card>
-        
+
         <Card className="p-4 mt-4 bg-yellow-50">
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm">
@@ -427,9 +426,11 @@ export default function Schedule() {
                       headers: { 'x-password': password || '' }
                     });
                     const data = await response.json();
-                    const dataArray = Array.isArray(data) && data.length > 0 ? data : EVENT_TEMPLATES;
+                    if (!Array.isArray(data)) {
+                      throw new Error('Invalid server response');
+                    }
                     const wb = XLSX.utils.book_new();
-                    const ws = XLSX.utils.json_to_sheet(dataArray);
+                    const ws = XLSX.utils.json_to_sheet(data);
                     XLSX.utils.book_append_sheet(wb, ws, "EventTypes");
                     XLSX.writeFile(wb, "event-types.xlsx");
                   }}
@@ -452,7 +453,7 @@ export default function Schedule() {
                         const sheetName = workbook.SheetNames[0];
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                        
+
                         await fetch('/api/event-templates/import', {
                           method: 'POST',
                           headers: {
