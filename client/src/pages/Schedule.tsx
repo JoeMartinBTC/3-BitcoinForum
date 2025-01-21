@@ -147,6 +147,35 @@ export default function Schedule() {
               Export Calendar
             </button>
             <button
+              onClick={() => exportEventTemplates()}
+              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
+            >
+              Export Types
+            </button>
+            <input
+              type="file"
+              accept=".json"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const success = await importEventTemplates(file);
+                  if (success) {
+                    window.location.reload();
+                  } else {
+                    alert('Failed to import event types. Please check the file format.');
+                  }
+                }
+              }}
+              className="hidden"
+              id="typeImport"
+            />
+            <button
+              onClick={() => document.getElementById('typeImport')?.click()}
+              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors"
+            >
+              Import Types
+            </button>
+            <button
               onClick={() => {
                 import('xlsx').then(XLSX => {
                   console.log('All events:', events);

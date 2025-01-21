@@ -82,3 +82,41 @@ export const saveEventTemplates = () => {
     localStorage.setItem('eventTemplates', JSON.stringify(defaultTemplates));
   }
 };
+
+export const exportEventTemplates = () => {
+  const templates = localStorage.getItem('eventTemplates') || JSON.stringify(defaultTemplates);
+  const blob = new Blob([templates], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'event-templates.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+export const importEventTemplates = async (file: File) => {
+  try {
+    const text = await file.text();
+    const templates = JSON.parse(text);
+    
+    // Validate the imported data structure
+    if (!Array.isArray(templates)) {
+      throw new Error('Invalid template format: must be an array');
+    }
+    
+    for (const template of templates) {
+      if (!eventTemplateSchema.safeParse(template).success) {
+        throw new Error('Invalid template data structure');
+      }
+    }
+    
+    EVENT_TEMPLATES = templates;
+    localStorage.setItem('eventTemplates', JSON.stringify(templates));
+    return true;
+  } catch (error) {
+    console.error('Failed to import templates:', error);
+    return false;
+  }
+};
