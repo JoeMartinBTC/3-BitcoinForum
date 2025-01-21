@@ -17,11 +17,10 @@ async function migrate() {
       console.log(`Executed migration: ${migration}`);
     } catch (error) {
       console.error(`Failed to execute migration ${migration}:`, error);
-      process.exit(1);
+      throw error;
     }
   }
   console.log('All migrations completed successfully');
-  process.exit(0);
 }
 
 export { migrate };
