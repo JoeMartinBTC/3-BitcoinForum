@@ -1,7 +1,6 @@
-
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, timeGrid, eventTemplates, insertEventSchema, insertDayTitleSchema, insertEventTemplateSchema } from "../db/schema";
+import { events, dayTitles, timeGrid, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
@@ -54,12 +53,16 @@ export function registerRoutes(app: Express) {
         return res.status(400).json({ error: "Invalid event ID" });
       }
 
+      // Validate day value
       const day = req.body.day;
       if (day !== undefined && (day < 1 || day > 20)) {
         return res.status(400).json({ error: "Day must be between 1 and 20" });
       }
 
-      const updateData: any = { ...req.body };
+      // Convert and validate dates
+      const updateData: any = { 
+        ...req.body
+      };
       
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
@@ -77,10 +80,12 @@ export function registerRoutes(app: Express) {
         updateData.endTime = endTime;
       }
 
+      // Ensure both times are set if one is provided
       if ((updateData.startTime && !updateData.endTime) || (!updateData.startTime && updateData.endTime)) {
         return res.status(400).json({ error: "Both start and end times must be provided together" });
       }
 
+      // Validate time range if both times are provided
       if (updateData.startTime && updateData.endTime) {
         const diffMinutes = (updateData.endTime - updateData.startTime) / (1000 * 60);
         if (diffMinutes !== 25) {
@@ -192,34 +197,6 @@ export function registerRoutes(app: Express) {
     } catch (error) {
       console.error('Failed to save time grid:', error);
       res.status(500).json({ error: "Failed to save time grid" });
-    }
-  });
-
-  // Event templates endpoints
-  app.get("/api/event-templates", async (req, res) => {
-    try {
-      const templates = await db.select().from(eventTemplates);
-      res.json(templates);
-    } catch (error) {
-      console.error('Error fetching event templates:', error);
-      res.status(500).json({ error: "Failed to fetch event templates" });
-    }
-  });
-
-  app.post("/api/event-templates", async (req, res) => {
-    try {
-      const templateData = insertEventTemplateSchema.parse(req.body);
-      await db
-        .insert(eventTemplates)
-        .values(templateData)
-        .onConflictDoUpdate({
-          target: eventTemplates.id,
-          set: templateData
-        });
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Failed to save event template:', error);
-      res.status(500).json({ error: "Failed to save event template" });
     }
   });
 

@@ -72,40 +72,13 @@ const defaultTemplates = [
   }
 ];
 
-export let EVENT_TEMPLATES: EventTemplate[] = defaultTemplates;
+export let EVENT_TEMPLATES: EventTemplate[] = storedTemplates ? JSON.parse(storedTemplates) : defaultTemplates;
 
 // Function to save templates
-export const saveEventTemplates = async () => {
-  try {
-    for (const template of EVENT_TEMPLATES) {
-      await fetch('/api/event-templates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(template)
-      });
-    }
-  } catch (error) {
-    console.error('Failed to save templates:', error);
-  }
-};
-
-// Function to load templates
-export const loadEventTemplates = async () => {
-  try {
-    const response = await fetch('/api/event-templates');
-    if (response.ok) {
-      const templates = await response.json();
-      EVENT_TEMPLATES = templates.length > 0 ? templates : defaultTemplates;
-      if (templates.length === 0) {
-        saveEventTemplates();
-      }
-    }
-  } catch (error) {
-    console.error('Failed to load templates:', error);
+export const saveEventTemplates = () => {
+  localStorage.setItem('eventTemplates', JSON.stringify(EVENT_TEMPLATES));
+  if (EVENT_TEMPLATES.length === 0) {
     EVENT_TEMPLATES = defaultTemplates;
-    saveEventTemplates();
+    localStorage.setItem('eventTemplates', JSON.stringify(defaultTemplates));
   }
 };
-
-// Initial load
-loadEventTemplates();
