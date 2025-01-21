@@ -1,4 +1,3 @@
-
 "use client"
 
 import * as React from "react"
@@ -51,7 +50,7 @@ function Badge({ className, variant, ...props }: BadgeProps) {
 
 const VersionBadge = () => {
   return (
-    <div className={versionBadgeVariants()}>
+    <div className={cn(versionBadgeVariants(), "bg-white text-gray-800 z-50 border border-gray-300 shadow-sm")}>
       v0.8.7.beta
     </div>
   )
