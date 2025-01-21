@@ -421,6 +421,7 @@ export default function Schedule() {
               <div className="flex space-x-2 mt-2">
                 <button
                   onClick={async () => {
+                    const XLSX = await import('xlsx');
                     const password = localStorage.getItem('schedule-password');
                     const response = await fetch('/api/event-templates/export', {
                       headers: { 'x-password': password || '' }
