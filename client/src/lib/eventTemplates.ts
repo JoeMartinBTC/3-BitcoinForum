@@ -15,44 +15,20 @@ export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 const storedTemplates = localStorage.getItem('eventTemplates');
 const defaultTemplates = [
   {
-    id: 'roman-reher',
-    title: 'Roman Reher',
-    duration: 25,
-    color: 'bg-amber-50',
-    description: 'Speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'jack-mallers',
-    title: 'Jack Mallers',
-    duration: 25,
-    color: 'bg-amber-100',
-    description: 'Speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'speaker',
-    title: 'Speaker',
-    duration: 25,
-    color: 'bg-yellow-100',
-    description: 'Guest speaker session',
-    icon: 'users'
-  },
-  {
-    id: 'lecture',
-    title: 'Lecture',
-    duration: 25,
-    color: 'bg-blue-100',
-    description: 'Standard lecture session',
-    icon: 'book-open'
-  },
-  {
-    id: 'workshop',
-    title: 'Workshop',
+    id: 'green',
+    title: 'Green',
     duration: 25,
     color: 'bg-green-100',
-    description: 'Interactive workshop session',
-    icon: 'wrench'
+    description: 'Green session',
+    icon: 'users'
+  },
+  {
+    id: 'yellow',
+    title: 'Yellow',
+    duration: 25,
+    color: 'bg-yellow-100',
+    description: 'Yellow session',
+    icon: 'users'
   },
   {
     id: 'break',
@@ -61,14 +37,6 @@ const defaultTemplates = [
     color: 'bg-orange-100',
     description: 'Break or rest period',
     icon: 'coffee'
-  },
-  {
-    id: 'meeting',
-    title: 'Meeting',
-    duration: 25,
-    color: 'bg-purple-100',
-    description: 'Team meeting or discussion',
-    icon: 'users'
   }
 ];
 
