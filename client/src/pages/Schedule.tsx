@@ -417,7 +417,63 @@ export default function Schedule() {
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
           <ul className="list-disc pl-6 space-y-2 text-sm">
             <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
-            <li>Event Type kann nicht importiert werden</li>
+            <li>Event Types können jetzt importiert und exportiert werden (Level 3)</li>
+              <div className="flex space-x-2 mt-2">
+                <button
+                  onClick={async () => {
+                    const password = localStorage.getItem('schedule-password');
+                    const response = await fetch('/api/event-templates/export', {
+                      headers: { 'x-password': password || '' }
+                    });
+                    const data = await response.json();
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(data);
+                    XLSX.utils.book_append_sheet(wb, ws, "EventTypes");
+                    XLSX.writeFile(wb, "event-types.xlsx");
+                  }}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                >
+                  Export Event Types
+                </button>
+                <input
+                  type="file"
+                  accept=".xlsx"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const XLSX = await import('xlsx');
+                      const reader = new FileReader();
+                      reader.onload = async (e) => {
+                        const password = localStorage.getItem('schedule-password');
+                        const data = e.target?.result;
+                        const workbook = XLSX.read(data, { type: 'binary' });
+                        const sheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                        
+                        await fetch('/api/event-templates/import', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'x-password': password || ''
+                          },
+                          body: JSON.stringify(jsonData)
+                        });
+                        window.location.reload();
+                      };
+                      reader.readAsBinaryString(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="eventTypesImport"
+                />
+                <label
+                  htmlFor="eventTypesImport"
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors cursor-pointer"
+                >
+                  Import Event Types
+                </label>
+              </div>
             <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
           </ul>
         </Card>

@@ -200,6 +200,39 @@ export function registerRoutes(app: Express) {
     }
   });
 
+  // Event templates endpoints
+  app.get("/api/event-templates/export", async (req, res) => {
+    try {
+      const password = req.headers['x-password'];
+      if (password !== PASSWORDS.ADMIN) {
+        return res.status(401).json({ error: "Admin access required" });
+      }
+      const templates = await db.select().from(eventTemplates);
+      res.json(templates);
+    } catch (error) {
+      console.error('Failed to export event templates:', error);
+      res.status(500).json({ error: "Failed to export event templates" });
+    }
+  });
+
+  app.post("/api/event-templates/import", async (req, res) => {
+    try {
+      const password = req.headers['x-password'];
+      if (password !== PASSWORDS.ADMIN) {
+        return res.status(401).json({ error: "Admin access required" });
+      }
+      const data = req.body;
+      await db.delete(eventTemplates);
+      if (data.length > 0) {
+        await db.insert(eventTemplates).values(data);
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Failed to import event templates:', error);
+      res.status(500).json({ error: "Failed to import event templates" });
+    }
+  });
+
   app.post("/api/time-grid/import", async (req, res) => {
     try {
       const data = req.body;
