@@ -280,7 +280,6 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to import event templates" });
     }
   });
-  });
 
   app.post("/api/time-grid/import", async (req, res) => {
     try {
