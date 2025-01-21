@@ -202,6 +202,11 @@ export function registerRoutes(app: Express) {
 
   app.post("/api/time-grid/import", async (req, res) => {
     try {
+      const password = req.headers['x-password'];
+      if (password !== PASSWORDS.ADMIN) {
+        return res.status(401).json({ error: "Admin access required for import/export operations" });
+      }
+
       const data = req.body;
       await db.delete(timeGrid);
       if (data.length > 0) {
