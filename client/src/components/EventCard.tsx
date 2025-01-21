@@ -9,7 +9,6 @@ import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone, Rocket, ShoppingBag, Sun, Zap, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState } from 'react';
 
 const ICONS = {
   'book-open': BookOpen,
