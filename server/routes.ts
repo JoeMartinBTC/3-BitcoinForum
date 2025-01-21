@@ -263,16 +263,23 @@ export function registerRoutes(app: Express) {
       try {
         await db.delete(eventTemplates);
         if (data && Array.isArray(data) && data.length > 0) {
-          await db.insert(eventTemplates).values(data);
+          const formattedData = data.map(item => ({
+            id: String(item.id),
+            title: String(item.title),
+            duration: Number(item.duration),
+            color: String(item.color),
+            description: String(item.description),
+            icon: item.icon ? String(item.icon) : null
+          }));
+          await db.insert(eventTemplates).values(formattedData);
         }
         res.json({ success: true });
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to import event templates:', error);
-        // Check if table doesn't exist
-        if (error.code === '42P01') {
+        if (error?.code === '42P01') {
           res.status(500).json({ error: "Database table not found. Please run migrations." });
         } else {
-          res.status(500).json({ error: "Failed to import event templates" });
+          res.status(500).json({ error: "Failed to import event templates: " + error.message });
         }
       }
     } catch (error) {
