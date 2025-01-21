@@ -1,3 +1,4 @@
+
 import type { Express } from "express";
 import { db } from "../db";
 import { events, dayTitles, timeGrid, eventTemplates, insertEventSchema, insertDayTitleSchema, insertEventTemplateSchema } from "../db/schema";
@@ -53,16 +54,12 @@ export function registerRoutes(app: Express) {
         return res.status(400).json({ error: "Invalid event ID" });
       }
 
-      // Validate day value
       const day = req.body.day;
       if (day !== undefined && (day < 1 || day > 20)) {
         return res.status(400).json({ error: "Day must be between 1 and 20" });
       }
 
-      // Convert and validate dates
-      const updateData: any = { 
-        ...req.body
-      };
+      const updateData: any = { ...req.body };
       
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
@@ -80,12 +77,10 @@ export function registerRoutes(app: Express) {
         updateData.endTime = endTime;
       }
 
-      // Ensure both times are set if one is provided
       if ((updateData.startTime && !updateData.endTime) || (!updateData.startTime && updateData.endTime)) {
         return res.status(400).json({ error: "Both start and end times must be provided together" });
       }
 
-      // Validate time range if both times are provided
       if (updateData.startTime && updateData.endTime) {
         const diffMinutes = (updateData.endTime - updateData.startTime) / (1000 * 60);
         if (diffMinutes !== 25) {
@@ -225,12 +220,6 @@ export function registerRoutes(app: Express) {
     } catch (error) {
       console.error('Failed to save event template:', error);
       res.status(500).json({ error: "Failed to save event template" });
-    }
-  });
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Failed to save time grid:', error);
-      res.status(500).json({ error: "Failed to save time grid" });
     }
   });
 
