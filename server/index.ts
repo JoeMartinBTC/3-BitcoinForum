@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    const { migrate } = require('../db/migrate');
+    const { migrate } = await import('../db/migrate.js');
     await migrate();
     log('Database migrations completed');
   } catch (error) {

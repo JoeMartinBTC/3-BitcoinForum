@@ -24,4 +24,4 @@ async function migrate() {
   process.exit(0);
 }
 
-migrate();
+export { migrate };
