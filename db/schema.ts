@@ -59,15 +59,6 @@ export type Event = {
 export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
 
-export const eventTemplates = pgTable("event_templates", {
-  id: text("id").primaryKey(),
-  title: text("title").notNull(),
-  duration: integer("duration").notNull().default(25),
-  color: text("color").notNull(),
-  description: text("description").notNull(),
-  icon: text("icon")
-});
-
 export const timeGrid = pgTable("time_grid", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   day: integer("day").notNull(),

@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, timeGrid, eventTemplates, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { events, dayTitles, timeGrid, insertEventSchema, insertDayTitleSchema } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
@@ -197,77 +197,6 @@ export function registerRoutes(app: Express) {
     } catch (error) {
       console.error('Failed to save time grid:', error);
       res.status(500).json({ error: "Failed to save time grid" });
-    }
-  });
-
-  // Event templates endpoints
-  app.get("/api/event-templates/export", async (req, res) => {
-    try {
-      const password = req.headers['x-password'];
-      if (password !== PASSWORDS.ADMIN) {
-        return res.status(401).json({ error: "Admin access required" });
-      }
-      let templates = await db.select().from(eventTemplates);
-      if (templates.length === 0) {
-        const defaultTemplates = [
-          {
-            id: 'roman-reher',
-            title: 'Roman Reher',
-            duration: 25,
-            color: 'bg-amber-50',
-            description: 'Speaker session',
-            icon: 'users'
-          },
-          {
-            id: 'jack-mallers',
-            title: 'Jack Mallers',
-            duration: 25,
-            color: 'bg-amber-100',
-            description: 'Speaker session',
-            icon: 'users'
-          },
-          {
-            id: 'speaker',
-            title: 'Speaker',
-            duration: 25,
-            color: 'bg-yellow-100',
-            description: 'Guest speaker session',
-            icon: 'users'
-          },
-          {
-            id: 'break',
-            title: 'Break',
-            duration: 25,
-            color: 'bg-orange-100',
-            description: 'Break or rest period',
-            icon: 'coffee'
-          }
-        ];
-        await db.insert(eventTemplates).values(defaultTemplates);
-        templates = defaultTemplates;
-      }
-      res.json(templates);
-    } catch (error) {
-      console.error('Failed to export event templates:', error);
-      res.status(500).json({ error: "Failed to export event templates" });
-    }
-  });
-
-  app.post("/api/event-templates/import", async (req, res) => {
-    try {
-      const password = req.headers['x-password'];
-      if (password !== PASSWORDS.ADMIN) {
-        return res.status(401).json({ error: "Admin access required" });
-      }
-      const data = req.body;
-      await db.delete(eventTemplates);
-      if (data.length > 0) {
-        await db.insert(eventTemplates).values(data);
-      }
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Failed to import event templates:', error);
-      res.status(500).json({ error: "Failed to import event templates" });
     }
   });
 
