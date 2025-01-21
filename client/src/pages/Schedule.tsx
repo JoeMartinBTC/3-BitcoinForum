@@ -16,7 +16,7 @@ import {
 import React, { useCallback } from 'react';
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
-import { EVENT_TEMPLATES, EventTemplate } from '../lib/eventTemplates';
+import { EVENT_TEMPLATES, EventTemplate, exportEventTemplates, importEventTemplates } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
