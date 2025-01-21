@@ -259,47 +259,15 @@ export function registerRoutes(app: Express) {
       if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
-
       const data = req.body;
-      if (!Array.isArray(data)) {
-        return res.status(400).json({ error: "Import data must be an array" });
+      await db.delete(eventTemplates);
+      if (data.length > 0) {
+        await db.insert(eventTemplates).values(data);
       }
-
-      // Validate and format each template
-      const validTemplates = data.map(item => ({
-        id: String(item.id || '').trim(),
-        title: String(item.title || '').trim(),
-        duration: Number(item.duration) || 25,
-        color: String(item.color || '').trim(),
-        description: String(item.description || '').trim(),
-        icon: item.icon ? String(item.icon).trim() : null
-      })).filter(template => 
-        template.id && 
-        template.title && 
-        template.color && 
-        template.description
-      );
-
-      if (validTemplates.length === 0) {
-        return res.status(400).json({ error: "No valid templates found in import data" });
-      }
-
-      // Begin transaction
-      await db.transaction(async (tx) => {
-        await tx.delete(eventTemplates);
-        await tx.insert(eventTemplates).values(validTemplates);
-      });
-
-      res.json({ 
-        success: true,
-        imported: validTemplates.length 
-      });
-    } catch (error: any) {
+      res.json({ success: true });
+    } catch (error) {
       console.error('Failed to import event templates:', error);
-      res.status(500).json({ 
-        error: "Failed to import event templates",
-        details: error?.message || 'Unknown error'
-      });
+      res.status(500).json({ error: "Failed to import event templates" });
     }
   });
 
