@@ -260,14 +260,20 @@ export function registerRoutes(app: Express) {
         return res.status(401).json({ error: "Admin access required" });
       }
       const data = req.body;
-      await db.delete(eventTemplates);
-      if (data.length > 0) {
-        await db.insert(eventTemplates).values(data);
-      }
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Failed to import event templates:', error);
-      res.status(500).json({ error: "Failed to import event templates" });
+      try {
+        await db.delete(eventTemplates);
+        if (data && Array.isArray(data) && data.length > 0) {
+          await db.insert(eventTemplates).values(data);
+        }
+        res.json({ success: true });
+      } catch (error) {
+        console.error('Failed to import event templates:', error);
+        // Check if table doesn't exist
+        if (error.code === '42P01') {
+          res.status(500).json({ error: "Database table not found. Please run migrations." });
+        } else {
+          res.status(500).json({ error: "Failed to import event templates" });
+        }
     }
   });
 
