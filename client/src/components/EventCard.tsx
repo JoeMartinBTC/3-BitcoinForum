@@ -117,21 +117,28 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="mt-4">
-                      <Input 
-                        value={event.info || ''}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          const value = e.target.value;
-                          clearTimeout((window as any).inputTimeout);
-                          (window as any).inputTimeout = setTimeout(() => {
-                            onUpdate({ id: event.id, info: value });
-                          }, 300);
-                        }}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        onFocus={(e) => e.target.select()}
-                        placeholder="Add event info"
-                        autoFocus
-                      />
+                      <DialogPrimitive.Close asChild>
+                        <form onSubmit={(e) => {
+                          e.preventDefault();
+                          const target = e.target as HTMLFormElement;
+                          const input = target.querySelector('input') as HTMLInputElement;
+                          onUpdate({ id: event.id, info: input.value });
+                        }}>
+                          <Input 
+                            defaultValue={event.info || ''}
+                            onKeyDown={(e) => {
+                              e.stopPropagation();
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                const form = e.currentTarget.form;
+                                if (form) form.requestSubmit();
+                              }
+                            }}
+                            placeholder="Add event info"
+                            autoFocus
+                          />
+                        </form>
+                      </DialogPrimitive.Close>
                     </div>
                   </DialogContent>
                 </Dialog>
