@@ -103,7 +103,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                     }`}>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Info className={`inline-block ml-1 w-3 h-3 ${event.info ? 'text-gray-600' : 'text-gray-400'}`} />
+                          <Info className={`inline-block ml-1 w-3 h-3 ${event.info ? 'text-green-500' : 'text-gray-400'}`} />
                         </TooltipTrigger>
                         <TooltipContent>
                           <p className="max-w-xs text-sm">Click to edit info</p>
