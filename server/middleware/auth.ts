@@ -1,4 +1,6 @@
 
+import type { Request, Response, NextFunction } from "express";
+
 const PASSWORDS = {
   VIEW: 'bip25',
   EDIT: '130jahr',
@@ -7,7 +9,7 @@ const PASSWORDS = {
 
 export { PASSWORDS };
 
-export function authMiddleware(req: any, res: any, next: any) {
+export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const password = req.headers['x-password'];
 
   // Require password
@@ -17,7 +19,7 @@ export function authMiddleware(req: any, res: any, next: any) {
 
   // For GET requests (viewing)
   if (req.method === 'GET') {
-    if (![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password)) {
+    if (![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
       return res.status(401).json({ error: 'Invalid password' });
     }
     return next();
@@ -25,7 +27,7 @@ export function authMiddleware(req: any, res: any, next: any) {
 
   // For modification requests (POST, PUT, DELETE)
   if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
-    if (![PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password)) {
+    if (![PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
       return res.status(401).json({ error: 'Insufficient permissions' });
     }
     return next();

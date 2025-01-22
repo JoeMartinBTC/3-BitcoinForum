@@ -26,21 +26,6 @@ export const events = pgTable("events", {
   info: text("info")
 });
 
-export type Event = {
-  id: number;
-  title: string;
-  color: string;
-  description: string | null;
-  day: number;
-  startTime: Date;
-  endTime: Date;
-  isBreak: boolean;
-  inHoldingArea: boolean;
-  templateId: string;
-  deleted?: boolean;
-  info?: string | null;
-};
-
 export const speakers = pgTable("speakers", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
