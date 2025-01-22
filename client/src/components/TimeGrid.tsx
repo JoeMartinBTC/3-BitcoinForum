@@ -31,7 +31,7 @@ function TimeSlot({
 
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-  
+
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
@@ -152,6 +152,19 @@ function TimeSlot({
                       'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
+                  }).then(() => {
+                    // Force refresh grid data to update all instances
+                    fetch('/api/time-grid').then(res => res.json()).then(data => {
+                      if (Array.isArray(data)) {
+                        // Update all matching slots with the new color
+                        data.forEach(item => {
+                          if (item.day === day && item.time === slot.time) {
+                            const key = `bg_${item.day}_${item.time}`;
+                            localStorage.setItem(key, item.backgroundColor);
+                          }
+                        });
+                      }
+                    });
                   });
                 }
                 setShowColorPicker(false);
