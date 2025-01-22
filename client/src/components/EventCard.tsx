@@ -117,28 +117,24 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="mt-4">
-                      <DialogPrimitive.Close asChild>
-                        <form onSubmit={(e) => {
-                          e.preventDefault();
-                          const target = e.target as HTMLFormElement;
-                          const input = target.querySelector('input') as HTMLInputElement;
-                          onUpdate({ id: event.id, info: input.value });
-                        }}>
-                          <Input 
-                            defaultValue={event.info || ''}
-                            onKeyDown={(e) => {
-                              e.stopPropagation();
-                              if (e.key === 'Enter') {
-                                e.preventDefault();
-                                const form = e.currentTarget.form;
-                                if (form) form.requestSubmit();
-                              }
-                            }}
-                            placeholder="Add event info"
-                            autoFocus
-                          />
-                        </form>
-                      </DialogPrimitive.Close>
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}>
+                        <textarea 
+                          defaultValue={event.info || ''}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            onUpdate({ id: event.id, info: e.target.value });
+                          }}
+                          onKeyDown={(e) => {
+                            e.stopPropagation();
+                          }}
+                          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px] resize-y"
+                          placeholder="Add event info"
+                          autoFocus
+                        />
+                      </form>
                     </div>
                   </DialogContent>
                 </Dialog>
