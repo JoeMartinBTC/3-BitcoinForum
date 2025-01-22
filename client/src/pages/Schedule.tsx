@@ -299,31 +299,31 @@ export default function Schedule() {
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-                    // Process all events in a single request
-                    try {
-                      const events = jsonData.map((event: any) => ({
-                        title: event.Title,
-                        description: event.Description,
-                        day: event.Day,
-                        startTime: event.StartTime,
-                        endTime: event.EndTime,
-                        isBreak: event.IsBreak === 'Yes',
-                        inHoldingArea: event.InHoldingArea === 'Yes',
-                        templateId: event.TemplateID,
-                        color: event.Color,
-                        info: event.Info || ''
-                      }));
-
-                      await fetch('/api/events/batch', {
-                        method: 'POST',
-                        headers: { 
-                          'Content-Type': 'application/json',
-                          'x-password': password || ''
-                        },
-                        body: JSON.stringify(events)
-                      });
-                    } catch (error) {
-                      console.error('Failed to import events:', error);
+                    // Process and import the data
+                    for (const event of jsonData as any[]) {
+                      try {
+                        await fetch('/api/events', {
+                          method: 'POST',
+                          headers: { 
+                            'Content-Type': 'application/json',
+                            'x-password': password || ''
+                          },
+                          body: JSON.stringify({
+                            title: event.Title,
+                            description: event.Description,
+                            day: event.Day,
+                            startTime: event.StartTime,
+                            endTime: event.EndTime,
+                            isBreak: event.IsBreak === 'Yes',
+                            inHoldingArea: event.InHoldingArea === 'Yes',
+                            templateId: event.TemplateID,
+                            color: event.Color,
+                            info: event.Info || ''
+                          })
+                        });
+                      } catch (error) {
+                        console.error('Failed to import event:', error);
+                      }
                     }
                     window.location.reload();
                   };
