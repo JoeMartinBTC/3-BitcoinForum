@@ -105,19 +105,22 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                       </Tooltip>
                     </div>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
                     <DialogHeader>
                       <DialogTitle>Edit Event Info</DialogTitle>
                       <DialogDescription>
                         Add additional information about this event
                       </DialogDescription>
                     </DialogHeader>
-                    <Input 
-                      value={event.info || ''}
-                      onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
-                      placeholder="Add event info"
-                      autoFocus
-                    />
+                    <form onSubmit={(e) => e.preventDefault()}>
+                      <Input 
+                        value={event.info || ''}
+                        onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
+                        placeholder="Add event info"
+                        autoFocus
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </form>
                   </DialogContent>
                 </Dialog>
               </span>
