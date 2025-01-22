@@ -9,6 +9,9 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { Event } from '@db/schema';
+import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone, Rocket, ShoppingBag, Sun, Zap } from 'lucide-react';
 
 const ICONS = {
@@ -83,54 +86,52 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     <TooltipProvider>
       <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
         <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
-        <div className="flex h-full items-center">
-          <div className="flex flex-1 min-w-0 items-center">
-            <span className={`font-medium text-left text-ellipsis ${
-              event.title.length > 40 ? 'text-[0.6rem]' : 
-              event.title.length > 25 ? 'text-[0.7rem]' : 
-              'text-[0.75rem]'
-            } leading-tight line-clamp-3 whitespace-normal`}>
-              {event.title}
+          <div className="flex h-full items-center">
+            <div className="flex flex-1 min-w-0 items-center">
+              <span className={`font-medium text-left text-ellipsis ${
+                event.title.length > 40 ? 'text-[0.6rem]' : 
+                event.title.length > 25 ? 'text-[0.7rem]' : 
+                'text-[0.75rem]'
+              } leading-tight line-clamp-3 whitespace-normal`}>
+                {event.title}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="inline-block cursor-pointer">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info className="inline-block ml-1 w-3 h-3" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="max-w-xs text-sm">Click to edit info</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Edit Event Info</DialogTitle>
+                    </DialogHeader>
+                    <Input 
+                      value={event.info || ''}
+                      onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
+                      placeholder="Add event info"
+                    />
+                  </DialogContent>
+                </Dialog>
+              </span>
+            </div>
+            <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <Dialog>
                 <DialogTrigger asChild>
-                  <div className="inline-block cursor-pointer">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info className="inline-block ml-1 w-3 h-3" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-xs text-sm">Click to edit info</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
+                  <Button variant="ghost" size="sm" className="h-6 px-1.5 ml-1">✎</Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Edit Event Info</DialogTitle>
+                    <DialogTitle>Edit Event</DialogTitle>
                   </DialogHeader>
-                  <Input 
-                    value={event.info || ''}
-                    onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
-                    placeholder="Add event info"
-                  />
-                </DialogContent>
-              </Dialog>
-            </span>
-          </div>
-          <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-6 px-1.5 ml-1">✎</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Edit Event</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 pt-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    {EVENT_TEMPLATES.map((t) => {
-                      const TemplateIcon = t.icon ? ICONS[t.icon as keyof typeof ICONS] : null;
-                      return (
+                  <div className="space-y-4 pt-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      {EVENT_TEMPLATES.map((t) => (
                         <Button
                           key={t.id}
                           variant={event.templateId === t.id ? "default" : "outline"}
@@ -141,38 +142,38 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                             color: t.color
                           })}
                         >
-                          {TemplateIcon && <TemplateIcon className="h-6 w-6" />}
+                          {t.icon && <ICONS[t.icon as keyof typeof ICONS] className="h-6 w-6" />}
                           <span>{t.title}</span>
                         </Button>
-                      );
-                    })}
+                      ))}
+                    </div>
+                    <Input 
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Event title"
+                    />
+                    <Input 
+                      value={event.info || ''}
+                      onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
+                      placeholder="Event info (optional)"
+                    />
+                    <DialogPrimitive.Close asChild>
+                      <Button onClick={() => onUpdate({ id: event.id, title })}>
+                        Save Changes
+                      </Button>
+                    </DialogPrimitive.Close>
                   </div>
-                  <Input 
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Event title"
-                  />
-                  <Input 
-                    value={event.info || ''}
-                    onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
-                    placeholder="Event info (optional)"
-                  />
-                  <DialogPrimitive.Close asChild>
-                    <Button onClick={() => onUpdate({ id: event.id, title })}>
-                      Save Changes
-                    </Button>
-                  </DialogPrimitive.Close>
-                </div>
-              </DialogContent>
-            </Dialog>
-            {localStorage.getItem('schedule-password') === '99ballons' && (
-              <button 
-                onClick={handleDelete}
-                className="absolute top-1 left-1 p-1.5 text-red-500 hover:text-red-700"
-              >
-                🗑️
-              </button>
-            )}
+                </DialogContent>
+              </Dialog>
+              {localStorage.getItem('schedule-password') === '99ballons' && (
+                <button 
+                  onClick={handleDelete}
+                  className="absolute top-1 left-1 p-1.5 text-red-500 hover:text-red-700"
+                >
+                  🗑️
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
