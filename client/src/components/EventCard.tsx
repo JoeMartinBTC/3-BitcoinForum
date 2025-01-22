@@ -108,7 +108,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                   <DialogContent 
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     onPointerDownOutside={(e) => e.preventDefault()}
-                    onClick={(e) => e.stopPropagation()}
+                    onInteractOutside={(e) => e.preventDefault()}
                   >
                     <DialogHeader>
                       <DialogTitle>Edit Event Info</DialogTitle>
@@ -116,14 +116,23 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                         Add additional information about this event
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="mt-4">
+                    <div className="mt-4" onClick={(e) => e.stopPropagation()}>
                       <Input 
                         value={event.info || ''}
                         onChange={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
-                          onUpdate({ id: event.id, info: e.target.value });
+                          const value = e.target.value;
+                          requestAnimationFrame(() => {
+                            onUpdate({ id: event.id, info: value });
+                          });
                         }}
-                        onKeyDown={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => {
+                          e.stopPropagation();
+                          if (e.key === 'Escape') {
+                            e.preventDefault();
+                          }
+                        }}
                         placeholder="Add event info"
                         autoFocus
                       />
