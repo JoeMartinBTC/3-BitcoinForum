@@ -2,7 +2,7 @@
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useState, useContext } from 'react';
 import { Info } from 'lucide-react';
@@ -108,11 +108,15 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Edit Event Info</DialogTitle>
+                      <DialogDescription>
+                        Add additional information about this event
+                      </DialogDescription>
                     </DialogHeader>
                     <Input 
                       value={event.info || ''}
                       onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
                       placeholder="Add event info"
+                      autoFocus
                     />
                   </DialogContent>
                 </Dialog>
