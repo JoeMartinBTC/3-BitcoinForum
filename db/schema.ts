@@ -56,6 +56,7 @@ export type Event = {
   inHoldingArea: boolean;
   templateId: string;
   deleted?: boolean;
+  info?: string | null;
 };
 export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
