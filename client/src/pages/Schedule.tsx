@@ -91,7 +91,8 @@ export default function Schedule() {
         IsBreak: event.isBreak ? 'Yes' : 'No',
         InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
         TemplateID: event.templateId || '',
-        Color: event.color || ''
+        Color: event.color || '',
+        Info: event.info || ''
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
@@ -195,7 +196,8 @@ export default function Schedule() {
                     StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
                     EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
                     Duration: event.endTime && event.startTime ? 
-                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : ''
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : '',
+                    Info: event.info || ''
                   }));
                   console.log('Holding area events:', filteredEvents);
                   const data = holdingAreaEvents.map(event => ({
@@ -208,7 +210,8 @@ export default function Schedule() {
                     StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
                     EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
                     Duration: event.endTime && event.startTime ? 
-                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : ''
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : '',
+                    Info: event.info || ''
                   }));
                   console.log('Excel data:', data);
                   const ws = XLSX.utils.json_to_sheet(data);
@@ -256,7 +259,8 @@ export default function Schedule() {
                             isBreak: false,
                             inHoldingArea: true,
                             templateId: event.TemplateID || '1',
-                            color: event.Color || 'bg-blue-100'
+                            color: event.Color || 'bg-blue-100',
+                            info: event.Info || ''
                           })
                         });
                       } catch (error) {
@@ -313,7 +317,8 @@ export default function Schedule() {
                             isBreak: event.IsBreak === 'Yes',
                             inHoldingArea: event.InHoldingArea === 'Yes',
                             templateId: event.TemplateID,
-                            color: event.Color
+                            color: event.Color,
+                            info: event.Info || ''
                           })
                         });
                       } catch (error) {
@@ -376,19 +381,22 @@ export default function Schedule() {
             <button
               onClick={async () => {
                 const XLSX = await import('xlsx');
-                const slots = document.querySelectorAll('[data-slot-info]');
-                const backgroundData = Array.from(slots).map(slot => {
-                  const day = slot.getAttribute('data-day');
-                  const time = slot.getAttribute('data-time');
-                  const hasEvent = slot.querySelector('.event-card');
-                  if (!hasEvent) {
-                    const backgroundColor = getComputedStyle(slot).backgroundColor;
-                    return { day, time, backgroundColor };
-                  }
-                  return null;
-                }).filter(Boolean);
+                const allEvents = events || [];
+                const data = allEvents.map(event => ({
+                  ID: event.id,
+                  Title: event.title,
+                  Description: event.description || '',
+                  Day: event.day,
+                  StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
+                  EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',
+                  IsBreak: event.isBreak ? 'Yes' : 'No',
+                  InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+                  TemplateID: event.templateId || '',
+                  Color: event.color || '',
+                  Info: event.info || ''
+                }));
 
-                const ws = XLSX.utils.json_to_sheet(backgroundData);
+                const ws = XLSX.utils.json_to_sheet(data);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
                 XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
