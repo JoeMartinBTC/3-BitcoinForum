@@ -1,4 +1,3 @@
-
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -80,6 +79,9 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
     }
   };
 
+  // Placeholder for day count - replace with actual logic
+  const daysRemaining = 2; // Replace with actual calculation
+
   return (
     <TooltipProvider>
       <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
@@ -94,10 +96,12 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                 {event.title}
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className="inline-block cursor-pointer">
+                    <div className={`inline-block cursor-pointer transition-opacity duration-200 ${
+                      daysRemaining > 6 ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+                    }`}>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Info className="inline-block ml-1 w-3 h-3" />
+                          <Info className="inline-block ml-1 w-3 h-3 text-gray-400" />
                         </TooltipTrigger>
                         <TooltipContent>
                           <p className="max-w-xs text-sm">Click to edit info</p>
