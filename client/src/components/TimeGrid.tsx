@@ -33,7 +33,7 @@ function TimeSlot({
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
-    return gridItem?.backgroundColor || storedColor || '#ffffff';
+    return storedColor || gridItem?.backgroundColor || '#ffffff';
   });
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
