@@ -97,7 +97,9 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                 <Dialog>
                   <DialogTrigger asChild>
                     <div className={`inline-block cursor-pointer transition-opacity duration-200 ${
-                      daysRemaining > 6 ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+                      document.querySelectorAll('[data-day]').length > 6 
+                        ? 'opacity-0 group-hover:opacity-100' 
+                        : 'opacity-100'
                     }`}>
                       <Tooltip>
                         <TooltipTrigger asChild>
