@@ -90,16 +90,30 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               'text-[0.75rem]'
             } leading-tight line-clamp-3 whitespace-normal`}>
               {event.title}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="inline-block ml-1 w-3 h-3" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs text-sm">{event.info || 'Click edit to add info'}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="inline-block cursor-pointer">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="inline-block ml-1 w-3 h-3" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs text-sm">Click to edit info</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit Event Info</DialogTitle>
+                  </DialogHeader>
+                  <Input 
+                    value={event.info || ''}
+                    onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
+                    placeholder="Add event info"
+                  />
+                </DialogContent>
+              </Dialog>
             </span>
           </div>
           <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
