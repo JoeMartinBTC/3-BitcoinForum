@@ -152,19 +152,27 @@ function TimeSlot({
                       'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  }).then(() => {
-                    // Force refresh grid data to update all instances
-                    fetch('/api/time-grid').then(res => res.json()).then(data => {
-                      if (Array.isArray(data)) {
-                        // Update all matching slots with the new color
-                        data.forEach(item => {
-                          if (item.day === day && item.time === slot.time) {
-                            const key = `bg_${item.day}_${item.time}`;
-                            localStorage.setItem(key, item.backgroundColor);
-                          }
-                        });
-                      }
-                    });
+                  }).then(async (response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
+                    }
+                    const res = await fetch('/api/time-grid');
+                    if (!res.ok) {
+                      throw new Error('Failed to fetch updated grid data');
+                    }
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                      // Update all matching slots with the new color
+                      data.forEach(item => {
+                        if (item.day === day && item.time === slot.time) {
+                          const key = `bg_${item.day}_${item.time}`;
+                          localStorage.setItem(key, item.backgroundColor);
+                        }
+                      });
+                    }
+                  }).catch(error => {
+                    console.error("Error updating background color:", error);
+                    // Optionally handle the error, e.g., display a message to the user.
                   });
                 }
                 setShowColorPicker(false);
@@ -187,6 +195,27 @@ function TimeSlot({
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
+                  }).then(async (response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
+                    }
+                    const res = await fetch('/api/time-grid');
+                    if (!res.ok) {
+                      throw new Error('Failed to fetch updated grid data');
+                    }
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                      // Update all matching slots with the new color
+                      data.forEach(item => {
+                        if (item.day === day && item.time === slot.time) {
+                          const key = `bg_${item.day}_${item.time}`;
+                          localStorage.setItem(key, item.backgroundColor);
+                        }
+                      });
+                    }
+                  }).catch(error => {
+                    console.error("Error updating background color:", error);
+                    // Optionally handle the error, e.g., display a message to the user.
                   });
                 }
                 setShowColorPicker(false);
