@@ -90,16 +90,14 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               'text-[0.75rem]'
             } leading-tight line-clamp-3 whitespace-normal`}>
               {event.title}
-              {event.info && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="inline-block ml-1 w-3 h-3" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs text-sm">{event.info}</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info className="inline-block ml-1 w-3 h-3" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs text-sm">{event.info || 'Click edit to add info'}</p>
+                </TooltipContent>
+              </Tooltip>
             </span>
           </div>
           <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
