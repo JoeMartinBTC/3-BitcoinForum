@@ -125,11 +125,6 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Event title"
                   />
-                  <Input
-                    value={event.info || ''}
-                    onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
-                    placeholder="Event info (optional)"
-                  />
                   <DialogPrimitive.Close asChild>
                     <Button onClick={() => onUpdate({ id: event.id, title })}>
                       Save Changes
