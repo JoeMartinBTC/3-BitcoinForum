@@ -80,8 +80,9 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   };
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
-      <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
+    <TooltipProvider>
+      <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }} className="h-full">
+        <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
         <div className="flex h-full items-center">
           <div className="flex flex-1 min-w-0 items-center">
             <span className={`font-medium text-left text-ellipsis ${
@@ -175,6 +176,6 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }
