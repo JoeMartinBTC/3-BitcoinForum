@@ -140,12 +140,18 @@ export default function Schedule() {
             >
               Export PDF
             </button>
-            <button
-              onClick={handleExcelExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Export Calendar
-            </button>
+            <div className="relative group">
+              <button
+                onClick={handleExcelExport}
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+              >
+                Export Calendar
+                <span className="ml-1">ⓘ</span>
+              </button>
+              <div className="absolute hidden group-hover:block z-50 w-64 p-2 bg-black text-white text-sm rounded shadow-lg -top-12 left-1/2 transform -translate-x-1/2">
+                Exports all events to an Excel file with complete details
+              </div>
+            </div>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
                 <button
@@ -359,12 +365,18 @@ export default function Schedule() {
             </AlertDialog>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
-                <button
-                  onClick={() => document.getElementById('excelImport')?.click()}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                >
-                  Import Calendar
-                </button>
+                <div className="relative group">
+                  <button
+                    onClick={() => document.getElementById('excelImport')?.click()}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                  >
+                    Import Calendar
+                    <span className="ml-1">ⓘ</span>
+                  </button>
+                  <div className="absolute hidden group-hover:block z-50 w-64 p-2 bg-black text-white text-sm rounded shadow-lg -top-12 left-1/2 transform -translate-x-1/2">
+                    Import events from an Excel file in the exported format
+                  </div>
+                </div>
                 <button
                   onClick={() => document.getElementById('holdingImport')?.click()}
                   className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
