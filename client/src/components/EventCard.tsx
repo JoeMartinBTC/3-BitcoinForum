@@ -116,23 +116,19 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                         Add additional information about this event
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="mt-4" onClick={(e) => e.stopPropagation()}>
+                    <div className="mt-4">
                       <Input 
                         value={event.info || ''}
                         onChange={(e) => {
-                          e.preventDefault();
                           e.stopPropagation();
                           const value = e.target.value;
-                          requestAnimationFrame(() => {
+                          clearTimeout((window as any).inputTimeout);
+                          (window as any).inputTimeout = setTimeout(() => {
                             onUpdate({ id: event.id, info: value });
-                          });
+                          }, 300);
                         }}
-                        onKeyDown={(e) => {
-                          e.stopPropagation();
-                          if (e.key === 'Escape') {
-                            e.preventDefault();
-                          }
-                        }}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        onFocus={(e) => e.target.select()}
                         placeholder="Add event info"
                         autoFocus
                       />
