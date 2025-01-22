@@ -1,4 +1,3 @@
-
 const PASSWORDS = {
   VIEW: 'bip25',
   EDIT: '130jahr',
