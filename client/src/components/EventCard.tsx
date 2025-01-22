@@ -1,3 +1,4 @@
+
 import { useDrag } from 'react-dnd';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,9 +7,6 @@ import { Input } from "@/components/ui/input";
 import { useState, useContext } from 'react';
 import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Event } from '@db/schema';
-import { EVENT_TEMPLATES } from '../lib/eventTemplates';
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
@@ -142,7 +140,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                             color: t.color
                           })}
                         >
-                          {t.icon && <ICONS[t.icon as keyof typeof ICONS] className="h-6 w-6" />}
+                          {t.icon && t.icon in ICONS && <Icon className="h-6 w-6" />}
                           <span>{t.title}</span>
                         </Button>
                       ))}
