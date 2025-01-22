@@ -200,7 +200,33 @@ export function registerRoutes(app: Express) {
     }
   });
 
-  app.post("/api/time-grid/import", async (req, res) => {
+  app.post("/api/events/batch", async (req, res) => {
+  try {
+    const password = req.headers['x-password'];
+    if (!PASSWORDS.values.includes(password)) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const events = req.body;
+    if (!Array.isArray(events)) {
+      return res.status(400).json({ error: "Expected array of events" });
+    }
+
+    // Insert all events in a single transaction
+    await db.transaction(async (tx) => {
+      for (const event of events) {
+        await tx.insert(schema.events).values(event);
+      }
+    });
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Failed to batch import events:', error);
+    res.status(500).json({ error: "Failed to import events" });
+  }
+});
+
+app.post("/api/time-grid/import", async (req, res) => {
     try {
       const password = req.headers['x-password'];
       if (password !== PASSWORDS.ADMIN) {
