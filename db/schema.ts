@@ -22,8 +22,24 @@ export const events = pgTable("events", {
   isBreak: boolean("is_break").default(false).notNull(),
   inHoldingArea: boolean("in_holding_area").default(true).notNull(),
   templateId: text("template_id").notNull().default('lecture'),
-  color: text("color").notNull().default("bg-blue-100")
+  color: text("color").notNull().default("bg-blue-100"),
+  info: text("info")
 });
+
+export type Event = {
+  id: number;
+  title: string;
+  color: string;
+  description: string | null;
+  day: number;
+  startTime: Date;
+  endTime: Date;
+  isBreak: boolean;
+  inHoldingArea: boolean;
+  templateId: string;
+  deleted?: boolean;
+  info?: string | null;
+};
 
 export const speakers = pgTable("speakers", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),

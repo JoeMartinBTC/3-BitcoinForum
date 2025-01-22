@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useState, useContext } from 'react';
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
@@ -88,6 +90,16 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
               'text-[0.75rem]'
             } leading-tight line-clamp-3 whitespace-normal`}>
               {event.title}
+              {event.info && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Info className="inline-block ml-1 w-3 h-3" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs text-sm">{event.info}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </span>
           </div>
           <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -124,6 +136,11 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Event title"
+                  />
+                  <Input 
+                    value={event.info || ''}
+                    onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
+                    placeholder="Event info (optional)"
                   />
                   <DialogPrimitive.Close asChild>
                     <Button onClick={() => onUpdate({ id: event.id, title })}>
