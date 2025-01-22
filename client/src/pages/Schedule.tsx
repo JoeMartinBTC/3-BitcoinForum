@@ -125,7 +125,7 @@ export default function Schedule() {
         </DialogContent>
       </Dialog>
       <VersionBadge />
-      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.8</span></h1>
+      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.8.5</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
