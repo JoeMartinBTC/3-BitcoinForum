@@ -7,8 +7,7 @@ import { useState, useContext } from 'react';
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from '@db/schema';
 import { EVENT_TEMPLATES } from '../lib/eventTemplates';
-import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone, Rocket, ShoppingBag, Sun, Zap, Info } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { BookOpen, Wrench, Coffee, Users, Calendar, Star, Video, Music, Briefcase, Code, Gamepad, Heart, Image, Mail, Map, Phone, Rocket, ShoppingBag, Sun, Zap } from 'lucide-react';
 
 const ICONS = {
   'book-open': BookOpen,
@@ -83,25 +82,13 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
       <div className={`cursor-move hover:shadow-md transition-shadow w-full h-full overflow-hidden group ${template.color}`}>
         <div className="flex h-full items-center">
           <div className="flex flex-1 min-w-0 items-center">
-            <div className="flex items-center gap-1">
-              <span className={`font-medium text-left text-ellipsis ${
-                event.title.length > 40 ? 'text-[0.6rem]' : 
-                event.title.length > 25 ? 'text-[0.7rem]' : 
-                'text-[0.75rem]'
-              } leading-tight line-clamp-3 whitespace-normal`}>
-                {event.title}
-              </span>
-              {event.info && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info className="h-3 w-3 cursor-help opacity-50 hover:opacity-100" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs text-sm">{event.info}</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-            </div>
+            <span className={`font-medium text-left text-ellipsis ${
+              event.title.length > 40 ? 'text-[0.6rem]' : 
+              event.title.length > 25 ? 'text-[0.7rem]' : 
+              'text-[0.75rem]'
+            } leading-tight line-clamp-3 whitespace-normal`}>
+              {event.title}
+            </span>
           </div>
           <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Dialog>
@@ -133,18 +120,11 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                       );
                     })}
                   </div>
-                  <div className="space-y-4">
-                    <Input 
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Event title"
-                    />
-                    <Input
-                      value={event.info || ''}
-                      onChange={(e) => onUpdate({ id: event.id, info: e.target.value })}
-                      placeholder="Event info (optional)"
-                    />
-                  </div>
+                  <Input 
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Event title"
+                  />
                   <DialogPrimitive.Close asChild>
                     <Button onClick={() => onUpdate({ id: event.id, title })}>
                       Save Changes
