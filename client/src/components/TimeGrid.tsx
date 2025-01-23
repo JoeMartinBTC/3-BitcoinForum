@@ -22,7 +22,7 @@ function TimeSlot({
   const { data: gridData = [] } = useQuery({
     queryKey: ['timeGrid'],
     queryFn: async () => {
-      const res = await fetch('/api/time-grid');
+      const res = await fetch('http://localhost:5000/api/time-grid');
       if (!res.ok) throw new Error('Failed to fetch grid data');
       const data = await res.json();
       return Array.isArray(data) ? data : [];
@@ -35,7 +35,7 @@ function TimeSlot({
   // Poll for background color updates
   useEffect(() => {
     const pollInterval = setInterval(async () => {
-      const res = await fetch('/api/time-grid', {
+      const res = await fetch('http://localhost:5000/api/time-grid', {
         headers: {
           'x-password': 'view' // Using view permission for fetching grid data
         }
@@ -167,7 +167,7 @@ function TimeSlot({
                   const key = `bg_${day}_${slot.time}`;
                   localStorage.setItem(key, newColor);
                   setBackgroundColor(newColor);
-                  fetch('/api/time-grid', {
+                  fetch('http://localhost:5000/api/time-grid', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    const res = await fetch('/api/time-grid');
+                    const res = await fetch('http://localhost:5000/api/time-grid');
                     if (!res.ok) {
                       throw new Error('Failed to fetch updated grid data');
                     }
@@ -217,7 +217,7 @@ function TimeSlot({
                   const key = `bg_${day}_${slot.time}`;
                   localStorage.setItem(key, defaultColor);
                   setBackgroundColor(defaultColor);
-                  fetch('/api/time-grid', {
+                  fetch('http://localhost:5000/api/time-grid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
@@ -225,7 +225,7 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    const res = await fetch('/api/time-grid');
+                    const res = await fetch('http://localhost:5000/api/time-grid');
                     if (!res.ok) {
                       throw new Error('Failed to fetch updated grid data');
                     }
