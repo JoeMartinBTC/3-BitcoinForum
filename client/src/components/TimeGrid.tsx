@@ -142,17 +142,19 @@ function TimeSlot({
                     color: newColor
                   });
                 } else {
-                  setBackgroundColor(newColor);
+                  const key = `bg_${day}_${slot.time}`;
+                  localStorage.setItem(key, newColor);
                   fetch('/api/time-grid', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-password': localStorage.getItem('schedule-password') || '' },
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-password': localStorage.getItem('schedule-password') || ''
+                    },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  })
-                  .then((response) => {
+                  }).then(async (response) => {
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    return response.json();
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
@@ -172,17 +174,19 @@ function TimeSlot({
                     color: defaultColor
                   });
                 } else {
-                  setBackgroundColor(defaultColor);
+                  const key = `bg_${day}_${slot.time}`;
+                  localStorage.setItem(key, defaultColor);
                   fetch('/api/time-grid', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-password': localStorage.getItem('schedule-password') || '' },
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-password': localStorage.getItem('schedule-password') || ''
+                    },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
-                  })
-                  .then((response) => {
+                  }).then(async (response) => {
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    return response.json();
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
