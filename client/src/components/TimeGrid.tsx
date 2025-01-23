@@ -1,5 +1,5 @@
 import { useDrop } from 'react-dnd';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
@@ -22,47 +22,19 @@ function TimeSlot({
   const { data: gridData = [] } = useQuery({
     queryKey: ['timeGrid'],
     queryFn: async () => {
-      const res = await fetch('http://localhost:5000/api/time-grid');
+      const res = await fetch('/api/time-grid');
       if (!res.ok) throw new Error('Failed to fetch grid data');
       const data = await res.json();
       return Array.isArray(data) ? data : [];
     }
   });
-
+  
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-
-  // Poll for background color updates
-  useEffect(() => {
-    const pollInterval = setInterval(async () => {
-      const res = await fetch('http://localhost:5000/api/time-grid', {
-        headers: {
-          'x-password': 'view' // Using view permission for fetching grid data
-        }
-      });
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        const matchingItem = data.find(item => item.day === day && item.time === slot.time);
-        if (matchingItem?.backgroundColor) {
-          setBackgroundColor(matchingItem.backgroundColor);
-          localStorage.setItem(`bg_${day}_${slot.time}`, matchingItem.backgroundColor);
-        }
-      }
-    }, 5000); // Poll every 5 seconds
-
-    return () => clearInterval(pollInterval);
-  }, [day, slot.time]);
-
-  useEffect(() => {
+  const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
-    if (storedColor) {
-      setBackgroundColor(storedColor);
-    } else if (gridItem?.backgroundColor) {
-      setBackgroundColor(gridItem.backgroundColor);
-      localStorage.setItem(key, gridItem.backgroundColor);
-    }
-  }, [day, slot.time, gridItem]);
+    return gridItem?.backgroundColor || storedColor || '#ffffff';
+  });
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
@@ -82,11 +54,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-
+      
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-
+      
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -164,41 +136,11 @@ function TimeSlot({
                     color: newColor
                   });
                 } else {
-                  const key = `bg_${day}_${slot.time}`;
-                  localStorage.setItem(key, newColor);
                   setBackgroundColor(newColor);
-                  fetch('http://localhost:5000/api/time-grid', {
+                  fetch('/api/time-grid', {
                     method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'x-password': 'edit' // Using edit permission for updating grid data
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  }).then(async (response) => {
-                    if (!response.ok) {
-                      throw new Error('Failed to update background color');
-                    }
-                    const res = await fetch('http://localhost:5000/api/time-grid');
-                    if (!res.ok) {
-                      throw new Error('Failed to fetch updated grid data');
-                    }
-                    const data = await res.json();
-                    if (Array.isArray(data)) {
-                      // Update all matching slots with the new color
-                      data.forEach(item => {
-                        if (item.day === day && item.time === slot.time) {
-                          const key = `bg_${item.day}_${item.time}`;
-                          localStorage.setItem(key, item.backgroundColor);
-                        }
-                      });
-                    }
-                  }).then(async (response) => {
-                    if (!response.ok) {
-                      throw new Error('Failed to update background color');
-                    }
-                  }).catch(error => {
-                    console.error("Error updating background color:", error);
-                    // Optionally handle the error, e.g., display a message to the user.
                   });
                 }
                 setShowColorPicker(false);
@@ -214,38 +156,11 @@ function TimeSlot({
                     color: defaultColor
                   });
                 } else {
-                  const key = `bg_${day}_${slot.time}`;
-                  localStorage.setItem(key, defaultColor);
                   setBackgroundColor(defaultColor);
-                  fetch('http://localhost:5000/api/time-grid', {
+                  fetch('/api/time-grid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
-                  }).then(async (response) => {
-                    if (!response.ok) {
-                      throw new Error('Failed to update background color');
-                    }
-                    const res = await fetch('http://localhost:5000/api/time-grid');
-                    if (!res.ok) {
-                      throw new Error('Failed to fetch updated grid data');
-                    }
-                    const data = await res.json();
-                    if (Array.isArray(data)) {
-                      // Update all matching slots with the new color
-                      data.forEach(item => {
-                        if (item.day === day && item.time === slot.time) {
-                          const key = `bg_${item.day}_${item.time}`;
-                          localStorage.setItem(key, item.backgroundColor);
-                        }
-                      });
-                    }
-                  }).then(async (response) => {
-                    if (!response.ok) {
-                      throw new Error('Failed to update background color');
-                    }
-                  }).catch(error => {
-                    console.error("Error updating background color:", error);
-                    // Optionally handle the error, e.g., display a message to the user.
                   });
                 }
                 setShowColorPicker(false);
@@ -308,13 +223,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-
+      
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-
+      
       setShowAllDays(false);
       return next;
     });
@@ -495,7 +410,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-
+        
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
