@@ -182,9 +182,6 @@ function TimeSlot({
                         queryClient.invalidateQueries({ queryKey: ['timeGrid'] }),
                         queryClient.refetchQueries({ queryKey: ['timeGrid'], exact: true, type: 'all' })
                       ]);
-                        if (!Array.isArray(old)) return old;
-                        return old.map((item: any) => {
-                          if (item.day === day && item.time === slot.time) {
                             return { ...item, backgroundColor: newColor };
                           }
                           return item;
