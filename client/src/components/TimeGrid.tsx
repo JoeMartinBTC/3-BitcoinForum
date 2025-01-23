@@ -19,16 +19,15 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const { data: gridData = [] } = useQuery({
+  const { data: gridData = [], status } = useQuery({
     queryKey: ['timeGrid'],
     queryFn: async () => {
       const res = await fetch('/api/time-grid');
       if (!res.ok) throw new Error('Failed to fetch grid data');
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
+      return res.json();
     }
   });
-  
+
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
@@ -54,11 +53,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      
+
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-      
+
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -139,8 +138,18 @@ function TimeSlot({
                   setBackgroundColor(newColor);
                   fetch('/api/time-grid', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'x-password': localStorage.getItem('schedule-password') || '' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
+                  })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
+                    }
+                    return response.json();
+                  })
+                  .catch(error => {
+                    console.error("Error updating background color:", error);
+                    // Handle the error appropriately, e.g., display an error message to the user.
                   });
                 }
                 setShowColorPicker(false);
@@ -159,8 +168,18 @@ function TimeSlot({
                   setBackgroundColor(defaultColor);
                   fetch('/api/time-grid', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'x-password': localStorage.getItem('schedule-password') || '' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: defaultColor })
+                  })
+                  .then((response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
+                    }
+                    return response.json();
+                  })
+                  .catch(error => {
+                    console.error("Error updating background color:", error);
+                    // Handle the error appropriately, e.g., display an error message to the user.
                   });
                 }
                 setShowColorPicker(false);
@@ -223,13 +242,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-      
+
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-      
+
       setShowAllDays(false);
       return next;
     });
@@ -410,7 +429,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-        
+
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
