@@ -35,7 +35,11 @@ function TimeSlot({
   // Poll for background color updates
   useEffect(() => {
     const pollInterval = setInterval(async () => {
-      const res = await fetch('/api/time-grid');
+      const res = await fetch('/api/time-grid', {
+        headers: {
+          'x-password': 'view' // Using view permission for fetching grid data
+        }
+      });
       const data = await res.json();
       if (Array.isArray(data)) {
         const matchingItem = data.find(item => item.day === day && item.time === slot.time);
@@ -166,7 +170,8 @@ function TimeSlot({
                   fetch('/api/time-grid', {
                     method: 'POST',
                     headers: {
-                      'Content-Type': 'application/json'
+                      'Content-Type': 'application/json',
+                      'x-password': 'edit' // Using edit permission for updating grid data
                     },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
                   }).then(async (response) => {
