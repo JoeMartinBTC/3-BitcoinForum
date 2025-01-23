@@ -27,12 +27,14 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 500,
+    refetchInterval: 100,
     staleTime: 0,
     gcTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
-    refetchOnReconnect: true
+    refetchOnReconnect: true,
+    retry: true,
+    retryDelay: 500
   });
 
   const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
@@ -167,9 +169,19 @@ function TimeSlot({
                     const result = await response.json();
                     if (result.success) {
                       setBackgroundColor(newColor);
-                      await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
-                      await queryClient.refetchQueries({ queryKey: ['timeGrid'] });
                       queryClient.setQueryData(['timeGrid'], (old: any) => {
+                        if (!Array.isArray(old)) return old;
+                        return old.map((item: any) => {
+                          if (item.day === day && item.time === slot.time) {
+                            return { ...item, backgroundColor: newColor };
+                          }
+                          return item;
+                        });
+                      });
+                      await Promise.all([
+                        queryClient.invalidateQueries({ queryKey: ['timeGrid'] }),
+                        queryClient.refetchQueries({ queryKey: ['timeGrid'], exact: true, type: 'all' })
+                      ]);
                         if (!Array.isArray(old)) return old;
                         return old.map((item: any) => {
                           if (item.day === day && item.time === slot.time) {
