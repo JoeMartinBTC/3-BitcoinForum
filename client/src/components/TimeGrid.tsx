@@ -29,7 +29,7 @@ function TimeSlot({
     },
     refetchInterval: 2000,
     staleTime: 0,
-    cacheTime: 0
+    gcTime: 0
   });
 
   const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
