@@ -182,10 +182,6 @@ function TimeSlot({
                         queryClient.invalidateQueries({ queryKey: ['timeGrid'] }),
                         queryClient.refetchQueries({ queryKey: ['timeGrid'], exact: true, type: 'all' })
                       ]);
-                            return { ...item, backgroundColor: newColor };
-                          }
-                          return item;
-                        });
                       });
                     }
                   })
