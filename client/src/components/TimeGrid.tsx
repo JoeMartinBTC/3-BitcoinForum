@@ -161,7 +161,8 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
+                    await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
+                    await queryClient.refetchQueries({ queryKey: ['timeGrid'] });
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
