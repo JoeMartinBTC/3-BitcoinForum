@@ -27,9 +27,11 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 2000,
+    refetchInterval: 1000,
     staleTime: 0,
-    gcTime: 0
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true
   });
 
   const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
@@ -161,8 +163,12 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
-                    await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
-                    await queryClient.refetchQueries({ queryKey: ['timeGrid'] });
+                    const result = await response.json();
+                    if (result.success) {
+                      await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
+                      await queryClient.refetchQueries({ queryKey: ['timeGrid'], exact: true });
+                      setBackgroundColor(newColor);
+                    }
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
