@@ -26,7 +26,8 @@ function TimeSlot({
       const res = await fetch('/api/time-grid');
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
-    }
+    },
+    refetchInterval: 5000 // Refetch every 5 seconds
   });
 
   const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
@@ -153,7 +154,7 @@ function TimeSlot({
                   const key = `bg_${day}_${slot.time}`;
                   localStorage.setItem(key, newColor);
                   setBackgroundColor(newColor);
-                  queryClient.invalidateQueries(['timeGrid']);
+                  queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
                   fetch('/api/time-grid', {
                     method: 'POST',
                     headers: {
