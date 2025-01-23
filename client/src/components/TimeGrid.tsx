@@ -1,6 +1,6 @@
 import { useDrop } from 'react-dnd';
 import { useRef, useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
@@ -13,6 +13,7 @@ function TimeSlot({
   events, 
   updateEvent 
 }: { 
+  const queryClient = useQueryClient(); 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
