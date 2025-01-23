@@ -13,12 +13,12 @@ function TimeSlot({
   events, 
   updateEvent 
 }: { 
-  const queryClient = useQueryClient(); 
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
+  const queryClient = useQueryClient();
   const [showColorPicker, setShowColorPicker] = useState(false);
   const { data: gridData = [], status } = useQuery({
     queryKey: ['timeGrid'],
