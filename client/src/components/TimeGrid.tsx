@@ -28,12 +28,19 @@ function TimeSlot({
     }
   });
 
-  const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
+  const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
     return gridItem?.backgroundColor || storedColor || '#ffffff';
   });
+
+  useEffect(() => {
+    const key = `bg_${day}_${slot.time}`;
+    if (backgroundColor !== '#ffffff') {
+      localStorage.setItem(key, backgroundColor);
+    }
+  }, [backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
