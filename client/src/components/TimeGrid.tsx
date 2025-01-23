@@ -161,6 +161,7 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
+                    queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
@@ -193,6 +194,7 @@ function TimeSlot({
                     if (!response.ok) {
                       throw new Error('Failed to update background color');
                     }
+                    queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
                   })
                   .catch(error => {
                     console.error("Error updating background color:", error);
