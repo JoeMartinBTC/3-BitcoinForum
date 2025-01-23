@@ -27,8 +27,9 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 1000,
+    refetchInterval: 500,
     staleTime: 0,
+    gcTime: 0,
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     refetchOnReconnect: true
@@ -165,9 +166,18 @@ function TimeSlot({
                     }
                     const result = await response.json();
                     if (result.success) {
-                      await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
-                      await queryClient.refetchQueries({ queryKey: ['timeGrid'], exact: true });
                       setBackgroundColor(newColor);
+                      await queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
+                      await queryClient.refetchQueries({ queryKey: ['timeGrid'] });
+                      queryClient.setQueryData(['timeGrid'], (old: any) => {
+                        if (!Array.isArray(old)) return old;
+                        return old.map((item: any) => {
+                          if (item.day === day && item.time === slot.time) {
+                            return { ...item, backgroundColor: newColor };
+                          }
+                          return item;
+                        });
+                      });
                     }
                   })
                   .catch(error => {
