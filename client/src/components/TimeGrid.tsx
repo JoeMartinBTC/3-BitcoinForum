@@ -27,7 +27,9 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 5000 // Refetch every 5 seconds
+    refetchInterval: 2000,
+    staleTime: 0,
+    cacheTime: 0
   });
 
   const gridItem = gridData?.find((item: {day: number, time: string, backgroundColor: string}) => item.day === day && item.time === slot.time);
@@ -40,16 +42,9 @@ function TimeSlot({
       setBackgroundColor(storedColor);
     } else if (gridItem?.backgroundColor) {
       setBackgroundColor(gridItem.backgroundColor);
+      localStorage.setItem(key, gridItem.backgroundColor);
     }
   }, [gridItem?.backgroundColor, day, slot.time]);
-
-  useEffect(() => {
-    const key = `bg_${day}_${slot.time}`;
-    const storedColor = localStorage.getItem(key);
-    if (storedColor) {
-      setBackgroundColor(storedColor);
-    }
-  }, [day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
