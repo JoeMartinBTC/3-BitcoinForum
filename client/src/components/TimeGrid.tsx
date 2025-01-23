@@ -32,6 +32,23 @@ function TimeSlot({
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
 
+  // Poll for background color updates
+  useEffect(() => {
+    const pollInterval = setInterval(async () => {
+      const res = await fetch('/api/time-grid');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        const matchingItem = data.find(item => item.day === day && item.time === slot.time);
+        if (matchingItem?.backgroundColor) {
+          setBackgroundColor(matchingItem.backgroundColor);
+          localStorage.setItem(`bg_${day}_${slot.time}`, matchingItem.backgroundColor);
+        }
+      }
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [day, slot.time]);
+
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
@@ -170,6 +187,10 @@ function TimeSlot({
                         }
                       });
                     }
+                  }).then(async (response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
+                    }
                   }).catch(error => {
                     console.error("Error updating background color:", error);
                     // Optionally handle the error, e.g., display a message to the user.
@@ -212,6 +233,10 @@ function TimeSlot({
                           localStorage.setItem(key, item.backgroundColor);
                         }
                       });
+                    }
+                  }).then(async (response) => {
+                    if (!response.ok) {
+                      throw new Error('Failed to update background color');
                     }
                   }).catch(error => {
                     console.error("Error updating background color:", error);
