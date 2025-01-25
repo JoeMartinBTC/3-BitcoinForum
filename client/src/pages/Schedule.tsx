@@ -497,9 +497,11 @@ export default function Schedule() {
                 onChange={(e) => {
                   const newValue = e.target.value;
                   setNotes(newValue);
+                  
+                  // Update local storage immediately
                   localStorage.setItem('notes-content', newValue);
                   
-                  // Debounce the API call
+                  // Debounce the API call with a longer delay
                   clearTimeout((window as any).notesTimeout);
                   (window as any).notesTimeout = setTimeout(() => {
                     const storedPassword = localStorage.getItem('schedule-password');
@@ -510,8 +512,8 @@ export default function Schedule() {
                         'x-password': storedPassword || ''
                       },
                       body: JSON.stringify({ content: newValue })
-                    });
-                  }, 300);
+                    }).catch(console.error);
+                  }, 1000);
                 }}
                 rows={5}
               />
