@@ -40,6 +40,10 @@ export default function Schedule() {
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!['bip25', '130jahr', '99ballons'].includes(password)) {
+      alert('Invalid password');
+      return;
+    }
     try {
       const response = await fetch('/api/events', {
         headers: {
