@@ -24,41 +24,9 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
-  const [notes, setNotes] = React.useState(() => localStorage.getItem('notes-content') || '');
-
-  const fetchNotes = React.useCallback(() => {
-    const password = localStorage.getItem('schedule-password');
-    if (!password) return;
-    
-    fetch('/api/notes', {
-      headers: {
-        'x-password': password
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data && typeof data === 'string') {
-          setNotes(data);
-          localStorage.setItem('notes-content', data);
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching notes:', err);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    fetchNotes();
-    const interval = setInterval(fetchNotes, 15000); // Poll every 15 seconds
-    return () => clearInterval(interval);
-  }, [fetchNotes]);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!['bip25', '130jahr', '99ballons'].includes(password)) {
-      alert('Invalid password');
-      return;
-    }
     try {
       const response = await fetch('/api/events', {
         headers: {
@@ -68,8 +36,6 @@ export default function Schedule() {
       if (response.ok) {
         localStorage.setItem('schedule-password', password);
         setShowPasswordDialog(false);
-        // Fetch notes immediately after successful login
-        fetchNotes();
       } else {
         alert('Invalid password');
       }
@@ -487,39 +453,14 @@ export default function Schedule() {
           </div>
         </Card>
 
-        {(password === '130jahr' || password === '99ballons') && (
-          <Card className="p-4 mt-4 bg-yellow-50">
-            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
-            {password === '99ballons' ? (
-              <textarea
-                className="w-full p-2 border rounded bg-white/50"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                onBlur={async () => {
-                  try {
-                    const storedPassword = localStorage.getItem('schedule-password');
-                    await fetch('/api/notes', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'x-password': storedPassword || ''
-                      },
-                      body: JSON.stringify({ content: notes })
-                    });
-                    localStorage.setItem('notes-content', notes);
-                  } catch (err) {
-                    console.error('Failed to save notes:', err);
-                  }
-                }}
-                rows={5}
-              />
-            ) : (
-              <div className="whitespace-pre-wrap text-sm pl-6">
-                {notes}
-              </div>
-            )}
-          </Card>
-        )}
+        <Card className="p-4 mt-4 bg-yellow-50">
+          <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
+          <ul className="list-disc pl-6 space-y-2 text-sm">
+            <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
+            <li>Event Type kann nicht importiert werden</li>
+            <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
+          </ul>
+        </Card>
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, timeGrid, notes, insertEventSchema, insertDayTitleSchema } from "../db/schema";
-import { eq, sql } from "drizzle-orm";
+import { events, dayTitles, timeGrid, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
-import { Router } from 'express'; // Added import for Router
 
 export function registerRoutes(app: Express) {
   // Get all events
@@ -64,7 +63,7 @@ export function registerRoutes(app: Express) {
       const updateData: any = { 
         ...req.body
       };
-
+      
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
         if (isNaN(startTime.getTime())) {
@@ -219,42 +218,4 @@ export function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to import time grid" });
     }
   });
-
-  const notesRouter = Router(); // Create a new router for notes
-
-  // Notes API endpoints
-  notesRouter.get('/notes', async (req, res) => {
-    try {
-      const result = await db.select().from(notes).limit(1);
-      res.json(result[0]?.content || '');
-    } catch (error) {
-      console.error('Failed to fetch notes:', error);
-      res.status(500).json({ error: "Failed to fetch notes" });
-    }
-  });
-
-  notesRouter.post('/notes', async (req, res) => {
-    const password = req.headers['x-password'];
-    if (!password || ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-    const { content } = req.body;
-    try {
-      // Use a transaction to ensure atomicity
-      await db.transaction(async (tx) => {
-        await tx.delete(notes);
-        await tx.insert(notes).values({ 
-          content: content || '',
-          updated_at: new Date()
-        });
-      });
-      res.json({ success: true });
-    } catch (error) {
-      console.error('Failed to save note:', error);
-      res.status(500).json({ error: "Failed to save note" });
-    }
-  });
-
-  app.use('/api/notes', notesRouter); // Mount the notes router to the app
-
 }
