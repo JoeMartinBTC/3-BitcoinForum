@@ -105,7 +105,7 @@ export default function Schedule() {
   return (
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent>
+        <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Enter Password</DialogTitle>
           </DialogHeader>
