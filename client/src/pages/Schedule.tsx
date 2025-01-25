@@ -28,14 +28,23 @@ export default function Schedule() {
 
   const fetchNotes = React.useCallback(() => {
     const password = localStorage.getItem('schedule-password');
+    if (!password) return;
+    
     fetch('/api/notes', {
       headers: {
-        'x-password': password || ''
+        'x-password': password
       }
     })
       .then(res => res.json())
       .then(data => {
-        setNotes(data);
+        if (data && typeof data === 'string') {
+          setNotes(data);
+          localStorage.setItem('notes-content', data);
+        }
+      })
+      .catch(err => {
+        const cachedNotes = localStorage.getItem('notes-content');
+        if (cachedNotes) setNotes(cachedNotes);
       });
   }, []);
 
