@@ -49,7 +49,7 @@ export default function Schedule() {
 
   React.useEffect(() => {
     fetchNotes();
-    const interval = setInterval(fetchNotes, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchNotes, 15000); // Poll every 15 seconds
     return () => clearInterval(interval);
   }, [fetchNotes]);
 
@@ -494,23 +494,22 @@ export default function Schedule() {
               <textarea
                 className="w-full p-2 border rounded bg-white/50"
                 value={notes}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  setNotes(newValue);
-                  localStorage.setItem('notes-content', newValue);
-                  
-                  clearTimeout((window as any).notesUpdateTimeout);
-                  (window as any).notesUpdateTimeout = setTimeout(() => {
+                onChange={(e) => setNotes(e.target.value)}
+                onBlur={async () => {
+                  try {
                     const storedPassword = localStorage.getItem('schedule-password');
-                    fetch('/api/notes', {
+                    await fetch('/api/notes', {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
                         'x-password': storedPassword || ''
                       },
-                      body: JSON.stringify({ content: newValue })
-                    }).catch(console.error);
-                  }, 500);
+                      body: JSON.stringify({ content: notes })
+                    });
+                    localStorage.setItem('notes-content', notes);
+                  } catch (err) {
+                    console.error('Failed to save notes:', err);
+                  }
                 }}
                 rows={5}
               />

@@ -240,10 +240,13 @@ export function registerRoutes(app: Express) {
     }
     const { content } = req.body;
     try {
-      await db.delete(notes);
-      await db.insert(notes).values({ 
-        content,
-        updated_at: new Date()
+      // Use a transaction to ensure atomicity
+      await db.transaction(async (tx) => {
+        await tx.delete(notes);
+        await tx.insert(notes).values({ 
+          content: content || '',
+          updated_at: new Date()
+        });
       });
       res.json({ success: true });
     } catch (error) {
