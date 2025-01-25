@@ -453,14 +453,23 @@ export default function Schedule() {
           </div>
         </Card>
 
-        <Card className="p-4 mt-4 bg-yellow-50">
-          <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
-          <ul className="list-disc pl-6 space-y-2 text-sm">
-            <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
-            <li>Event Type kann nicht importiert werden</li>
-            <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
-          </ul>
-        </Card>
+        {(password === '130jahr' || password === '99ballons') && (
+          <Card className="p-4 mt-4 bg-yellow-50">
+            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
+            {password === '99ballons' ? (
+              <textarea
+                className="w-full p-2 border rounded bg-white/50"
+                defaultValue={localStorage.getItem('wichtige-hinweise') || 'In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!\nEvent Type kann nicht importiert werden\nHolding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist'}
+                onChange={(e) => localStorage.setItem('wichtige-hinweise', e.target.value)}
+                rows={5}
+              />
+            ) : (
+              <div className="whitespace-pre-wrap text-sm pl-6">
+                {localStorage.getItem('wichtige-hinweise') || 'In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!\nEvent Type kann nicht importiert werden\nHolding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist'}
+              </div>
+            )}
+          </Card>
+        )}
       </div>
     </div>
   );
