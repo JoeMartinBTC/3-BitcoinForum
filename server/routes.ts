@@ -240,10 +240,11 @@ export function registerRoutes(app: Express) {
     }
     const { content } = req.body;
     try {
-      // Delete existing notes first
       await db.delete(notes);
-      // Insert new note
-      await db.insert(notes).values({ content });
+      await db.insert(notes).values({ 
+        content,
+        updated_at: new Date()
+      });
       res.json({ success: true });
     } catch (error) {
       console.error('Failed to save note:', error);

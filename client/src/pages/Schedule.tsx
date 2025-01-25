@@ -49,7 +49,7 @@ export default function Schedule() {
 
   React.useEffect(() => {
     fetchNotes();
-    const interval = setInterval(fetchNotes, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchNotes, 1000); // Poll every second for faster sync
     return () => clearInterval(interval);
   }, [fetchNotes]);
 
