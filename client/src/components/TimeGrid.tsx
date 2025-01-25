@@ -19,15 +19,8 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const { data: gridData = [] } = useQuery({
-    queryKey: ['timeGrid'],
-    queryFn: async () => {
-      const res = await fetch('/api/time-grid');
-      if (!res.ok) throw new Error('Failed to fetch grid data');
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
-    }
-  });
+  const { events, updateEvent, backgroundColorsQuery } = useSchedule();
+  const gridData = backgroundColorsQuery?.data || [];
   
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {

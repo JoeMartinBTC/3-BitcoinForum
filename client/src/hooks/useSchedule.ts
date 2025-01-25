@@ -6,6 +6,16 @@ export function useSchedule() {
     queryKey: ['dayTitles'],
     queryFn: () => fetch('/api/day-titles').then(res => res.json()),
   });
+
+  const backgroundColorsQuery = useQuery({
+    queryKey: ['timeGrid'],
+    queryFn: async () => {
+      const res = await fetch('/api/time-grid');
+      if (!res.ok) throw new Error('Failed to fetch grid data');
+      return res.json();
+    },
+    refetchInterval: 5000, // Refetch every 5 seconds
+  });
   const queryClient = useQueryClient();
 
   const { data: events = [] } = useQuery<Event[]>({
