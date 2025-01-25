@@ -71,3 +71,13 @@ export const timeGrid = pgTable("time_grid", {
 export const insertTimeGridSchema = createInsertSchema(timeGrid);
 export const selectTimeGridSchema = createSelectSchema(timeGrid);
 export type TimeGrid = z.infer<typeof selectTimeGridSchema>;
+
+export const notes = pgTable("notes", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  content: text("content").notNull(),
+  updated_at: timestamp("updated_at").defaultNow()
+});
+
+export const insertNotesSchema = createInsertSchema(notes);
+export const selectNotesSchema = createSelectSchema(notes);
+export type Notes = z.infer<typeof selectNotesSchema>;

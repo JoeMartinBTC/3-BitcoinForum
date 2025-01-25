@@ -224,8 +224,13 @@ export function registerRoutes(app: Express) {
 
   // Notes API endpoints
   notesRouter.get('/notes', async (req, res) => {
-    const notes = await db.query.notes.findFirst(); // Assuming a 'notes' table exists
-    res.json(notes?.content || '');
+    try {
+      const result = await db.select().from(notes).limit(1);
+      res.json(result[0]?.content || '');
+    } catch (error) {
+      console.error('Failed to fetch notes:', error);
+      res.status(500).json({ error: "Failed to fetch notes" });
+    }
   });
 
   notesRouter.post('/notes', async (req, res) => {
@@ -235,7 +240,10 @@ export function registerRoutes(app: Express) {
     }
     const { content } = req.body;
     try {
-      await db.insert(db.notes).values({ content, updated_at: new Date() }); // Assuming a 'notes' table with content and updated_at columns
+      // Delete existing notes first
+      await db.delete(notes);
+      // Insert new note
+      await db.insert(notes).values({ content });
       res.json({ success: true });
     } catch (error) {
       console.error('Failed to save note:', error);
