@@ -58,6 +58,8 @@ export default function Schedule() {
       if (response.ok) {
         localStorage.setItem('schedule-password', password);
         setShowPasswordDialog(false);
+        // Fetch notes immediately after successful login
+        fetchNotes();
       } else {
         alert('Invalid password');
       }
