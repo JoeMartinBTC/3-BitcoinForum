@@ -27,7 +27,12 @@ export default function Schedule() {
   const [notes, setNotes] = React.useState('');
 
   const fetchNotes = React.useCallback(() => {
-    fetch('/api/notes')
+    const password = localStorage.getItem('schedule-password');
+    fetch('/api/notes', {
+      headers: {
+        'x-password': password || ''
+      }
+    })
       .then(res => res.json())
       .then(setNotes);
   }, []);
@@ -478,11 +483,12 @@ export default function Schedule() {
                 className="w-full p-2 border rounded bg-white/50"
                 defaultValue={notes}
                 onChange={(e) => {
+                  const storedPassword = localStorage.getItem('schedule-password');
                   fetch('/api/notes', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
-                      'x-password': password
+                      'x-password': storedPassword || ''
                     },
                     body: JSON.stringify({ content: e.target.value })
                   });
