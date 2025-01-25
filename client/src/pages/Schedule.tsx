@@ -24,7 +24,10 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
-  const [notes, setNotes] = React.useState('');
+  const [notes, setNotes] = React.useState(() => {
+    const storedNotes = localStorage.getItem('schedule-notes');
+    return storedNotes || '';
+  });
 
   const fetchNotes = React.useCallback(() => {
     const password = localStorage.getItem('schedule-password');
@@ -34,7 +37,10 @@ export default function Schedule() {
       }
     })
       .then(res => res.json())
-      .then(setNotes);
+      .then(data => {
+        setNotes(data);
+        localStorage.setItem('schedule-notes', data);
+      });
   }, []);
 
   React.useEffect(() => {
@@ -485,6 +491,9 @@ export default function Schedule() {
                 className="w-full p-2 border rounded bg-white/50"
                 defaultValue={notes}
                 onChange={(e) => {
+                  const newValue = e.target.value;
+                  setNotes(newValue);
+                  localStorage.setItem('schedule-notes', newValue);
                   const storedPassword = localStorage.getItem('schedule-password');
                   fetch('/api/notes', {
                     method: 'POST',
@@ -492,7 +501,7 @@ export default function Schedule() {
                       'Content-Type': 'application/json',
                       'x-password': storedPassword || ''
                     },
-                    body: JSON.stringify({ content: e.target.value })
+                    body: JSON.stringify({ content: newValue })
                   });
                 }}
                 rows={5}
