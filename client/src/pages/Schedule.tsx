@@ -26,11 +26,17 @@ export default function Schedule() {
   const [password, setPassword] = React.useState('');
   const [notes, setNotes] = React.useState('');
 
-  React.useEffect(() => {
+  const fetchNotes = React.useCallback(() => {
     fetch('/api/notes')
       .then(res => res.json())
       .then(setNotes);
   }, []);
+
+  React.useEffect(() => {
+    fetchNotes();
+    const interval = setInterval(fetchNotes, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval);
+  }, [fetchNotes]);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
