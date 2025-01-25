@@ -24,6 +24,13 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
+  const [notes, setNotes] = React.useState('');
+
+  React.useEffect(() => {
+    fetch('/api/notes')
+      .then(res => res.json())
+      .then(setNotes);
+  }, []);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -459,13 +466,22 @@ export default function Schedule() {
             {password === '99ballons' ? (
               <textarea
                 className="w-full p-2 border rounded bg-white/50"
-                defaultValue={localStorage.getItem('wichtige-hinweise') || 'In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!\nEvent Type kann nicht importiert werden\nHolding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist'}
-                onChange={(e) => localStorage.setItem('wichtige-hinweise', e.target.value)}
+                defaultValue={notes}
+                onChange={(e) => {
+                  fetch('/api/notes', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-password': password
+                    },
+                    body: JSON.stringify({ content: e.target.value })
+                  });
+                }}
                 rows={5}
               />
             ) : (
               <div className="whitespace-pre-wrap text-sm pl-6">
-                {localStorage.getItem('wichtige-hinweise') || 'In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!\nEvent Type kann nicht importiert werden\nHolding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist'}
+                {notes}
               </div>
             )}
           </Card>
