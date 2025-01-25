@@ -495,25 +495,20 @@ export default function Schedule() {
                 className="w-full p-2 border rounded bg-white/50"
                 value={notes}
                 onChange={(e) => {
+                  setNotes(e.target.value);
+                }}
+                onBlur={(e) => {
                   const newValue = e.target.value;
-                  setNotes(newValue);
-                  
-                  // Update local storage immediately
                   localStorage.setItem('notes-content', newValue);
-                  
-                  // Debounce the API call with a longer delay
-                  clearTimeout((window as any).notesTimeout);
-                  (window as any).notesTimeout = setTimeout(() => {
-                    const storedPassword = localStorage.getItem('schedule-password');
-                    fetch('/api/notes', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'x-password': storedPassword || ''
-                      },
-                      body: JSON.stringify({ content: newValue })
-                    }).catch(console.error);
-                  }, 1000);
+                  const storedPassword = localStorage.getItem('schedule-password');
+                  fetch('/api/notes', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-password': storedPassword || ''
+                    },
+                    body: JSON.stringify({ content: newValue })
+                  }).catch(console.error);
                 }}
                 rows={5}
               />
