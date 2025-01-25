@@ -33,8 +33,16 @@ function TimeSlot({
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
-    return gridItem?.backgroundColor || storedColor || '#ffffff';
+    return storedColor || gridItem?.backgroundColor || '#ffffff';
   });
+
+  // Effect to sync background color with localStorage
+  useEffect(() => {
+    const key = `bg_${day}_${slot.time}`;
+    if (backgroundColor !== '#ffffff') {
+      localStorage.setItem(key, backgroundColor);
+    }
+  }, [backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
@@ -137,11 +145,13 @@ function TimeSlot({
                   });
                 } else {
                   setBackgroundColor(newColor);
+                  const key = `bg_${day}_${slot.time}`;
+                  localStorage.setItem(key, newColor);
                   fetch('/api/time-grid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  });
+                  }).catch(console.error);
                 }
                 setShowColorPicker(false);
               }}
