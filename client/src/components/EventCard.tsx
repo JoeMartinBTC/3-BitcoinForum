@@ -66,8 +66,6 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
 
   const password = localStorage.getItem('schedule-password');
   const isAdmin = password === '3';
-  const canView = password === '2' || password === '3';
-  const canEdit = password === '3';
 
   const handleDelete = async () => {
     try {

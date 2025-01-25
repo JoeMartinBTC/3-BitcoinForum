@@ -1,3 +1,4 @@
+
 import type { Request, Response, NextFunction } from "express";
 
 const PASSWORDS = {
@@ -16,30 +17,20 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     return res.status(401).json({ error: 'Password required' });
   }
 
-  //Interpret password as level.
-  const level = parseInt(password, 10);
-
-  //Check if password is valid level
-  if(isNaN(level) || level < 1 || level > 3){
-    return res.status(401).json({ error: 'Invalid password' });
-  }
-
   // For GET requests (viewing)
   if (req.method === 'GET') {
-    if (level >= 2) {
-      return next();
-    } else {
-      return res.status(401).json({ error: 'Insufficient permissions' });
+    if (![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
+      return res.status(401).json({ error: 'Invalid password' });
     }
+    return next();
   }
 
   // For modification requests (POST, PUT, DELETE)
   if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
-    if (level === 3) {
-      return next();
-    } else {
-      return res.status(403).json({ error: 'Insufficient permissions' });
+    if (![PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
+      return res.status(401).json({ error: 'Insufficient permissions' });
     }
+    return next();
   }
 
   return res.status(401).json({ error: 'Invalid request method' });
