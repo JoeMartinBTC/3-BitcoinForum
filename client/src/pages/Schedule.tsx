@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState('');
-  const [notes, setNotes] = React.useState('');
+  const [notes, setNotes] = React.useState(() => localStorage.getItem('notes-content') || '');
 
   const fetchNotes = React.useCallback(() => {
     const password = localStorage.getItem('schedule-password');
@@ -43,8 +43,7 @@ export default function Schedule() {
         }
       })
       .catch(err => {
-        const cachedNotes = localStorage.getItem('notes-content');
-        if (cachedNotes) setNotes(cachedNotes);
+        console.error('Error fetching notes:', err);
       });
   }, []);
 
@@ -498,6 +497,7 @@ export default function Schedule() {
                 onChange={(e) => {
                   const newValue = e.target.value;
                   setNotes(newValue);
+                  localStorage.setItem('notes-content', newValue);
                   const storedPassword = localStorage.getItem('schedule-password');
                   fetch('/api/notes', {
                     method: 'POST',
