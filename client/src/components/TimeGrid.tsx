@@ -19,10 +19,12 @@ function TimeSlot({
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const { events, updateEvent, backgroundColorsQuery } = useSchedule();
+  const { backgroundColorsQuery } = useSchedule();
   const gridData = backgroundColorsQuery?.data || [];
   
-  const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
+  const gridItem = gridData.find((item: { day: number; time: string; backgroundColor: string }) => 
+    item.day === day && item.time === slot.time
+  );
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
     const storedColor = localStorage.getItem(key);
