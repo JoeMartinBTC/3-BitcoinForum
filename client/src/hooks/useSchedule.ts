@@ -16,7 +16,7 @@ export function useSchedule() {
       const data = await res.json();
       return Array.isArray(data) ? data : [];
     },
-    refetchInterval: 1000,
+    refetchInterval: 2000,
     staleTime: 0,
     gcTime: 0,
     refetchOnMount: true,
