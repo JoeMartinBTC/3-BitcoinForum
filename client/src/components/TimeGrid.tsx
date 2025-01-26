@@ -153,27 +153,22 @@ function TimeSlot({
               type="color"
               aria-label="Select event color"
               value={slotColor}
-              onChange={async (e) => {
+              onChange={(e) => {
                 const newColor = e.target.value;
-                try {
-                  const response = await fetch('/api/time-grid', {
+                if (slotEvent) {
+                  updateEvent({
+                    id: slotEvent.id,
+                    color: newColor
+                  });
+                } else {
+                  setBackgroundColor(newColor);
+                  const key = `bg_${day}_${slot.time}`;
+                  localStorage.setItem(key, newColor);
+                  fetch('/api/time-grid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  });
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                  }
-                  if (slotEvent) {
-                    updateEvent({
-                      id: slotEvent.id,
-                      color: newColor
-                    });
-                  } else {
-                    setBackgroundColor(newColor);
-                  }
-                } catch (error) {
-                  console.error('Failed to update background color:', error);
+                  }).catch(console.error);
                 }
                 setShowColorPicker(false);
               }}

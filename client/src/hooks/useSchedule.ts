@@ -19,13 +19,9 @@ export function useSchedule() {
     staleTime: 0,
     gcTime: 0,
     retry: 3,
-    retryDelay: 100,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['timeGrid'], data);
-    }
+    refetchOnReconnect: true
   });
   const queryClient = useQueryClient();
 
