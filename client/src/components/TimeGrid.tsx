@@ -1,7 +1,6 @@
 import { useDrop } from 'react-dnd';
 import { useRef, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { queryClient } from '../lib/queryClient';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
@@ -27,23 +26,23 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       const data = await res.json();
       return Array.isArray(data) ? data : [];
-    },
-    refetchInterval: 1000
+    }
   });
-
+  
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
-    return localStorage.getItem(key) || gridItem?.backgroundColor || '#ffffff';
+    const storedColor = localStorage.getItem(key);
+    return storedColor || gridItem?.backgroundColor || '#ffffff';
   });
 
+  // Effect to sync background color with localStorage
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
-    if (gridItem?.backgroundColor) {
-      setBackgroundColor(gridItem.backgroundColor);
-      localStorage.setItem(key, gridItem.backgroundColor);
+    if (backgroundColor !== '#ffffff') {
+      localStorage.setItem(key, backgroundColor);
     }
-  }, [gridItem?.backgroundColor, day, slot.time]);
+  }, [backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
@@ -63,11 +62,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-
+      
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-
+      
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -123,7 +122,7 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotEvents.length > 0 ? slotEvents[0]?.color : backgroundColor,
+        backgroundColor: slotEvents[0]?.color || backgroundColor,
       }}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -137,7 +136,7 @@ function TimeSlot({
               type="color"
               aria-label="Select event color"
               value={slotColor}
-              onChange={async (e) => {
+              onChange={(e) => {
                 const newColor = e.target.value;
                 if (slotEvent) {
                   updateEvent({
@@ -148,12 +147,11 @@ function TimeSlot({
                   setBackgroundColor(newColor);
                   const key = `bg_${day}_${slot.time}`;
                   localStorage.setItem(key, newColor);
-                  await fetch('/api/time-grid', {
+                  fetch('/api/time-grid', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ day, time: slot.time, backgroundColor: newColor })
-                  });
-                  queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
+                  }).catch(console.error);
                 }
                 setShowColorPicker(false);
               }}
@@ -235,13 +233,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-
+      
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-
+      
       setShowAllDays(false);
       return next;
     });
@@ -422,7 +420,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-
+        
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (

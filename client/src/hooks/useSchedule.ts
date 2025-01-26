@@ -8,22 +8,6 @@ export function useSchedule() {
   });
   const queryClient = useQueryClient();
 
-  const { data: backgroundColors = [] } = useQuery({
-    queryKey: ['timeGrid'],
-    queryFn: async () => {
-      const res = await fetch('/api/time-grid');
-      if (!res.ok) throw new Error('Failed to fetch grid data');
-      const data = await res.json();
-      return Array.isArray(data) ? data : [];
-    },
-    refetchInterval: 2000,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true
-  });
-
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
     queryFn: async () => {
@@ -78,7 +62,6 @@ export function useSchedule() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
-      queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
     },
   });
 
@@ -107,7 +90,6 @@ export function useSchedule() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
-      queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
     },
   });
 
