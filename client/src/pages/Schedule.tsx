@@ -423,20 +423,15 @@ export default function Schedule() {
                     // Store the background colors in local storage for persistence
                     const backgroundColors = {};
                     jsonData.forEach((item: any) => {
-                      if (item && item.backgroundColor) {
-                        const key = `bg_${item.day}_${item.time}`;
-                        let color = item.backgroundColor;
-                        if (typeof color === 'string' && color.includes(',')) {
-                          const [r, g, b] = color.split(',').map(Number);
-                          color = `rgb(${r}, ${g}, ${b})`;
-                        }
-                        localStorage.setItem(key, color);
+                      const key = `bg_${item.day}_${item.time}`;
+                      const rgb = item.backgroundColor.match(/\d+/g);
+                      const color = rgb ? `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})` : item.backgroundColor;
+                      localStorage.setItem(key, color);
 
-                        // Also apply to currently visible slots
-                        const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
-                        if (slot && !slot.querySelector('.event-card')) {
-                          (slot as HTMLElement).style.backgroundColor = color;
-                        }
+                      // Also apply to currently visible slots
+                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                      if (slot && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = color;
                       }
                     });
                   };
