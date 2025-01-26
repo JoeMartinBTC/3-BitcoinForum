@@ -14,10 +14,7 @@ export function useSchedule() {
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 3000,
-    staleTime: 2000,
-    cacheTime: 10000,
-    retry: 3
+    refetchInterval: 5000, // Refetch every 5 seconds
   });
   const queryClient = useQueryClient();
 

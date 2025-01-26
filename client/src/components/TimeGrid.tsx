@@ -31,29 +31,19 @@ function TimeSlot({
   const gridItem = gridData.find((item: GridItem) => 
     item.day === day && item.time === slot.time
   );
-  const [backgroundColor, setBackgroundColor] = useState(gridItem?.backgroundColor || '#ffffff');
+  const [backgroundColor, setBackgroundColor] = useState(() => {
+    const key = `bg_${day}_${slot.time}`;
+    const storedColor = localStorage.getItem(key);
+    return storedColor || gridItem?.backgroundColor || '#ffffff';
+  });
 
-  useEffect(() => {
-    if (gridItem?.backgroundColor) {
-      setBackgroundColor(gridItem.backgroundColor);
-    }
-  }, [gridItem?.backgroundColor]);
-
+  // Effect to sync background color with localStorage
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
     if (backgroundColor !== '#ffffff') {
       localStorage.setItem(key, backgroundColor);
-      fetch('/api/time-grid', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          day,
-          time: slot.time,
-          backgroundColor
-        })
-      }).catch(console.error);
     }
-  }, [backgroundColor]);
+  }, [backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
