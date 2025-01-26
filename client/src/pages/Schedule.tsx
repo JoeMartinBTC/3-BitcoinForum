@@ -126,7 +126,7 @@ export default function Schedule() {
         </DialogContent>
       </Dialog>
       <VersionBadge />
-      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9.2</span></h1>
+      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9.1</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
@@ -381,11 +381,19 @@ export default function Schedule() {
             <button
               onClick={async () => {
                 const XLSX = await import('xlsx');
-                const timeSlots = document.querySelectorAll('[data-day][data-time]');
-                const data = Array.from(timeSlots).map((slot: any) => ({
-                  day: slot.getAttribute('data-day'),
-                  time: slot.getAttribute('data-time'),
-                  backgroundColor: window.getComputedStyle(slot).backgroundColor
+                const allEvents = events || [];
+                const data = allEvents.map(event => ({
+                  ID: event.id,
+                  Title: event.title,
+                  Description: event.description || '',
+                  Day: event.day,
+                  StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
+                  EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',
+                  IsBreak: event.isBreak ? 'Yes' : 'No',
+                  InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
+                  TemplateID: event.templateId || '',
+                  Color: event.color || '',
+                  Info: event.info || ''
                 }));
 
                 const ws = XLSX.utils.json_to_sheet(data);
@@ -413,35 +421,26 @@ export default function Schedule() {
                 if (file) {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
-                  reader.onload = (e) => {
+                  reader.onload = async (e) => {
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-                    // Clear existing background colors
-                    localStorage.clear();
-                    
-                    // Store new background colors
+                    // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
                     jsonData.forEach((item: any) => {
-                      if (item && item.day && item.time && item.backgroundColor) {
-                        const key = `bg_${item.day}_${item.time}`;
-                        localStorage.setItem(key, item.backgroundColor);
-                      }
-                    });
+                      const key = `bg_${item.day}_${item.time}`;
+                      const color = item.backgroundColor.startsWith('rgb') 
+                        ? item.backgroundColor
+                        : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                      localStorage.setItem(key, color);
 
-                    // Apply colors immediately
-                    const slots = document.querySelectorAll('[data-day][data-time]');
-                    slots.forEach((slot) => {
-                      const day = slot.getAttribute('data-day');
-                      const time = slot.getAttribute('data-time');
-                      if (day && time) {
-                        const key = `bg_${day}_${time}`;
-                        const color = localStorage.getItem(key);
-                        if (color) {
-                          (slot as HTMLElement).style.backgroundColor = color;
-                        }
+                      // Also apply to currently visible slots
+                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                      if (slot && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = color;
                       }
                     });
                   };
