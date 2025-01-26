@@ -37,25 +37,27 @@ function TimeSlot({
     return storedColor || gridItem?.backgroundColor || '#ffffff';
   });
 
-  // Sync with server data
   useEffect(() => {
-    if (gridItem?.backgroundColor) {
+    if (gridItem?.backgroundColor && gridItem.backgroundColor !== '#ffffff') {
+      const key = `bg_${day}_${slot.time}`;
+      localStorage.setItem(key, gridItem.backgroundColor);
       setBackgroundColor(gridItem.backgroundColor);
     }
   }, [gridItem?.backgroundColor]);
 
-  // Save changes to server
   useEffect(() => {
+    const key = `bg_${day}_${slot.time}`;
+    const storedColor = localStorage.getItem(key);
+    if (storedColor && storedColor !== '#ffffff' && storedColor !== backgroundColor) {
+      setBackgroundColor(storedColor);
+    }
+  }, []);
+
+  // Effect to save color changes
+  useEffect(() => {
+    const key = `bg_${day}_${slot.time}`;
     if (backgroundColor !== '#ffffff') {
-      fetch('/api/time-grid', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          day,
-          time: slot.time,
-          backgroundColor
-        })
-      }).catch(console.error);
+      localStorage.setItem(key, backgroundColor);
     }
   }, [backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
