@@ -34,17 +34,16 @@ function TimeSlot({
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
-    const storedColor = localStorage.getItem(key);
-    return storedColor || gridItem?.backgroundColor || '#ffffff';
+    return localStorage.getItem(key) || gridItem?.backgroundColor || '#ffffff';
   });
 
-  // Effect to sync background color with localStorage
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
-    if (backgroundColor !== '#ffffff') {
-      localStorage.setItem(key, backgroundColor);
+    if (gridItem?.backgroundColor && gridItem.backgroundColor !== backgroundColor) {
+      setBackgroundColor(gridItem.backgroundColor);
+      localStorage.setItem(key, gridItem.backgroundColor);
     }
-  }, [backgroundColor, day, slot.time]);
+  }, [gridItem?.backgroundColor, backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);

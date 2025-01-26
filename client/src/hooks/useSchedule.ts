@@ -18,7 +18,7 @@ export function useSchedule() {
     },
     refetchInterval: 1000,
     staleTime: 0,
-    cacheTime: 0
+    gcTime: 0
   });
 
   const { data: events = [] } = useQuery<Event[]>({
