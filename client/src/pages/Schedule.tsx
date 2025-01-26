@@ -105,7 +105,7 @@ export default function Schedule() {
   return (
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent>
+        <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Enter Password</DialogTitle>
           </DialogHeader>
@@ -126,7 +126,7 @@ export default function Schedule() {
         </DialogContent>
       </Dialog>
       <VersionBadge />
-      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9.1</span></h1>
+      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9.2</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
@@ -429,19 +429,18 @@ export default function Schedule() {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                     // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
                     jsonData.forEach((item: any) => {
-                      if (item && item.day && item.time && item.backgroundColor) {
-                        const key = `bg_${item.day}_${item.time}`;
-                        const color = typeof item.backgroundColor === 'string' && item.backgroundColor.startsWith('rgb')
-                          ? item.backgroundColor 
-                          : `rgb(${item.backgroundColor})`;
-                        localStorage.setItem(key, color);
+                      const key = `bg_${item.day}_${item.time}`;
+                      const color = item.backgroundColor.startsWith('rgb') 
+                        ? item.backgroundColor
+                        : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                      localStorage.setItem(key, color);
 
-                        // Also apply to currently visible slots
-                        const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
-                        if (slot && !slot.querySelector('.event-card')) {
-                          (slot as HTMLElement).style.backgroundColor = color;
-                        }
+                      // Also apply to currently visible slots
+                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                      if (slot && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = color;
                       }
                     });
                   };
