@@ -111,11 +111,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                       </Tooltip>
                     </div>
                   </DialogTrigger>
-                  <DialogContent 
-                    onOpenAutoFocus={(e) => e.preventDefault()}
-                    onPointerDownOutside={(e) => e.preventDefault()}
-                    onInteractOutside={(e) => e.preventDefault()}
-                  >
+                  <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Edit Event Info</DialogTitle>
                       <DialogDescription>
@@ -133,12 +129,8 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                             e.stopPropagation();
                             onUpdate({ id: event.id, info: e.target.value });
                           }}
-                          onKeyDown={(e) => {
-                            e.stopPropagation();
-                          }}
                           className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px] resize-y"
                           placeholder="Add event info"
-                          autoFocus
                         />
                       </form>
                     </div>
