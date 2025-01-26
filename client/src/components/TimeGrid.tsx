@@ -39,11 +39,11 @@ function TimeSlot({
 
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
-    if (gridItem?.backgroundColor && gridItem.backgroundColor !== backgroundColor) {
+    if (gridItem?.backgroundColor) {
       setBackgroundColor(gridItem.backgroundColor);
       localStorage.setItem(key, gridItem.backgroundColor);
     }
-  }, [gridItem?.backgroundColor, backgroundColor, day, slot.time]);
+  }, [gridItem?.backgroundColor, day, slot.time]);
   const slotEvent = events.find(event => {
     const eventTime = new Date(event.startTime);
     const [slotHours, slotMinutes] = slot.time.split(':').map(Number);
