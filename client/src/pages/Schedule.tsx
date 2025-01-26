@@ -413,28 +413,35 @@ export default function Schedule() {
                 if (file) {
                   const XLSX = await import('xlsx');
                   const reader = new FileReader();
-                  reader.onload = async (e) => {
+                  reader.onload = (e) => {
                     const data = e.target?.result;
                     const workbook = XLSX.read(data, { type: 'binary' });
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                    // Clear existing background colors
+                    localStorage.clear();
                     
+                    // Store new background colors
                     jsonData.forEach((item: any) => {
-                      const key = `bg_${item.day}_${item.time}`;
-                      if (item && item.backgroundColor) {
+                      if (item && item.day && item.time && item.backgroundColor) {
+                        const key = `bg_${item.day}_${item.time}`;
                         localStorage.setItem(key, item.backgroundColor);
                       }
                     });
 
-                    // Apply colors after storage
-                    document.querySelectorAll('[data-day][data-time]').forEach((slot) => {
+                    // Apply colors immediately
+                    const slots = document.querySelectorAll('[data-day][data-time]');
+                    slots.forEach((slot) => {
                       const day = slot.getAttribute('data-day');
                       const time = slot.getAttribute('data-time');
-                      const key = `bg_${day}_${time}`;
-                      const color = localStorage.getItem(key);
-                      if (color && !slot.querySelector('.event-card')) {
-                        (slot as HTMLElement).style.backgroundColor = color;
+                      if (day && time) {
+                        const key = `bg_${day}_${time}`;
+                        const color = localStorage.getItem(key);
+                        if (color) {
+                          (slot as HTMLElement).style.backgroundColor = color;
+                        }
                       }
                     });
                   };
