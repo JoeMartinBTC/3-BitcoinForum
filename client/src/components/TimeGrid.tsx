@@ -1,6 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { useRef, useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { queryClient } from '../lib/queryClient';
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
