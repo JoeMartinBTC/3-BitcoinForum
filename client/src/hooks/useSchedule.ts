@@ -77,6 +77,8 @@ export function useSchedule() {
         queryClient.setQueryData(['events'], (old: Event[]) => 
           old.filter(e => e.id !== id)
         );
+        // Invalidate time grid query to refresh background colors
+        queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
         return { previousEvents };
       }
     },
@@ -105,6 +107,8 @@ export function useSchedule() {
         queryClient.setQueryData(['events'], (old: Event[]) => 
           old.filter(e => e.id !== id)
         );
+        // Invalidate time grid query to refresh background colors
+        queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
         return { previousEvents };
       }
     },
