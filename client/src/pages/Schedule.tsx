@@ -381,19 +381,11 @@ export default function Schedule() {
             <button
               onClick={async () => {
                 const XLSX = await import('xlsx');
-                const allEvents = events || [];
-                const data = allEvents.map(event => ({
-                  ID: event.id,
-                  Title: event.title,
-                  Description: event.description || '',
-                  Day: event.day,
-                  StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
-                  EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',
-                  IsBreak: event.isBreak ? 'Yes' : 'No',
-                  InHoldingArea: event.inHoldingArea ? 'Yes' : 'No',
-                  TemplateID: event.templateId || '',
-                  Color: event.color || '',
-                  Info: event.info || ''
+                const timeSlots = document.querySelectorAll('[data-day][data-time]');
+                const data = Array.from(timeSlots).map((slot: any) => ({
+                  day: slot.getAttribute('data-day'),
+                  time: slot.getAttribute('data-time'),
+                  backgroundColor: window.getComputedStyle(slot).backgroundColor
                 }));
 
                 const ws = XLSX.utils.json_to_sheet(data);
