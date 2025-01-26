@@ -96,11 +96,16 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                 {event.title}
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className={`inline-block cursor-pointer transition-opacity duration-200 ${
-                      document.querySelectorAll('[data-day]').length > 6 
-                        ? 'opacity-0 group-hover:opacity-100' 
-                        : 'opacity-100'
-                    }`}>
+                    <div 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      className={`inline-block cursor-pointer transition-opacity duration-200 ${
+                        document.querySelectorAll('[data-day]').length > 6 
+                          ? 'opacity-0 group-hover:opacity-100' 
+                          : 'opacity-100'
+                      }`}
+                    >
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Info className={`inline-block ml-1 w-3 h-3 ${event.info ? 'text-green-500' : 'text-gray-400'}`} />
