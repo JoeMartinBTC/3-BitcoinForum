@@ -419,18 +419,23 @@ export default function Schedule() {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-                    // Store the background colors in local storage for persistence
+                    
                     jsonData.forEach((item: any) => {
-                      if (item && item.day && item.time && item.backgroundColor) {
-                        const key = `bg_${item.day}_${item.time}`;
-                        const color = typeof item.backgroundColor === 'string' ? item.backgroundColor : '#ffffff';
-                        localStorage.setItem(key, color);
-                        
-                        const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
-                        if (slot && !slot.querySelector('.event-card')) {
-                          (slot as HTMLElement).style.backgroundColor = color;
-                        }
+                      const key = `bg_${item.day}_${item.time}`;
+                      if (item && item.backgroundColor) {
+                        localStorage.setItem(key, item.backgroundColor);
+                      }
+                    });
+
+                    // Apply colors after storage
+                    document.querySelectorAll('[data-day][data-time]').forEach((slot) => {
+                      const day = slot.getAttribute('data-day');
+                      const time = slot.getAttribute('data-time');
+                      const key = `bg_${day}_${time}`;
+                      const color = localStorage.getItem(key);
+                      if (color && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = color;
+                      }
                       }
                     });
                   };
