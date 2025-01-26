@@ -186,18 +186,14 @@ export function registerRoutes(app: Express) {
   app.post("/api/time-grid", async (req, res) => {
     try {
       const { day, time, backgroundColor } = req.body;
-      const result = await db
+      await db
         .insert(timeGrid)
         .values({ day, time, backgroundColor })
         .onConflictDoUpdate({
           target: [timeGrid.day, timeGrid.time],
           set: { backgroundColor }
-        })
-        .returning();
-      
-      // Send back the updated data
-      const allGridData = await db.select().from(timeGrid);
-      res.json(allGridData);
+        });
+      res.json({ success: true });
     } catch (error) {
       console.error('Failed to save time grid:', error);
       res.status(500).json({ error: "Failed to save time grid" });

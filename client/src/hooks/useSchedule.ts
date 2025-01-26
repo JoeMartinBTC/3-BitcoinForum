@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Event } from '@db/schema';
 
@@ -6,22 +5,6 @@ export function useSchedule() {
   const dayTitlesQuery = useQuery({
     queryKey: ['dayTitles'],
     queryFn: () => fetch('/api/day-titles').then(res => res.json()),
-  });
-
-  const backgroundColorsQuery = useQuery({
-    queryKey: ['timeGrid'],
-    queryFn: async () => {
-      const res = await fetch('/api/time-grid');
-      if (!res.ok) throw new Error('Failed to fetch grid data');
-      return res.json();
-    },
-    refetchInterval: 1000,
-    staleTime: 0,
-    gcTime: 0,
-    retry: 3,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true
   });
   const queryClient = useQueryClient();
 
@@ -69,8 +52,6 @@ export function useSchedule() {
         queryClient.setQueryData(['events'], (old: Event[]) => 
           old.filter(e => e.id !== id)
         );
-        // Invalidate time grid query to refresh background colors
-        queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
         return { previousEvents };
       }
     },
@@ -99,8 +80,6 @@ export function useSchedule() {
         queryClient.setQueryData(['events'], (old: Event[]) => 
           old.filter(e => e.id !== id)
         );
-        // Invalidate time grid query to refresh background colors
-        queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
         return { previousEvents };
       }
     },
@@ -118,6 +97,5 @@ export function useSchedule() {
     events,
     createEvent: createEventMutation.mutate,
     updateEvent: updateEventMutation.mutate,
-    backgroundColorsQuery,
   };
 }
