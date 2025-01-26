@@ -13,17 +13,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react'; // Added useState and useEffect
 import { usePDF } from 'react-to-pdf';
 import { useSchedule } from '../hooks/useSchedule';
 import { EVENT_TEMPLATES, EventTemplate, exportEventTemplates, importEventTemplates } from '../lib/eventTemplates';
 import { VersionBadge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useQueryClient } from '@tanstack/react-query'; // Added for useQueryClient
+
 
 export default function Schedule() {
-  const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
-  const [password, setPassword] = React.useState('');
+  const [showPasswordDialog, setShowPasswordDialog] = useState(true);
+  const [password, setPassword] = useState('');
+  const queryClient = useQueryClient(); // Moved here to fix React Hook order
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +56,7 @@ export default function Schedule() {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const element = targetRef.current;
     if (element) {
       element.classList.add('pdf-export');
@@ -84,7 +87,7 @@ export default function Schedule() {
       const data = allEvents.map(event => ({
         ID: event.id,
         Title: event.title,
-        Description: event.description || '',
+        Description: event.description || '', //Added default value
         Day: event.day,
         StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
         EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',
@@ -189,7 +192,7 @@ export default function Schedule() {
                   const filteredEvents = holdingAreaEvents.map(event => ({
                     ID: event.id,
                     Title: event.title,
-                    Description: event.description || '',
+                    Description: event.description || '', //Added default value
                     TemplateID: event.templateId || '',
                     Color: event.color || '',
                     Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
@@ -203,7 +206,7 @@ export default function Schedule() {
                   const data = holdingAreaEvents.map(event => ({
                     ID: event.id,
                     Title: event.title,
-                    Description: event.description || '',
+                    Description: event.description || '', //Added default value
                     TemplateID: event.templateId || '',
                     Color: event.color || '',
                     Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
@@ -252,7 +255,7 @@ export default function Schedule() {
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({
                             title: event.Title,
-                            description: event.Description || '',
+                            description: event.Description || '', //Added default value
                             day: 1,
                             startTime: startTime.toISOString(),
                             endTime: endTime.toISOString(),
@@ -385,7 +388,7 @@ export default function Schedule() {
                 const data = allEvents.map(event => ({
                   ID: event.id,
                   Title: event.title,
-                  Description: event.description || '',
+                  Description: event.description || '', //Added default value
                   Day: event.day,
                   StartTime: event.startTime ? new Date(event.startTime).toISOString() : '',
                   EndTime: event.endTime ? new Date(event.endTime).toISOString() : '',

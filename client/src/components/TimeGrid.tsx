@@ -29,7 +29,7 @@ function TimeSlot({
       return Array.isArray(data) ? data : [];
     }
   });
-  
+
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
   const [backgroundColor, setBackgroundColor] = useState(() => {
     const key = `bg_${day}_${slot.time}`;
@@ -63,11 +63,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      
+
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-      
+
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -235,13 +235,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-      
+
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-      
+
       setShowAllDays(false);
       return next;
     });
@@ -422,7 +422,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-        
+
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
