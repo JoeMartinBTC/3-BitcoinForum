@@ -14,14 +14,17 @@ export function useSchedule() {
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 1000,
+    refetchInterval: 500,
     staleTime: 0,
     gcTime: 0,
     retry: 3,
-    retryDelay: 500,
+    retryDelay: 100,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    refetchOnReconnect: true
+    refetchOnReconnect: true,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['timeGrid'], data);
+    }
   });
   const queryClient = useQueryClient();
 
