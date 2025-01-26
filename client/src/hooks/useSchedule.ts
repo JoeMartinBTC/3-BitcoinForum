@@ -14,11 +14,14 @@ export function useSchedule() {
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 3000,
+    refetchInterval: 1000,
     staleTime: 0,
-    gcTime: 5000,
+    gcTime: 0,
     retry: 3,
-    retryDelay: 1000
+    retryDelay: 500,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true
   });
   const queryClient = useQueryClient();
 
