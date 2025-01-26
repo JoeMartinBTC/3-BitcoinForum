@@ -421,17 +421,16 @@ export default function Schedule() {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                     // Store the background colors in local storage for persistence
-                    const backgroundColors = {};
                     jsonData.forEach((item: any) => {
-                      const key = `bg_${item.day}_${item.time}`;
-                      const rgb = item.backgroundColor.match(/\d+/g);
-                      const color = rgb ? `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})` : item.backgroundColor;
-                      localStorage.setItem(key, color);
+                      if (item && item.day && item.time && item.backgroundColor) {
+                        const key = `bg_${item.day}_${item.time}`;
+                        localStorage.setItem(key, item.backgroundColor);
 
-                      // Also apply to currently visible slots
-                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
-                      if (slot && !slot.querySelector('.event-card')) {
-                        (slot as HTMLElement).style.backgroundColor = color;
+                        // Also apply to currently visible slots
+                        const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                        if (slot && !slot.querySelector('.event-card')) {
+                          (slot as HTMLElement).style.backgroundColor = item.backgroundColor;
+                        }
                       }
                     });
                   };
