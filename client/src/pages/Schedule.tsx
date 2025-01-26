@@ -421,8 +421,9 @@ export default function Schedule() {
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                     // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
                     jsonData.forEach((item: any) => {
-                      if (item && item.day && item.time && item.backgroundColor) {
+                      if (item && item.backgroundColor) {
                         const key = `bg_${item.day}_${item.time}`;
                         localStorage.setItem(key, item.backgroundColor);
 
