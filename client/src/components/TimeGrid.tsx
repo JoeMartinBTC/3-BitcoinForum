@@ -123,7 +123,7 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotEvents[0]?.color || backgroundColor,
+        backgroundColor: slotEvents.length > 0 ? slotEvents[0]?.color : backgroundColor,
       }}
       onContextMenu={(e) => {
         e.preventDefault();

@@ -78,6 +78,7 @@ export function useSchedule() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
     },
   });
 
@@ -106,6 +107,7 @@ export function useSchedule() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['timeGrid'] });
     },
   });
 
