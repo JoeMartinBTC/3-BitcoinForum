@@ -13,9 +13,12 @@ export function useSchedule() {
     queryFn: async () => {
       const res = await fetch('/api/time-grid');
       if (!res.ok) throw new Error('Failed to fetch grid data');
-      return res.json();
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
     },
     refetchInterval: 1000,
+    staleTime: 0,
+    cacheTime: 0
   });
 
   const { data: events = [] } = useQuery<Event[]>({

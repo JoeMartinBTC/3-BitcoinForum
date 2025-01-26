@@ -27,7 +27,8 @@ function TimeSlot({
       if (!res.ok) throw new Error('Failed to fetch grid data');
       const data = await res.json();
       return Array.isArray(data) ? data : [];
-    }
+    },
+    refetchInterval: 1000
   });
 
   const gridItem = gridData.find(item => item.day === day && item.time === slot.time);
