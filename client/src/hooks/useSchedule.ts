@@ -15,7 +15,7 @@ export function useSchedule() {
       if (!res.ok) throw new Error('Failed to fetch grid data');
       return res.json();
     },
-    refetchInterval: 500,
+    refetchInterval: 1000,
     staleTime: 0,
     gcTime: 0,
     retry: 3,
@@ -23,15 +23,11 @@ export function useSchedule() {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['timeGrid'], data);
+    }
   });
   const queryClient = useQueryClient();
-
-  // Handle background color updates
-  useEffect(() => {
-    if (backgroundColorsQuery.data) {
-      queryClient.setQueryData(['timeGrid'], backgroundColorsQuery.data);
-    }
-  }, [backgroundColorsQuery.data, queryClient]);
 
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
