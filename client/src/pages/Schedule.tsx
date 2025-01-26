@@ -105,7 +105,7 @@ export default function Schedule() {
   return (
     <div className="w-auto mx-4 p-4 relative" ref={targetRef}>
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent onPointerDownOutside={(e) => e.preventDefault()}>
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Enter Password</DialogTitle>
           </DialogHeader>
@@ -126,7 +126,7 @@ export default function Schedule() {
         </DialogContent>
       </Dialog>
       <VersionBadge />
-      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9</span></h1>
+      <h1 className="text-xl font-bold mb-6">Event Schedule <span className="text-sm ml-2 text-gray-600">v0.8.9.1</span></h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
           <TimeGrid />
