@@ -8,6 +8,16 @@ export function useSchedule() {
   });
   const queryClient = useQueryClient();
 
+  const { data: backgroundColors = [] } = useQuery({
+    queryKey: ['timeGrid'],
+    queryFn: async () => {
+      const res = await fetch('/api/time-grid');
+      if (!res.ok) throw new Error('Failed to fetch grid data');
+      return res.json();
+    },
+    refetchInterval: 1000,
+  });
+
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
     queryFn: async () => {
