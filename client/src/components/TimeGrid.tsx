@@ -21,13 +21,13 @@ function TimeSlot({
   const [showColorPicker, setShowColorPicker] = useState(false);
   const { backgroundColorsQuery } = useSchedule();
   const gridData = backgroundColorsQuery?.data || [];
-  
+
   interface GridItem {
     day: number;
     time: string;
     backgroundColor: string;
   }
-  
+
   const gridItem = gridData.find((item: GridItem) => 
     item.day === day && item.time === slot.time
   );
@@ -37,7 +37,28 @@ function TimeSlot({
     return storedColor || gridItem?.backgroundColor || '#ffffff';
   });
 
-  // Effect to sync background color with localStorage
+  // Effect to sync with server data
+  useEffect(() => {
+    const key = `bg_${day}_${slot.time}`;
+    const storedColor = localStorage.getItem(key);
+    if (storedColor && storedColor !== '#ffffff') {
+      setBackgroundColor(storedColor);
+      // Update server with stored color
+      fetch('/api/time-grid', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          day,
+          time: slot.time,
+          backgroundColor: storedColor
+        })
+      }).catch(console.error);
+    } else if (gridItem?.backgroundColor) {
+      setBackgroundColor(gridItem.backgroundColor);
+    }
+  }, [gridItem?.backgroundColor, day, slot.time]);
+
+  // Effect to save color changes
   useEffect(() => {
     const key = `bg_${day}_${slot.time}`;
     if (backgroundColor !== '#ffffff') {
@@ -63,11 +84,11 @@ function TimeSlot({
       // Create a new Date object for today
       const today = new Date();
       const [hours, minutes] = slot.time.split(':').map(Number);
-      
+
       // Set the time while maintaining today's date
       const startTime = new Date(today);
       startTime.setHours(hours, minutes, 0, 0);
-      
+
       // Calculate end time (25 minutes later)
       const endTime = new Date(startTime);
       endTime.setMinutes(endTime.getMinutes() + 25);
@@ -234,13 +255,13 @@ export function TimeGrid() {
     setHiddenDays(prev => {
       const next = new Set(prev);
       const allDaysHidden = days.every(day => next.has(day));
-      
+
       if (allDaysHidden) {
         days.forEach(day => next.delete(day));
       } else {
         days.forEach(day => next.add(day));
       }
-      
+
       setShowAllDays(false);
       return next;
     });
@@ -421,7 +442,7 @@ export function TimeGrid() {
             minWidth: 'fit-content',
             gap: '0'
           }}>
-        
+
         {Array.from({length: numDays}, (_, i) => i + 1)
           .filter(day => showAllDays || !hiddenDays.has(day))
           .map((day) => (
