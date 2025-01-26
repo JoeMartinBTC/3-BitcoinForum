@@ -436,7 +436,6 @@ export default function Schedule() {
                       if (color && !slot.querySelector('.event-card')) {
                         (slot as HTMLElement).style.backgroundColor = color;
                       }
-                      }
                     });
                   };
                   reader.readAsBinaryString(file);
