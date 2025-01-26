@@ -22,7 +22,7 @@ function TimeSlot({
   const { backgroundColorsQuery } = useSchedule();
   const gridData = backgroundColorsQuery?.data || [];
   
-  const gridItem = gridData.find((item: { day: number; time: string; backgroundColor: string }) => 
+  const gridItem = gridData.find((item) => 
     item.day === day && item.time === slot.time
   );
   const [backgroundColor, setBackgroundColor] = useState(() => {
