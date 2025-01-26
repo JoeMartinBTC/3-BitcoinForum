@@ -22,11 +22,15 @@ export function useSchedule() {
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['timeGrid'], data);
-    }
   });
   const queryClient = useQueryClient();
+
+  // Handle background color updates
+  useEffect(() => {
+    if (backgroundColorsQuery.data) {
+      queryClient.setQueryData(['timeGrid'], backgroundColorsQuery.data);
+    }
+  }, [backgroundColorsQuery.data, queryClient]);
 
   const { data: events = [] } = useQuery<Event[]>({
     queryKey: ['events'],
