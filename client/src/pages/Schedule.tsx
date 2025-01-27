@@ -142,12 +142,14 @@ export default function Schedule() {
             >
               Export PDF
             </button>
-            <button
-              onClick={handleExcelExport}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-            >
-              Export Calendar
-            </button>
+            {localStorage.getItem('schedule-password') === '99ballons' && (
+              <>
+                <button
+                  onClick={handleExcelExport}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Export Calendar
+                </button>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
                 <button
@@ -371,34 +373,8 @@ export default function Schedule() {
                 >
                   Import Calendar
                 </button>
-                <button
-                  onClick={() => document.getElementById('holdingImport')?.click()}
-                  className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
-                >
-                  Import to Holding
-                </button>
               </>
             )}
-            <button
-              onClick={async () => {
-                const XLSX = await import('xlsx');
-                // Get all cells with background colors from the DOM
-                const cells = document.querySelectorAll('[data-day][data-time]');
-                const data = Array.from(cells).map((cell: any) => ({
-                  Day: cell.dataset.day,
-                  Time: cell.dataset.time,
-                  Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
-                }));
-
-                const ws = XLSX.utils.json_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
-                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
-              }}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-            >
-              Export Backgrounds
-            </button>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <button
                 onClick={() => document.getElementById('backgroundImport')?.click()}
@@ -453,17 +429,6 @@ export default function Schedule() {
               id="backgroundImport"
             />
           </div>
-          </Card>
-        )}
-
-        {localStorage.getItem('schedule-password') !== 'bip25' && (
-          <Card className="p-4 mt-4 bg-yellow-50">
-            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
-            <ul className="list-disc pl-6 space-y-2 text-sm">
-              <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
-              <li>Event Type kann nicht importiert werden</li>
-              <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
-            </ul>
           </Card>
         )}
       </div>
