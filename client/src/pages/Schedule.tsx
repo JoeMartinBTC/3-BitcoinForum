@@ -142,8 +142,20 @@ export default function Schedule() {
             >
               Export PDF
             </button>
+            <button
+              onClick={handleExcelExport}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Export Calendar
+            </button>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
+                <button
+                  onClick={() => exportEventTemplates()}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
+                >
+                  Export Types
+                </button>
                 <input
                   type="file"
                   accept=".json"
@@ -167,20 +179,52 @@ export default function Schedule() {
                 >
                   Import Types
                 </button>
-                <button
-                  onClick={() => document.getElementById('excelImport')?.click()}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                >
-                  Import Calendar
-                </button>
-                <button
-                  onClick={() => document.getElementById('backgroundImport')?.click()}
-                  className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-                >
-                  Import Backgrounds
-                </button>
               </>
             )}
+            <button
+              onClick={() => {
+                import('xlsx').then(XLSX => {
+                  console.log('All events:', events);
+                  const holdingAreaEvents = events?.filter(event => event.inHoldingArea === true) || [];
+                  console.log('Filtered holding area events:', holdingAreaEvents);
+                  const filteredEvents = holdingAreaEvents.map(event => ({
+                    ID: event.id,
+                    Title: event.title,
+                    Description: event.description || '',
+                    TemplateID: event.templateId || '',
+                    Color: event.color || '',
+                    Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
+                    StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+                    EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+                    Duration: event.endTime && event.startTime ? 
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : '',
+                    Info: event.info || ''
+                  }));
+                  console.log('Holding area events:', filteredEvents);
+                  const data = holdingAreaEvents.map(event => ({
+                    ID: event.id,
+                    Title: event.title,
+                    Description: event.description || '',
+                    TemplateID: event.templateId || '',
+                    Color: event.color || '',
+                    Type: EVENT_TEMPLATES.find((t: EventTemplate) => t.id === event.templateId)?.title || '',
+                    StartTime: event.startTime ? new Date(event.startTime).toLocaleString() : '',
+                    EndTime: event.endTime ? new Date(event.endTime).toLocaleString() : '',
+                    Duration: event.endTime && event.startTime ? 
+                      (new Date(event.endTime).getTime() - new Date(event.startTime).getTime()) / 60000 + ' minutes' : '',
+                    Info: event.info || ''
+                  }));
+                  console.log('Excel data:', data);
+                  const ws = XLSX.utils.json_to_sheet(data);
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "HoldingArea");
+                  XLSX.writeFile(wb, "holding-area.xlsx");
+                });
+              }}
+              className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+            >
+              Export Holding Area
+            </button>
             <input
               type="file"
               accept=".xlsx"
@@ -290,6 +334,79 @@ export default function Schedule() {
               className="hidden"
               id="excelImport"
             />
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                  Clear All Events
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Clear All Events</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will remove all events from the schedule. This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => {
+                    const password = localStorage.getItem('schedule-password');
+                    fetch('/api/events', { 
+                      method: 'DELETE',
+                      headers: {
+                        'x-password': password || ''
+                      }
+                    }).then(() => window.location.reload())
+                  }}>
+                    Clear Events
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            {localStorage.getItem('schedule-password') === '99ballons' && (
+              <>
+                <button
+                  onClick={() => document.getElementById('excelImport')?.click()}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Import Calendar
+                </button>
+                <button
+                  onClick={() => document.getElementById('holdingImport')?.click()}
+                  className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
+                >
+                  Import to Holding
+                </button>
+              </>
+            )}
+            <button
+              onClick={async () => {
+                const XLSX = await import('xlsx');
+                // Get all cells with background colors from the DOM
+                const cells = document.querySelectorAll('[data-day][data-time]');
+                const data = Array.from(cells).map((cell: any) => ({
+                  Day: cell.dataset.day,
+                  Time: cell.dataset.time,
+                  Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
+                }));
+
+                const ws = XLSX.utils.json_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
+                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
+              }}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+            >
+              Export Backgrounds
+            </button>
+            {localStorage.getItem('schedule-password') === '99ballons' && (
+              <button
+                onClick={() => document.getElementById('backgroundImport')?.click()}
+                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+              >
+                Import Backgrounds
+              </button>
+            )}
             <input
               type="file"
               accept=".xlsx"
@@ -336,6 +453,17 @@ export default function Schedule() {
               id="backgroundImport"
             />
           </div>
+          </Card>
+        )}
+
+        {localStorage.getItem('schedule-password') !== 'bip25' && (
+          <Card className="p-4 mt-4 bg-yellow-50">
+            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>In Event Type wird der Type (Sprecher, etc) definiert. Kann gelöscht werden, aber niemals alle löschen!!</li>
+              <li>Event Type kann nicht importiert werden</li>
+              <li>Holding Area kann importiert werden, passt aber farblich nur, wenn Event Type korrekt vorhanden ist</li>
+            </ul>
           </Card>
         )}
       </div>
