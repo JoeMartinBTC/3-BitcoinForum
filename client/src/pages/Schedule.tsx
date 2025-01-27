@@ -356,7 +356,7 @@ export default function Schedule() {
                 </AlertDialogContent>
               </AlertDialog>
             )}
-            {localStorage.getItem('schedule-password') === '99ballons' && (
+            {(localStorage.getItem('schedule-password') === '99ballons' || localStorage.getItem('schedule-password') === '130jahr') && (
               <>
                 <button
                   onClick={() => document.getElementById('excelImport')?.click()}
@@ -392,7 +392,7 @@ export default function Schedule() {
             >
               Export Backgrounds
             </button>
-            {localStorage.getItem('schedule-password') === '99ballons' && (
+            {(localStorage.getItem('schedule-password') === '99ballons' || localStorage.getItem('schedule-password') === '130jahr') && (
               <button
                 onClick={() => document.getElementById('backgroundImport')?.click()}
                 className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
