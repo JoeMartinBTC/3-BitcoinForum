@@ -325,35 +325,37 @@ export default function Schedule() {
               className="hidden"
               id="excelImport"
             />
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
-                  Clear All Events
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Clear All Events</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will remove all events from the schedule. This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => {
-                    const password = localStorage.getItem('schedule-password');
-                    fetch('/api/events', { 
-                      method: 'DELETE',
-                      headers: {
-                        'x-password': password || ''
-                      }
-                    }).then(() => window.location.reload())
-                  }}>
-                    Clear Events
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {localStorage.getItem('schedule-password') === '99ballons' && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors">
+                    Clear All Events
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Clear All Events</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will remove all events from the schedule. This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => {
+                      const password = localStorage.getItem('schedule-password');
+                      fetch('/api/events', { 
+                        method: 'DELETE',
+                        headers: {
+                          'x-password': password || ''
+                        }
+                      }).then(() => window.location.reload())
+                    }}>
+                      Clear Events
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
                 <button
