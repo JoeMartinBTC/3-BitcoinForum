@@ -101,7 +101,7 @@ function TimeSlot({
           : ''
       }`}
       style={{
-        backgroundColor: slotEvents[0]?.color || backgroundColor,
+        backgroundColor: backgroundColor || slotEvents[0]?.color || '#ffffff',
       }}
       onContextMenu={(e) => {
         e.preventDefault();
