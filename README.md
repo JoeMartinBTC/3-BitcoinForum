@@ -42,7 +42,7 @@ The application will be available at `http://localhost:5000`
 
 ## Development Status
 
-Current version: v0.1
+Current version: v0.8.9.7
 - ✅ Initial prototype
 - ✅ Drag-and-drop functionality
 - ✅ Time grid implementation
