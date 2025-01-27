@@ -372,33 +372,66 @@ export default function Schedule() {
                 </button>
               </>
             )}
-            <button
-              onClick={async () => {
-                const XLSX = await import('xlsx');
-                // Get all cells with background colors from the DOM
-                const cells = document.querySelectorAll('[data-day][data-time]');
-                const data = Array.from(cells).map((cell: any) => ({
-                  Day: cell.dataset.day,
-                  Time: cell.dataset.time,
-                  Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
-                }));
-
-                const ws = XLSX.utils.json_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
-                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
-              }}
-              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-            >
-              Export Backgrounds
-            </button>
-            {(localStorage.getItem('schedule-password') === '99ballons' || localStorage.getItem('schedule-password') === '130jahr') && (
+            {localStorage.getItem('schedule-password') === '99ballons' && (
               <button
-                onClick={() => document.getElementById('backgroundImport')?.click()}
+                onClick={async () => {
+                  const XLSX = await import('xlsx');
+                  // Get all cells with background colors from the DOM
+                  const cells = document.querySelectorAll('[data-day][data-time]');
+                  const data = Array.from(cells).map((cell: any) => ({
+                    Day: cell.dataset.day,
+                    Time: cell.dataset.time,
+                    Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
+                  }));
+
+                  const ws = XLSX.utils.json_to_sheet(data);
+                  const wb = XLSX.utils.book_new();
+                  XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
+                  XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
+                }}
                 className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
               >
-                Import Backgrounds
+                Export Backgrounds
               </button>
+            )}
+            {(localStorage.getItem('schedule-password') === '99ballons' || localStorage.getItem('schedule-password') === '130jahr') && (
+              <>
+                <button
+                  onClick={() => document.getElementById('backgroundImport')?.click()}
+                  className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+                >
+                  Import Backgrounds
+                </button>
+                <button
+                  onClick={() => document.getElementById('typeImport')?.click()}
+                  className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
+                >
+                  Import Type
+                </button>
+                <input
+                  type="file"
+                  accept=".xlsx"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const XLSX = await import('xlsx');
+                      const reader = new FileReader();
+                      reader.onload = async (e) => {
+                        const data = e.target?.result;
+                        const workbook = XLSX.read(data, { type: 'binary' });
+                        const sheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                        // Process type import data
+                        console.log('Importing types:', jsonData);
+                      };
+                      reader.readAsBinaryString(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="typeImport"
+                />
+              </>
             )}
             <input
               type="file"
