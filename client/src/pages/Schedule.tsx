@@ -142,14 +142,12 @@ export default function Schedule() {
             >
               Export PDF
             </button>
-            {localStorage.getItem('schedule-password') !== '130jahr' && (
-              <button
-                onClick={handleExcelExport}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-              >
-                Export Calendar
-              </button>
-            )}
+            <button
+              onClick={handleExcelExport}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+            >
+              Export Calendar
+            </button>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <>
                 <button
@@ -381,28 +379,26 @@ export default function Schedule() {
                 </button>
               </>
             )}
-            {localStorage.getItem('schedule-password') !== '130jahr' && (
-              <button
-                onClick={async () => {
-                  const XLSX = await import('xlsx');
-                  // Get all cells with background colors from the DOM
-                  const cells = document.querySelectorAll('[data-day][data-time]');
-                  const data = Array.from(cells).map((cell: any) => ({
-                    Day: cell.dataset.day,
-                    Time: cell.dataset.time,
-                    Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
-                  }));
+            <button
+              onClick={async () => {
+                const XLSX = await import('xlsx');
+                // Get all cells with background colors from the DOM
+                const cells = document.querySelectorAll('[data-day][data-time]');
+                const data = Array.from(cells).map((cell: any) => ({
+                  Day: cell.dataset.day,
+                  Time: cell.dataset.time,
+                  Color: (cell as HTMLElement).style.backgroundColor || '#ffffff'
+                }));
 
-                  const ws = XLSX.utils.json_to_sheet(data);
-                  const wb = XLSX.utils.book_new();
-                  XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
-                  XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
-                }}
-                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-              >
-                Export Backgrounds
-              </button>
-            )}
+                const ws = XLSX.utils.json_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "BackgroundColors");
+                XLSX.writeFile(wb, "calendar-backgrounds.xlsx");
+              }}
+              className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
+            >
+              Export Backgrounds
+            </button>
             {localStorage.getItem('schedule-password') === '99ballons' && (
               <button
                 onClick={() => document.getElementById('backgroundImport')?.click()}
