@@ -113,8 +113,6 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                   </DialogTrigger>
                   <DialogContent 
                     onOpenAutoFocus={(e) => e.preventDefault()}
-                    onPointerDownOutside={(e) => e.preventDefault()}
-                    onInteractOutside={(e) => e.preventDefault()}
                   >
                     <DialogHeader>
                       <DialogTitle>Edit Event Info</DialogTitle>
@@ -127,6 +125,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                         e.preventDefault();
                         e.stopPropagation();
                       }}>
+                        <div className="flex flex-col gap-4">
                         <textarea 
                           defaultValue={event.info || ''}
                           onChange={(e) => {
@@ -140,6 +139,10 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                           placeholder="Add event info"
                           autoFocus
                         />
+                        <DialogPrimitive.Close asChild>
+                          <Button type="button">Close</Button>
+                        </DialogPrimitive.Close>
+                        </div>
                       </form>
                     </div>
                   </DialogContent>
