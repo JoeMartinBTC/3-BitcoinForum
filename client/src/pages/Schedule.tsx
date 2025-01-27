@@ -430,17 +430,19 @@ export default function Schedule() {
 
                     // Store the background colors in local storage for persistence
                     const backgroundColors = {};
+                    console.log('Importing data:', jsonData);
                     jsonData.forEach((item: any) => {
                       try {
-                        if (item.StartTime && item.Day) {
-                          const startTime = new Date(item.StartTime);
-                          const timeStr = `${startTime.getHours()}:${String(startTime.getMinutes()).padStart(2, '0')}`;
-                          const key = `bg_${item.Day}_${timeStr}`;
-                          const color = item.Color || '#ffffff';
+                        const day = item.Day || item.day;
+                        const time = item.Time || item.time;
+                        if (day && time) {
+                          const key = `bg_${day}_${time}`;
+                          const color = item.Color || item.backgroundColor || item.color || '#ffffff';
                           localStorage.setItem(key, color);
+                          console.log('Setting color:', key, color);
 
                           // Also apply to currently visible slots
-                          const slot = document.querySelector(`[data-day="${item.Day}"][data-time="${timeStr}"]`);
+                          const slot = document.querySelector(`[data-day="${day}"][data-time="${time}"]`);
                           if (slot && !slot.querySelector('.event-card')) {
                             (slot as HTMLElement).style.backgroundColor = color;
                           }
