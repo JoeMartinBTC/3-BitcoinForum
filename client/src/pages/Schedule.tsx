@@ -428,26 +428,21 @@ export default function Schedule() {
                     const worksheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-                    // Process each background color entry and save to database
-                    for (const item of jsonData as any[]) {
-                      if (item.Day && item.StartTime) {
-                        const startTime = new Date(item.StartTime);
-                        const timeStr = `${startTime.getHours()}:${String(startTime.getMinutes()).padStart(2, '0')}`;
-                        
-                        // Save to database via API
-                        await fetch('/api/time-grid', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            day: item.Day,
-                            time: timeStr,
-                            backgroundColor: item.Color || '#ffffff'
-                          })
-                        });
+                    // Store the background colors in local storage for persistence
+                    const backgroundColors = {};
+                    jsonData.forEach((item: any) => {
+                      const key = `bg_${item.day}_${item.time}`;
+                      const color = item.backgroundColor.startsWith('rgb') 
+                        ? item.backgroundColor
+                        : `rgb(${item.backgroundColor.split(',').join(', ')})`;
+                      localStorage.setItem(key, color);
+
+                      // Also apply to currently visible slots
+                      const slot = document.querySelector(`[data-day="${item.day}"][data-time="${item.time}"]`);
+                      if (slot && !slot.querySelector('.event-card')) {
+                        (slot as HTMLElement).style.backgroundColor = color;
                       }
-                    }
-                    // Reload the page to show updated colors
-                    window.location.reload();
+                    });
                   };
                   reader.readAsBinaryString(file);
                 }
