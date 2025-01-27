@@ -131,10 +131,11 @@ export default function Schedule() {
         <Card className="p-4">
           <TimeGrid />
         </Card>
-        <Card className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
-          <HoldingArea />
-          <div className="flex gap-2 mt-4">
+        {localStorage.getItem('schedule-password') !== 'bip25' && (
+          <Card className="p-4">
+            <h2 className="text-xl font-semibold mb-4">Events and Speakers</h2>
+            <HoldingArea />
+            <div className="flex gap-2 mt-4">
             <button
               onClick={handlePDFExport}
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -452,7 +453,8 @@ export default function Schedule() {
               id="backgroundImport"
             />
           </div>
-        </Card>
+          </Card>
+        )}
 
         <Card className="p-4 mt-4 bg-yellow-50">
           <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
