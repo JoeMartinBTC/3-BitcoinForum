@@ -13,7 +13,7 @@ export const selectDayTitleSchema = createSelectSchema(dayTitles);
 export type DayTitle = z.infer<typeof selectDayTitleSchema>;
 
 export const events = pgTable("events", {
-  id: integer("id").primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: text("title").notNull(),
   description: text("description"),
   day: integer("day").notNull(), // 1, 2, or 3
@@ -27,7 +27,7 @@ export const events = pgTable("events", {
 });
 
 export const speakers = pgTable("speakers", {
-  id: integer("id").primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),
   bio: text("bio"),
   topic: text("topic").notNull(),
@@ -62,7 +62,7 @@ export type InsertSpeaker = z.infer<typeof insertSpeakerSchema>;
 export type Speaker = z.infer<typeof selectSpeakerSchema>;
 
 export const timeGrid = pgTable("time_grid", {
-  id: integer("id").primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   day: integer("day").notNull(),
   time: text("time").notNull(),
   backgroundColor: text("background_color").notNull().default('#ffffff'),
