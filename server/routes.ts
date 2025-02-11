@@ -1,6 +1,13 @@
 import type { Express } from "express";
 import { db } from "../db";
-import { events, dayTitles, timeGrid, insertEventSchema, insertDayTitleSchema } from "../db/schema";
+import {
+  events,
+  eventTypesTable,
+  dayTitles,
+  timeGrid,
+  insertEventSchema,
+  insertDayTitleSchema,
+} from "../db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { PASSWORDS } from "./middleware/auth";
@@ -9,8 +16,13 @@ export function registerRoutes(app: Express) {
   // Get all events
   app.get("/api/events", async (req, res) => {
     try {
-      const password = req.headers['x-password'];
-      if (!password || ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(password as string)) {
+      const password = req.headers["x-password"];
+      if (
+        !password ||
+        ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(
+          password as string,
+        )
+      ) {
         return res.status(401).json({ error: "Invalid password" });
       }
 
@@ -18,7 +30,7 @@ export function registerRoutes(app: Express) {
       console.log(`Fetched ${allEvents.length} events`);
       res.json(allEvents);
     } catch (error) {
-      console.error('Error fetching events:', error);
+      console.error("Error fetching events:", error);
       res.status(500).json({ error: "Failed to fetch events" });
     }
   });
@@ -30,16 +42,16 @@ export function registerRoutes(app: Express) {
       const newEvent = await db.insert(events).values(eventData).returning();
       res.json(newEvent[0]);
     } catch (error) {
-      console.error('Event creation failed:', error);
+      console.error("Event creation failed:", error);
       if (error instanceof z.ZodError) {
-        res.status(400).json({ 
+        res.status(400).json({
           error: "Invalid event data",
-          details: error.errors
+          details: error.errors,
         });
       } else {
-        res.status(500).json({ 
+        res.status(500).json({
           error: "Failed to create event",
-          details: error instanceof Error ? error.message : 'Unknown error'
+          details: error instanceof Error ? error.message : "Unknown error",
         });
       }
     }
@@ -60,10 +72,10 @@ export function registerRoutes(app: Express) {
       }
 
       // Convert and validate dates
-      const updateData: any = { 
-        ...req.body
+      const updateData: any = {
+        ...req.body,
       };
-      
+
       if (req.body.startTime) {
         const startTime = new Date(req.body.startTime);
         if (isNaN(startTime.getTime())) {
@@ -81,15 +93,23 @@ export function registerRoutes(app: Express) {
       }
 
       // Ensure both times are set if one is provided
-      if ((updateData.startTime && !updateData.endTime) || (!updateData.startTime && updateData.endTime)) {
-        return res.status(400).json({ error: "Both start and end times must be provided together" });
+      if (
+        (updateData.startTime && !updateData.endTime) ||
+        (!updateData.startTime && updateData.endTime)
+      ) {
+        return res.status(400).json({
+          error: "Both start and end times must be provided together",
+        });
       }
 
       // Validate time range if both times are provided
       if (updateData.startTime && updateData.endTime) {
-        const diffMinutes = (updateData.endTime - updateData.startTime) / (1000 * 60);
+        const diffMinutes =
+          (updateData.endTime - updateData.startTime) / (1000 * 60);
         if (diffMinutes !== 25) {
-          return res.status(400).json({ error: "Event duration must be exactly 25 minutes" });
+          return res
+            .status(400)
+            .json({ error: "Event duration must be exactly 25 minutes" });
         }
       }
 
@@ -103,18 +123,18 @@ export function registerRoutes(app: Express) {
         return res.status(404).json({ error: "Event not found" });
       }
 
-      console.log('Successfully updated event:', {
+      console.log("Successfully updated event:", {
         id: eventId,
         updates: updateData,
-        result: updatedEvent[0]
+        result: updatedEvent[0],
       });
 
       res.json(updatedEvent[0]);
     } catch (error) {
-      console.error('Event update failed:', error);
-      res.status(500).json({ 
+      console.error("Event update failed:", error);
+      res.status(500).json({
         error: "Failed to update event",
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : "Unknown error",
       });
     }
   });
@@ -132,14 +152,14 @@ export function registerRoutes(app: Express) {
   // Delete all events
   app.delete("/api/events", async (req, res) => {
     try {
-      const password = req.headers['x-password'];
+      const password = req.headers["x-password"];
       if (password !== PASSWORDS.ADMIN) {
         return res.status(401).json({ error: "Admin access required" });
       }
       await db.delete(events);
       res.json({ success: true });
     } catch (error) {
-      console.error('Failed to delete all events:', error);
+      console.error("Failed to delete all events:", error);
       res.status(500).json({ error: "Failed to delete all events" });
     }
   });
@@ -150,7 +170,7 @@ export function registerRoutes(app: Express) {
       const titles = await db.select().from(dayTitles);
       res.json(titles);
     } catch (error) {
-      console.error('Failed to fetch day titles:', error);
+      console.error("Failed to fetch day titles:", error);
       res.status(500).json({ error: "Failed to fetch day titles" });
     }
   });
@@ -163,11 +183,11 @@ export function registerRoutes(app: Express) {
         .values({ day, title1, title2 })
         .onConflictDoUpdate({
           target: dayTitles.day,
-          set: { title1, title2 }
+          set: { title1, title2 },
         });
       res.json({ success: true });
     } catch (error) {
-      console.error('Failed to save day titles:', error);
+      console.error("Failed to save day titles:", error);
       res.status(500).json({ error: "Failed to save day titles" });
     }
   });
@@ -178,7 +198,7 @@ export function registerRoutes(app: Express) {
       const gridData = await db.select().from(timeGrid);
       res.json(gridData);
     } catch (error) {
-      console.error('Failed to fetch time grid:', error);
+      console.error("Failed to fetch time grid:", error);
       res.status(500).json({ error: "Failed to fetch time grid" });
     }
   });
@@ -191,20 +211,22 @@ export function registerRoutes(app: Express) {
         .values({ day, time, backgroundColor })
         .onConflictDoUpdate({
           target: [timeGrid.day, timeGrid.time],
-          set: { backgroundColor }
+          set: { backgroundColor },
         });
       res.json({ success: true });
     } catch (error) {
-      console.error('Failed to save time grid:', error);
+      console.error("Failed to save time grid:", error);
       res.status(500).json({ error: "Failed to save time grid" });
     }
   });
 
   app.post("/api/time-grid/import", async (req, res) => {
     try {
-      const password = req.headers['x-password'];
+      const password = req.headers["x-password"];
       if (password !== PASSWORDS.ADMIN) {
-        return res.status(401).json({ error: "Admin access required for import/export operations" });
+        return res.status(401).json({
+          error: "Admin access required for import/export operations",
+        });
       }
 
       const data = req.body;
@@ -214,8 +236,54 @@ export function registerRoutes(app: Express) {
       }
       res.json({ success: true });
     } catch (error) {
-      console.error('Failed to import time grid:', error);
+      console.error("Failed to import time grid:", error);
       res.status(500).json({ error: "Failed to import time grid" });
+    }
+  });
+
+  // Get all event types
+  app.get("/api/event-types", async (req, res) => {
+    try {
+      const password = req.headers["x-password"];
+      if (
+        !password ||
+        ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(
+          password as string,
+        )
+      ) {
+        return res.status(401).json({ error: "Invalid password" });
+      }
+
+      const allEvents = await db.select().from(eventTypesTable);
+      console.log(`Fetched ${allEvents.length} event types`);
+      res.json(allEvents);
+    } catch (error) {
+      console.error("Error fetching event types:", error);
+      res.status(500).json({ error: "Failed to fetch event types" });
+    }
+  });
+
+  // Create new event type
+  app.post("/api/event-types", async (req, res) => {
+    try {
+      const newEventType = await db
+        .insert(eventTypesTable)
+        .values(req.body)
+        .returning();
+      res.json(newEventType[0]);
+    } catch (error) {
+      console.error("Event type creation failed:", error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({
+          error: "Invalid event type data",
+          details: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          error: "Failed to create event type",
+          details: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
     }
   });
 }

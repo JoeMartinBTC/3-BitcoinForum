@@ -72,7 +72,7 @@ const ICONS = {
 
 export function HoldingArea() {
   const { events, createEvent, updateEvent } = useSchedule();
-  const { eventTypes } = useEventTypes();
+  const { eventTypes, createEventType } = useEventTypes();
 
   const [newEventTitle, setNewEventTitle] = useState("");
   const defaultTemplate = {
@@ -112,6 +112,8 @@ export function HoldingArea() {
     setSelectedTemplate(newTemplate);
     setIsCreatingTemplate(false);
     setNewTemplateTitle("");
+
+    createEventType(newTemplate)
   };
 
   const handleCreateEvent = () => {
