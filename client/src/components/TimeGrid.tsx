@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { EventCard } from "./EventCard";
 import { useSchedule } from "../hooks/useSchedule";
+import { useCalendar } from "../hooks/useCalendar";
 import { generateTimeSlots } from "../lib/timeUtils";
 import type { Event } from "@db/schema";
 
@@ -10,17 +11,20 @@ function TimeSlot({
   day,
   slot,
   events,
+  bgColor,
+  updateBgColor,
   updateEvent,
 }: {
   day: number;
   slot: ReturnType<typeof generateTimeSlots>[number];
   events: Event[];
+  bgColor: string;
+  updateBgColor: (day: number, time: string, color: string) => void;
   updateEvent: (updates: Partial<Event> & { id: number }) => void;
 }) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const storageKey = `bg_${day}_${slot.time}`;
   const [backgroundColor, setBackgroundColor] = useState(() => {
-    return localStorage.getItem(storageKey) || "#ffffff";
+    return bgColor || "#ffffff";
   });
   const slotEvent = events.find((event) => {
     const eventTime = new Date(event.startTime);
@@ -117,8 +121,8 @@ function TimeSlot({
               value={slotColor}
               onChange={(e) => {
                 const newColor = e.target.value;
-                localStorage.setItem(storageKey, newColor);
                 setBackgroundColor(newColor);
+                updateBgColor(day, slot.time, newColor);
                 setShowColorPicker(false);
               }}
             />
@@ -127,9 +131,9 @@ function TimeSlot({
               onClick={() => {
                 const defaultColor = "#ffffff";
                 const key = `bg_${day}_${slot.time}`;
-                localStorage.setItem(key, defaultColor);
                 setBackgroundColor(defaultColor);
                 setShowColorPicker(false);
+                updateBgColor(day, slot.time, defaultColor);
               }}
             >
               Reset
@@ -157,6 +161,19 @@ function TimeSlot({
 
 export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
+  const { calendarBgColors, updateCalendarBgColors } = useCalendar();
+
+  console.log({ calendarBgColors });
+
+  const updateBgColor = (day, time, color) => {
+    const key = `bg-${day}-${time}`;
+
+    updateCalendarBgColors({
+      ...calendarBgColors,
+      [key]: color,
+    });
+  };
+
   const timeSlots = generateTimeSlots();
   const [numDays, setNumDays] = useState(19); // Limited to 19 days
   const [hiddenDays, setHiddenDays] = useState<Set<number>>(new Set());
@@ -484,11 +501,13 @@ export function TimeGrid() {
                   <div className="space-y-0">
                     {timeSlots.map((slot) => (
                       <TimeSlot
-                        key={`${day}-${slot.time}`}
+                        key={`${day}-${slot.time}-${calendarBgColors?.[`bg-${day}-${slot.time}`]}`}
                         day={day}
                         slot={slot}
                         events={events}
                         updateEvent={updateEvent}
+                        bgColor={calendarBgColors?.[`bg-${day}-${slot.time}`]}
+                        updateBgColor={updateBgColor}
                       />
                     ))}
                   </div>

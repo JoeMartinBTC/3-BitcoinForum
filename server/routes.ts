@@ -3,6 +3,7 @@ import { db } from "../db";
 import {
   events,
   eventTypesTable,
+  calendarBgColorsTable,
   dayTitles,
   timeGrid,
   insertEventSchema,
@@ -348,6 +349,76 @@ export function registerRoutes(app: Express) {
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete event type" });
+    }
+  });
+
+  // Get all event types
+  app.get("/api/calendar/bg-colors", async (req, res) => {
+    try {
+      const password = req.headers["x-password"];
+      if (
+        !password ||
+        ![PASSWORDS.VIEW, PASSWORDS.EDIT, PASSWORDS.ADMIN].includes(
+          password as string,
+        )
+      ) {
+        return res.status(401).json({ error: "Invalid password" });
+      }
+
+      const allEvents = await db
+        .select()
+        .from(calendarBgColorsTable)
+        .where(eq(calendarBgColorsTable.key, 1));
+      res.json(JSON.parse(allEvents[0]?.color || "{}"));
+    } catch (error) {
+      console.error("Error fetching event types:", error);
+      res.status(500).json({ error: "Failed to fetch event types" });
+    }
+  });
+
+  // Update calendar background color
+  app.put("/api/calendar/bg-colors", async (req, res) => {
+    try {
+      console.log("bg-color", req.body);
+      const value = JSON.stringify(req.body);
+
+      const count = await db.$count(calendarBgColorsTable);
+
+      if (count) {
+        const updated = await db
+          .update(calendarBgColorsTable)
+          .set({ color: value })
+          .where(eq(calendarBgColorsTable.key, 1))
+          .returning();
+        res.json(updated[0]);
+      } else {
+        const newColors = await db
+          .insert(calendarBgColorsTable)
+          .values({ color: value })
+          .returning();
+        res.json(newColors[0]);
+      }
+
+      // await db
+      //   .insert(calendarBgColorsTable)
+      //   .values({ key: 1, color: value })
+      //   .onConflictDoUpdate({
+      //     target: calendarBgColorsTable.id,
+      //     set: { color: value },
+      //   });
+    } catch (error) {
+      console.error("Calendar background update failed:", error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({
+          error: "Invalid calendar background data",
+          details: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          error: "Failed to update calendar background data",
+          details: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
     }
   });
 }

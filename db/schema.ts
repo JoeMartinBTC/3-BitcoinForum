@@ -89,4 +89,9 @@ export const eventTypesTable = pgTable("event_types", {
   icon: varchar({ length: 255 }),
 });
 
-export type EventType = typeof eventTypesTable.$inferInsert
+export type EventType = typeof eventTypesTable.$inferInsert;
+
+export const calendarBgColorsTable = pgTable("calendar_bg_colors", {
+  key: integer().primaryKey().generatedAlwaysAsIdentity(),
+  color: varchar(),
+});
