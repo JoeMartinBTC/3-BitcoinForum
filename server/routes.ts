@@ -286,4 +286,68 @@ export function registerRoutes(app: Express) {
       }
     }
   });
+
+  app.put("/api/event-types/sync", async (req, res) => {
+    try {
+      console.log(req.body);
+      await db.delete(eventTypesTable);
+      const result = await db
+        .insert(eventTypesTable)
+        .values(req.body)
+        .returning();
+      res.json(result);
+    } catch (error) {
+      console.error("Event types sync failed:", error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({
+          error: "Invalid event type data",
+          details: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          error: "Failed to sync event types",
+          details: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
+    }
+  });
+
+  // Update event type
+  app.put("/api/event-types/:id", async (req, res) => {
+    try {
+      const { key, ...value } = req.body;
+      const updatedEventType = await db
+        .update(eventTypesTable)
+        .set(value)
+        .where(eq(eventTypesTable.key, req.body.key))
+        .returning();
+
+      res.json(updatedEventType[0]);
+    } catch (error) {
+      console.error("Event type update failed:", error);
+      if (error instanceof z.ZodError) {
+        res.status(400).json({
+          error: "Invalid event type data",
+          details: error.errors,
+        });
+      } else {
+        res.status(500).json({
+          error: "Failed to update event type",
+          details: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
+    }
+  });
+
+  // Delete event type
+  app.delete("/api/event-types/:id", async (req, res) => {
+    try {
+      await db
+        .delete(eventTypesTable)
+        .where(eq(eventTypesTable.id, req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete event type" });
+    }
+  });
 }

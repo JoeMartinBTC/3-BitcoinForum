@@ -20,7 +20,7 @@ export function useEventTypes() {
       return Array.isArray(data) ? data : [];
     },
     refetchOnMount: true,
-    refetchOnWindowFocus: true,
+    refetchInterval: 5000, // Refetch data every 5 seconds
   });
 
   const createEventTypeMutation = useMutation({
@@ -62,8 +62,92 @@ export function useEventTypes() {
     },
   });
 
+  const deleteEventTypeMutation = useMutation({
+    mutationFn: (id: string) => {
+      const password = localStorage.getItem("schedule-password");
+      return fetch(`/api/event-types/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-password": password || "",
+        },
+      }).then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => Promise.reject(err));
+        }
+        return res.json();
+      });
+    },
+    onMutate: ({ id, deleted }) => {
+      if (deleted) {
+        const previousEvents = queryClient.getQueryData(["event-types"]);
+        queryClient.setQueryData(["event-types"], (old: Event[]) =>
+          old.filter((e) => e.id !== id),
+        );
+        return { previousEvents };
+      }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousEvents) {
+        queryClient.setQueryData(["event-types"], context.previousEvents);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["event-types"] });
+    },
+  });
+
+  const updateEventTypeMutation = useMutation({
+    mutationFn: (eventType: EventType) => {
+      const password = localStorage.getItem("schedule-password");
+      return fetch(`/api/event-types/${eventType.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-password": password || "",
+        },
+        body: JSON.stringify(eventType),
+      }).then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => Promise.reject(err));
+        }
+        return res.json();
+      });
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousEvents) {
+        queryClient.setQueryData(["event-types"], context.previousEvents);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["event-types"] });
+    },
+  });
+
+  const syncEventTypesMutation = useMutation({
+    mutationFn: (eventTypes: EventType[]) => {
+      const password = localStorage.getItem("schedule-password");
+      return fetch(`/api/event-types/sync`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-password": password || "",
+        },
+        body: JSON.stringify(eventTypes),
+      }).then((res) => {
+        if (!res.ok) {
+          return res.json().then((err) => Promise.reject(err));
+        }
+        return res.json();
+      });
+    },
+  });
+
   return {
     eventTypes,
     createEventType: createEventTypeMutation.mutate,
+    deleteEventType: deleteEventTypeMutation.mutate,
+    syncEventTypes: syncEventTypesMutation.mutate,
+    updateEventType: updateEventTypeMutation.mutate,
   };
 }

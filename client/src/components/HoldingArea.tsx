@@ -2,8 +2,7 @@ import { ScrollArea } from "./ui/scroll-area";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
-import { EVENT_TEMPLATES } from "../lib/eventTemplates";
+import React, { useState, useEffect } from "react";
 import {
   BookOpen,
   Wrench,
@@ -72,7 +71,8 @@ const ICONS = {
 
 export function HoldingArea() {
   const { events, createEvent, updateEvent } = useSchedule();
-  const { eventTypes, createEventType } = useEventTypes();
+  const { eventTypes, createEventType, deleteEventType, updateEventType } =
+    useEventTypes();
 
   const [newEventTitle, setNewEventTitle] = useState("");
   const defaultTemplate = {
@@ -84,16 +84,16 @@ export function HoldingArea() {
     icon: "calendar",
   };
   const [selectedTemplate, setSelectedTemplate] = useState(
-    EVENT_TEMPLATES?.[0] || defaultTemplate,
+    eventTypes?.[0] || defaultTemplate,
   );
   const [isCreatingTemplate, setIsCreatingTemplate] = useState(false);
   const [newTemplateTitle, setNewTemplateTitle] = useState("");
   const [newTemplateIcon, setNewTemplateIcon] = useState("users");
   const [newTemplateColor, setNewTemplateColor] = useState("bg-purple-100");
 
-  const saveEventTemplates = () => {
-    localStorage.setItem("eventTemplates", JSON.stringify(EVENT_TEMPLATES));
-  };
+  // const saveEventTemplates = () => {
+  //   localStorage.setItem("eventTemplates", JSON.stringify(EVENT_TEMPLATES));
+  // };
 
   const handleCreateTemplate = () => {
     if (!newTemplateTitle) return;
@@ -107,13 +107,13 @@ export function HoldingArea() {
       icon: newTemplateIcon,
     };
 
-    EVENT_TEMPLATES.push(newTemplate);
-    localStorage.setItem("eventTemplates", JSON.stringify(EVENT_TEMPLATES));
+    // EVENT_TEMPLATES.push(newTemplate);
+    // localStorage.setItem("eventTemplates", JSON.stringify(EVENT_TEMPLATES));
     setSelectedTemplate(newTemplate);
     setIsCreatingTemplate(false);
     setNewTemplateTitle("");
 
-    createEventType(newTemplate)
+    createEventType(newTemplate);
   };
 
   const handleCreateEvent = () => {
@@ -131,6 +131,10 @@ export function HoldingArea() {
   };
 
   const level = localStorage.getItem("schedule-password") || "1";
+
+  // useEffect(() => {
+  //   syncEventTypes(EVENT_TEMPLATES);
+  // }, []);
 
   return (
     <div className="space-y-4">
@@ -248,7 +252,7 @@ export function HoldingArea() {
 
               <ScrollArea className="h-[400px] pr-4">
                 <div className="grid grid-cols-2 gap-2">
-                  {EVENT_TEMPLATES.map((template) => {
+                  {eventTypes.map((template) => {
                     const Icon = template.icon
                       ? ICONS[template.icon as keyof typeof ICONS]
                       : null;
@@ -376,11 +380,12 @@ export function HoldingArea() {
                                         icon: newTemplateIcon,
                                         color: newTemplateColor,
                                       };
-                                      const index = EVENT_TEMPLATES.findIndex(
-                                        (t) => t.id === template.id,
-                                      );
-                                      EVENT_TEMPLATES[index] = updatedTemplate;
-                                      saveEventTemplates();
+                                      updateEventType(updatedTemplate);
+                                      // const index = EVENT_TEMPLATES.findIndex(
+                                      //   (t) => t.id === template.id,
+                                      // );
+                                      // EVENT_TEMPLATES[index] = updatedTemplate;
+                                      // saveEventTemplates();
                                       setSelectedTemplate(updatedTemplate);
                                     }}
                                     className="flex-1"
@@ -394,19 +399,27 @@ export function HoldingArea() {
                                     <Button
                                       variant="destructive"
                                       onClick={() => {
-                                        fetch(`/api/events/${template.id}`, {
-                                          method: "DELETE",
-                                        }).then(() => {
-                                          const index =
-                                            EVENT_TEMPLATES.findIndex(
-                                              (t) => t.id === template.id,
-                                            );
-                                          EVENT_TEMPLATES.splice(index, 1);
-                                          saveEventTemplates();
-                                          setSelectedTemplate(
-                                            EVENT_TEMPLATES[0],
-                                          );
-                                        });
+                                        deleteEventType(template.id);
+
+                                        // const index = EVENT_TEMPLATES.findIndex(
+                                        //   (t) => t.id === template.id,
+                                        // );
+                                        // EVENT_TEMPLATES.splice(index, 1);
+                                        // saveEventTemplates();
+                                        setSelectedTemplate(eventTypes[0]);
+                                        // fetch(`/api/events/${template.id}`, {
+                                        //   method: "DELETE",
+                                        // }).then(() => {
+                                        //   const index =
+                                        //     EVENT_TEMPLATES.findIndex(
+                                        //       (t) => t.id === template.id,
+                                        //     );
+                                        //   EVENT_TEMPLATES.splice(index, 1);
+                                        //   saveEventTemplates();
+                                        //   setSelectedTemplate(
+                                        //     EVENT_TEMPLATES[0],
+                                        //   );
+                                        // });
                                       }}
                                       className="flex-1"
                                     >
