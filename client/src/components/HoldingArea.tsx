@@ -34,7 +34,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { EventTemplate } from "../lib/eventTemplates";
 import { useSchedule } from "../hooks/useSchedule";
 import { useEventTypes } from "../hooks/useEventTypes";
 import {
@@ -94,7 +93,7 @@ export function HoldingArea() {
   const handleCreateTemplate = () => {
     if (!newTemplateTitle) return;
 
-    const newTemplate: EventTemplate = {
+    const newTemplate = {
       id: newTemplateTitle.toLowerCase().replace(/\s+/g, "-"),
       title: newTemplateTitle,
       duration: 25,

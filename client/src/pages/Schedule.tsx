@@ -16,12 +16,7 @@ import {
 import React, { useCallback } from "react";
 import { usePDF } from "react-to-pdf";
 import { useSchedule } from "../hooks/useSchedule";
-import {
-  EVENT_TEMPLATES,
-  EventTemplate,
-  exportEventTemplates,
-  importEventTemplates,
-} from "../lib/eventTemplates";
+import { useEventTypes } from "../hooks/useEventTypes";
 import { VersionBadge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -34,6 +29,8 @@ import { Input } from "@/components/ui/input";
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState("");
+
+  const { eventTypes } = useEventTypes();
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,9 +182,8 @@ export default function Schedule() {
                             TemplateID: event.templateId || "",
                             Color: event.color || "",
                             Type:
-                              EVENT_TEMPLATES.find(
-                                (t: EventTemplate) => t.id === event.templateId,
-                              )?.title || "",
+                              eventTypes.find((t) => t.id === event.templateId)
+                                ?.title || "",
                             StartTime: event.startTime
                               ? new Date(event.startTime).toLocaleString()
                               : "",
@@ -212,9 +208,8 @@ export default function Schedule() {
                           TemplateID: event.templateId || "",
                           Color: event.color || "",
                           Type:
-                            EVENT_TEMPLATES.find(
-                              (t: EventTemplate) => t.id === event.templateId,
-                            )?.title || "",
+                            eventTypes.find((t) => t.id === event.templateId)
+                              ?.title || "",
                           StartTime: event.startTime
                             ? new Date(event.startTime).toLocaleString()
                             : "",

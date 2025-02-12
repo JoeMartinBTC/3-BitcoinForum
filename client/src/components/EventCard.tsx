@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/tooltip";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Event } from "@db/schema";
-import { EVENT_TEMPLATES } from "../lib/eventTemplates";
 import {
   BookOpen,
   Wrench,
@@ -43,6 +42,8 @@ import {
   Sun,
   Zap,
 } from "lucide-react";
+
+import { useEventTypes } from "../hooks/useEventTypes";
 
 const ICONS = {
   "book-open": BookOpen,
@@ -73,6 +74,7 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onUpdate }: EventCardProps) {
+  const { eventTypes } = useEventTypes();
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "EVENT",
     item: event,
@@ -86,8 +88,8 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
   }));
 
   const [title, setTitle] = useState(event.title);
-  const template = EVENT_TEMPLATES.find((t) => t.id === event.templateId) ||
-    EVENT_TEMPLATES[0] || {
+  const template = eventTypes.find((t) => t.id === event.templateId) ||
+    eventTypes[0] || {
       id: "default",
       title: "Default",
       duration: 25,
@@ -211,7 +213,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
                   </DialogHeader>
                   <div className="space-y-4 pt-4">
                     <div className="grid grid-cols-2 gap-2">
-                      {EVENT_TEMPLATES.map((t) => (
+                      {eventTypes.map((t) => (
                         <Button
                           key={t.id}
                           variant={
