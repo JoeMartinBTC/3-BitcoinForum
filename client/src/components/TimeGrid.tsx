@@ -163,8 +163,6 @@ export function TimeGrid() {
   const { events, updateEvent } = useSchedule();
   const { calendarBgColors, updateCalendarBgColors } = useCalendar();
 
-  console.log({ calendarBgColors });
-
   const updateBgColor = (day, time, color) => {
     const key = `bg-${day}-${time}`;
 

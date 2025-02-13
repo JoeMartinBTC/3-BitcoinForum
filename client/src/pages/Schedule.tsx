@@ -25,12 +25,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  exportEventTemplates,
+  importEventTemplates,
+} from "../lib/eventTemplates";
 
 export default function Schedule() {
   const [showPasswordDialog, setShowPasswordDialog] = React.useState(true);
   const [password, setPassword] = React.useState("");
 
-  const { eventTypes } = useEventTypes();
+  const { eventTypes, syncEventTypes } = useEventTypes();
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -419,12 +423,12 @@ export default function Schedule() {
                     Import Calendar
                   </button>
                   <button
-                    onClick={() =>
-                      document.getElementById("typeImport")?.click()
-                    }
+                    onClick={() => {
+                      exportEventTemplates(eventTypes);
+                    }}
                     className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
                   >
-                    Import Type
+                    Export type
                   </button>
                 </>
               )}
@@ -475,22 +479,16 @@ export default function Schedule() {
                   </button>
                   <input
                     type="file"
-                    accept=".xlsx"
+                    accept=".json"
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const XLSX = await import("xlsx");
-                        const reader = new FileReader();
-                        reader.onload = async (e) => {
-                          const data = e.target?.result;
-                          const workbook = XLSX.read(data, { type: "binary" });
-                          const sheetName = workbook.SheetNames[0];
-                          const worksheet = workbook.Sheets[sheetName];
-                          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                          // Process type import data
-                          console.log("Importing types:", jsonData);
-                        };
-                        reader.readAsBinaryString(file);
+                        const importedEventTypes =
+                          await importEventTemplates(file);
+                        if (importedEventTypes) {
+                          syncEventTypes(importedEventTypes);
+                          window.location.reload();
+                        }
                       }
                     }}
                     className="hidden"
