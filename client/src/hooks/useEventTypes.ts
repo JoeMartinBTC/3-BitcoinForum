@@ -43,18 +43,16 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onMutate: ({ id, deleted }) => {
-      if (deleted) {
-        const previousEvents = queryClient.getQueryData(["event-types"]);
-        queryClient.setQueryData(["event-types"], (old: Event[]) =>
-          old.filter((e) => e.id !== id),
-        );
-        return { previousEvents };
+    onMutate: async (newEventType) => {
+      const previousData = queryClient.getQueryData<EventType[]>(["event-types"]);
+      if (previousData) {
+        queryClient.setQueryData<EventType[]>(["event-types"], [...previousData, newEventType]);
       }
+      return { previousData };
     },
     onError: (err, variables, context) => {
-      if (context?.previousEvents) {
-        queryClient.setQueryData(["event-types"], context.previousEvents);
+      if (context?.previousData) {
+        queryClient.setQueryData(["event-types"], context.previousData);
       }
     },
     onSettled: () => {
@@ -81,7 +79,7 @@ export function useEventTypes() {
     onMutate: ({ id, deleted }) => {
       if (deleted) {
         const previousEvents = queryClient.getQueryData(["event-types"]);
-        queryClient.setQueryData(["event-types"], (old: Event[]) =>
+        queryClient.setQueryData(["event-types"], (old: EventType[]) =>
           old.filter((e) => e.id !== id),
         );
         return { previousEvents };

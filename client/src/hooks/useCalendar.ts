@@ -34,15 +34,11 @@ export function useCalendar() {
         body: JSON.stringify(colors),
       }).then((res) => res.json());
     },
-    onMutate: ({ id, deleted }) => {
-      if (deleted) {
-        const previousEvents = queryClient.getQueryData(["calendar-bg-colors"]);
-        queryClient.setQueryData(["calendar-bg-colors"], (old: Record<string, string>) =>
-          old.filter((e) => e.id !== id),
-        );
-        return { previousEvents };
-      }
-    },
+    onMutate: async (colors) => {
+    const previousData = queryClient.getQueryData(["calendar-bg-colors"]);
+    queryClient.setQueryData(["calendar-bg-colors"], colors);
+    return { previousData };
+  },
     onError: (err, variables, context) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(
