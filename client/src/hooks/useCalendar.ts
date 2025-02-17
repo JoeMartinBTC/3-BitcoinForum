@@ -23,7 +23,7 @@ export function useCalendar() {
   });
 
   const updateCalendarBgColorsMutation = useMutation({
-    mutationFn: (colors) => {
+    mutationFn: (colors: Record<string, string>) => {
       const password = localStorage.getItem("schedule-password");
       return fetch(`/api/calendar/bg-colors`, {
         method: "PUT",
@@ -37,7 +37,7 @@ export function useCalendar() {
     onMutate: ({ id, deleted }) => {
       if (deleted) {
         const previousEvents = queryClient.getQueryData(["calendar-bg-colors"]);
-        queryClient.setQueryData(["calendar-bg-colors"], (old: Event[]) =>
+        queryClient.setQueryData(["calendar-bg-colors"], (old: Record<string, string>) =>
           old.filter((e) => e.id !== id),
         );
         return { previousEvents };
