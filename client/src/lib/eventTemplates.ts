@@ -14,12 +14,7 @@ export type EventTemplate = z.infer<typeof eventTemplateSchema>;
 export const exportEventTemplates = (eventTypes: EventTemplate[]) => {
   const blob = new Blob(
     [
-      JSON.stringify(
-        eventTypes.map((e) => {
-          const { key, ...values } = e;
-          return values;
-        }),
-      ),
+      JSON.stringify(eventTypes),
     ],
     {
       type: "application/json",

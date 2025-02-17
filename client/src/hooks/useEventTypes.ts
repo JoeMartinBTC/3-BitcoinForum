@@ -76,11 +76,11 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onMutate: ({ id, deleted }) => {
-      if (deleted) {
+    onMutate: (variables: { id: string; deleted: boolean }) => {
+      if (variables.deleted) {
         const previousEvents = queryClient.getQueryData(["event-types"]);
         queryClient.setQueryData(["event-types"], (old: EventType[]) =>
-          old.filter((e) => e.id !== id),
+          old.filter((e) => e.id !== variables.id),
         );
         return { previousEvents };
       }

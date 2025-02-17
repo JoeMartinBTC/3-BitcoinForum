@@ -40,10 +40,10 @@ export function useCalendar() {
     return { previousData };
   },
     onError: (err, variables, context) => {
-      if (context?.previousEvents) {
+      if (context?.previousData) {
         queryClient.setQueryData(
           ["calendar-bg-colors"],
-          context.previousEvents,
+          context.previousData,
         );
       }
     },
