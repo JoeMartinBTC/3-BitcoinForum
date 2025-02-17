@@ -17,6 +17,9 @@ import React, { useCallback } from "react";
 import { usePDF } from "react-to-pdf";
 import { useSchedule } from "../hooks/useSchedule";
 import { useEventTypes } from "../hooks/useEventTypes";
+import { useCalendar } from "../hooks/useCalendar";
+
+import { rgbToHex } from "../lib/utils";
 import { VersionBadge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -35,6 +38,7 @@ export default function Schedule() {
   const [password, setPassword] = React.useState("");
 
   const { eventTypes, syncEventTypes } = useEventTypes();
+  const { updateCalendarBgColors } = useCalendar();
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -513,20 +517,19 @@ export default function Schedule() {
 
                       // Store the background colors in local storage for persistence
                       const backgroundColors = {};
-                      console.log("Importing data:", jsonData);
                       jsonData.forEach((item: any) => {
                         try {
                           const day = item.Day || item.day;
                           const time = item.Time || item.time;
                           if (day && time) {
-                            const key = `bg_${day}_${time}`;
+                            const key = `bg-${day}-${time}`;
                             const color =
                               item.Color ||
                               item.backgroundColor ||
-                              item.color ||
-                              "#ffffff";
-                            localStorage.setItem(key, color);
-                            console.log("Setting color:", key, color);
+                              "rgb(255, 255, 255)";
+                            const hexColor = rgbToHex(color);
+                            if (hexColor !== "#ffffff")
+                              backgroundColors[key] = hexColor;
 
                             // Also apply to currently visible slots
                             const slot = document.querySelector(
@@ -541,6 +544,8 @@ export default function Schedule() {
                           console.error("Error processing item:", item, error);
                         }
                       });
+                      updateCalendarBgColors(backgroundColors);
+                      window.location.reload();
                     };
                     reader.readAsBinaryString(file);
                   }
