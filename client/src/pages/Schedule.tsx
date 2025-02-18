@@ -562,18 +562,31 @@ export default function Schedule() {
 
         {localStorage.getItem("schedule-password") !== "bip25" && (
           <Card className="p-4 mt-4 bg-yellow-50">
-            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise:</h2>
+            <h2 className="text-lg font-semibold mb-2">Wichtige Hinweise</h2>
             <ul className="list-disc pl-6 space-y-2 text-sm">
               <li>
-                In Event Type wird der Type (Sprecher, etc) definiert. Kann
-                gelöscht werden, aber niemals alle löschen!!
+                In der oberen Leiste befinden sich Knöpfe zum Ein-/Ausblenden einzelner Tage sowie Schalter für bestimmte Locations. In der Mitte gibt es einen Knopf, um alle Tage auf einmal ein-/auszublenden.
               </li>
-              <li>Event Type kann nicht importiert werden</li>
               <li>
-                Holding Area kann importiert werden, passt aber farblich nur,
-                wenn Event Type korrekt vorhanden ist
+                Darunter können einzelne Locations an den jeweiligen Tagen ein-/ausgeblendet werden.
+              </li>
+              <li>
+                Kalendereinträge lassen sich beliebig verschieben. Ist die Ansicht groß genug, erscheinen ein Stift und ein (i), die angeklickt werden können, um Inhalte zu bearbeiten. Falls keine zusätzliche Info (i) hinterlegt ist, bleibt das (i) grau, andernfalls wird es grün.
+              </li>
+              <li>
+                Ein Rechtsklick auf einen Termin ermöglicht das Anpassen der Hintergrundfarbe.
+              </li>
+              <li>
+                Unten befindet sich die <em>Backstage</em>. Über den Knopf <em>Add Events or Speakers</em> lassen sich neue Einträge erstellen, die dann im darunterliegenden Bereich erscheinen und von dort in den Kalender verschoben werden können.
+              </li>
+              <li>
+                Ganz unten stehen Exportfunktionen zur Verfügung, die als Backup dienen. Nach größeren Änderungen wird dringend empfohlen, alle Exporte durchzuführen. Die exportierten Dateien sind zudem die Grundlage für den Import in andere Systeme.
+              </li>
+              <li>
+                Das Passwort für die Ansicht ohne Änderungsrechte lautet: bip25.
               </li>
             </ul>
+            <p className="mt-4 text-sm">Ansonsten gilt: Bei Fragen einfach fragen!</p>
           </Card>
         )}
       </div>
