@@ -85,11 +85,6 @@ export function useEventTypes() {
       }
       return { previousEvents };
     },
-    onError: (_err, _variables, context: { previousEvents?: EventType[] }) => {
-      if (context?.previousEvents) {
-        queryClient.setQueryData(["event-types"], context.previousEvents);
-      }
-    },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["event-types"] });
     },
@@ -111,11 +106,6 @@ export function useEventTypes() {
         }
         return res.json();
       });
-    },
-    onError: (_err, _variables, context: { previousEvents?: EventType[] }) => {
-      if (context?.previousEvents) {
-        queryClient.setQueryData(["event-types"], context.previousEvents);
-      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["event-types"] });
