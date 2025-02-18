@@ -221,7 +221,7 @@ export function TimeGrid() {
 
   return (
     <div className="w-full min-h-[600px] relative">
-      
+
       <div className="mb-4 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -328,7 +328,7 @@ export function TimeGrid() {
               onClick={() => toggleVenue([2, 8, 14])}
               className={`px-3 py-1 rounded ${[2, 8, 14].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-200 text-blue-800 hover:bg-blue-300"}`}
             >
-              Nebenraum
+              Neben raum
             </button>
             <button
               onClick={() => toggleVenue([3, 9, 15])}
@@ -346,7 +346,7 @@ export function TimeGrid() {
               onClick={() => toggleVenue([5, 11, 17])}
               className={`px-3 py-1 rounded ${[5, 11, 17].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"}`}
             >
-              Exerzierhalle
+              Exerzier halle
             </button>
             <button
               onClick={() => toggleVenue([6, 12, 18])}
@@ -390,13 +390,13 @@ export function TimeGrid() {
               {[1, 7, 13].includes(day)
                 ? "Main Stage"
                 : [2, 8, 14].includes(day)
-                  ? "Nebenraum"
+                  ? "Neben raum"
                   : [3, 9, 15].includes(day)
                     ? "Donau Tower"
                     : [4, 10, 16].includes(day)
                       ? "Brigk"
                       : [5, 11, 17].includes(day)
-                        ? "Exerzierhalle"
+                        ? "Exerzier halle"
                         : day === 19
                           ? "Eishalle"
                           : [6, 12, 18].includes(day)
