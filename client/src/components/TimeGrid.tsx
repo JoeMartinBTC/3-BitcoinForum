@@ -264,7 +264,7 @@ export function TimeGrid() {
               }}
               className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 1).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-100 text-red-700 hover:bg-red-200"}`}
             >
-              Days 1-6
+              Donnerstag
             </button>
             <button
               onClick={() => {
@@ -288,7 +288,7 @@ export function TimeGrid() {
               }}
               className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 7).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-200 text-red-800 hover:bg-red-300"}`}
             >
-              Days 7-12
+              Freitag
             </button>
             <button
               onClick={() => {
@@ -312,7 +312,7 @@ export function TimeGrid() {
               }}
               className={`px-3 py-1 rounded ${Array.from({ length: 7 }, (_, i) => i + 13).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-300 text-red-900 hover:bg-red-400"}`}
             >
-              Days 13-19
+              Samstag
             </button>
             <button
               onClick={toggleShowAll}
