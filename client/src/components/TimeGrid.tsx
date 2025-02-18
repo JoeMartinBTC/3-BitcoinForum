@@ -260,7 +260,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 1).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-100 text-red-700 hover:bg-red-200"}`}
+              className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 1).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-100 text-gray-800 hover:bg-red-200"}`}
             >
               Donnerstag
             </button>
@@ -284,7 +284,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 7).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-200 text-red-800 hover:bg-red-300"}`}
+              className={`px-3 py-1 rounded ${Array.from({ length: 6 }, (_, i) => i + 7).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-200 text-gray-800 hover:bg-red-300"}`}
             >
               Freitag
             </button>
@@ -308,7 +308,7 @@ export function TimeGrid() {
                 });
                 setShowAllDays(false);
               }}
-              className={`px-3 py-1 rounded ${Array.from({ length: 7 }, (_, i) => i + 13).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-300 text-red-900 hover:bg-red-400"}`}
+              className={`px-3 py-1 rounded ${Array.from({ length: 7 }, (_, i) => i + 13).every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-red-300 text-gray-800 hover:bg-red-400"}`}
             >
               Samstag
             </button>
@@ -320,43 +320,37 @@ export function TimeGrid() {
             </button>
             <button
               onClick={() => toggleVenue([1, 7, 13])}
-              className={`px-3 py-1 rounded ${[1, 7, 13].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-100 text-blue-700 hover:bg-blue-200"}`}
+              className={`px-3 py-1 rounded ${[1, 7, 13].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-100 text-gray-800 hover:bg-blue-200"}`}
             >
               Main Stage
             </button>
             <button
               onClick={() => toggleVenue([2, 8, 14])}
-              className={`px-3 py-1 rounded ${[2, 8, 14].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-200 text-blue-800 hover:bg-blue-300"}`}
+              className={`px-3 py-1 rounded ${[2, 8, 14].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-200 text-gray-800 hover:bg-blue-300"}`}
             >
               Neben raum
             </button>
             <button
               onClick={() => toggleVenue([3, 9, 15])}
-              className={`px-3 py-1 rounded ${[3, 9, 15].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-300 text-blue-900 hover:bg-blue-400"}`}
+              className={`px-3 py-1 rounded ${[3, 9, 15].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-blue-300 text-gray-800 hover:bg-blue-400"}`}
             >
               Donau Tower
             </button>
             <button
               onClick={() => toggleVenue([4, 10, 16])}
-              className={`px-3 py-1 rounded ${[4, 10, 16].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-yellow-50 text-yellow-800 hover:bg-yellow-100"}`}
+              className={`px-3 py-1 rounded ${[4, 10, 16].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-green-100 text-gray-800 hover:bg-green-200"}`}
             >
               Brigk
             </button>
             <button
               onClick={() => toggleVenue([5, 11, 17])}
-              className={`px-3 py-1 rounded ${[5, 11, 17].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"}`}
+              className={`px-3 py-1 rounded ${[5, 11, 17].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-yellow-100 text-gray-800 hover:bg-yellow-200"}`}
             >
               Exerzier halle
             </button>
             <button
               onClick={() => toggleVenue([6, 12, 18])}
-              className={`px-3 py-1 rounded ${[6, 12, 18].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-green-100 text-green-800 hover:bg-green-200"}`}
-            >
-              VIP
-            </button>
-            <button
-              onClick={() => toggleVenue([19])}
-              className={`px-3 py-1 rounded ${[19].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-yellow-200 text-yellow-800 hover:bg-yellow-300"}`}
+              className={`px-3 py-1 rounded ${[6, 12, 18].every((day) => hiddenDays.has(day)) ? "bg-gray-100 border border-gray-300 text-gray-400" : "bg-purple-100 text-gray-800 hover:bg-purple-200"}`}
             >
               Eishalle
             </button>
@@ -371,20 +365,20 @@ export function TimeGrid() {
                 !showAllDays && hiddenDays.has(day)
                   ? "bg-gray-100 border border-gray-300 text-gray-400"
                   : [1, 7, 13].includes(day)
-                    ? "bg-blue-100 text-blue-700"
+                    ? "bg-blue-100 text-gray-800"
                     : [2, 8, 14].includes(day)
-                      ? "bg-blue-200 text-blue-800"
+                      ? "bg-blue-200 text-gray-800"
                       : [3, 9, 15].includes(day)
-                        ? "bg-blue-300 text-blue-900"
+                        ? "bg-blue-300 text-gray-800"
                         : [4, 10, 16].includes(day)
-                          ? "bg-yellow-50 text-yellow-800"
+                          ? "bg-yellow-50 text-gray-800"
                           : [5, 11, 17].includes(day)
-                            ? "bg-yellow-100 text-yellow-800"
+                            ? "bg-yellow-100 text-gray-800"
                             : day === 19
-                              ? "bg-yellow-200 text-yellow-800"
+                              ? "bg-yellow-200 text-gray-800"
                               : [6, 12, 18].includes(day)
-                                ? "bg-green-100 text-green-800"
-                                : "bg-primary/10 text-primary"
+                                ? "bg-green-100 text-gray-800"
+                                : "bg-primary/10 text-gray-800"
               }`}
             >
               {[1, 7, 13].includes(day)
@@ -413,7 +407,7 @@ export function TimeGrid() {
               {timeSlots.map((slot) => (
                 <div key={slot.time} className="h-[48px] flex items-start px-2">
                   {!slot.isTransition && slot.showTime !== false && (
-                    <span className="text-[12px] text-black font-medium -translate-y-3">
+                    <span className="text-[12px] text-gray-800 font-medium -translate-y-3">
                       {slot.time}
                     </span>
                   )}
@@ -455,16 +449,16 @@ export function TimeGrid() {
                   <div
                     className={`flex flex-col items-center gap-1 mb-2 px-2 ${
                       [6, 12, 18].includes(day)
-                        ? "bg-green-100 text-green-700"
+                        ? "bg-green-100 text-gray-800"
                         : day <= 6
-                          ? "bg-blue-100 text-blue-700"
+                          ? "bg-blue-100 text-gray-800"
                           : day <= 11
-                            ? "bg-blue-200 text-blue-800"
+                            ? "bg-blue-200 text-gray-800"
                             : day <= 17
-                              ? "bg-blue-300 text-blue-900"
+                              ? "bg-blue-300 text-gray-800"
                               : day === 19
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-blue-100 text-blue-700"
+                                ? "bg-yellow-100 text-gray-800"
+                                : "bg-blue-100 text-gray-800"
                     }`}
                   >
                     <div className="flex flex-col items-center text-center text-[11px] font-medium leading-tight py-1">
