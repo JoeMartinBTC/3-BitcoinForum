@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { EventType } from "@db/schema";
 
@@ -86,7 +85,7 @@ export function useEventTypes() {
       }
       return { previousEvents };
     },
-    onError: (_err, _variables, context) => {
+    onError: (_err, _variables, context: { previousEvents?: EventType[] }) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
@@ -113,7 +112,7 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onError: (_err, _variables, context) => {
+    onError: (_err, _variables, context: { previousEvents?: EventType[] }) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
