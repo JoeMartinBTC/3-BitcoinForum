@@ -222,7 +222,7 @@ export function TimeGrid() {
   return (
     <div className="w-full min-h-[600px] relative">
       <div className="absolute top-2 right-2 text-xs text-gray-500">
-        v0.8.9.5
+        v0.9.0
       </div>
       <div className="mb-4 space-y-2">
         <div className="flex items-center justify-between">
