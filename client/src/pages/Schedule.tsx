@@ -428,7 +428,10 @@ export default function Schedule() {
                   </button>
                   <button
                     onClick={() => {
-                      exportEventTemplates(eventTypes);
+                      exportEventTemplates(eventTypes.map(et => ({
+                        ...et,
+                        icon: et.icon || undefined
+                      })));
                     }}
                     className="px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 transition-colors"
                   >
@@ -516,7 +519,7 @@ export default function Schedule() {
                       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
                       // Store the background colors in local storage for persistence
-                      const backgroundColors = {};
+                      const backgroundColors: Record<string, string> = {};
                       jsonData.forEach((item: any) => {
                         try {
                           const day = item.Day || item.day;

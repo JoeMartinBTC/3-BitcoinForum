@@ -50,7 +50,7 @@ export function useEventTypes() {
       }
       return { previousData };
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, context: { previousData?: EventType[] }) => {
       if (context?.previousData) {
         queryClient.setQueryData(["event-types"], context.previousData);
       }
@@ -83,7 +83,7 @@ export function useEventTypes() {
       );
       return { previousEvents };
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, context: { previousEvents?: EventType[] }) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
@@ -110,7 +110,7 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onError: (err, variables, context) => {
+    onError: (err, variables, context: { previousEvents?: EventType[] }) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
