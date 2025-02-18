@@ -145,7 +145,7 @@ export default function Schedule() {
       <VersionBadge />
       <h1 className="text-xl font-bold mb-6">
         Event Schedule{" "}
-        <span className="text-sm ml-2 text-gray-600">v0.8.9.6</span>
+        <span className="text-sm ml-2 text-gray-600">v0.9.0</span>
       </h1>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
