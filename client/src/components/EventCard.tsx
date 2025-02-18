@@ -132,7 +132,7 @@ export function EventCard({ event, onUpdate }: EventCardProps) {
           <div className="flex h-full items-center">
             <div className="flex flex-1 min-w-0 items-center">
               <span
-                className={`font-medium text-left text-ellipsis ${
+                className={`font-medium text-left text-ellipsis text-gray-800 ${
                   event.title.length > 40
                     ? "text-[0.6rem]"
                     : event.title.length > 25
