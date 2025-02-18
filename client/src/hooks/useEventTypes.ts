@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { EventType } from "@db/schema";
 
@@ -20,7 +21,7 @@ export function useEventTypes() {
       return Array.isArray(data) ? data : [];
     },
     refetchOnMount: true,
-    refetchInterval: 5000, // Refetch data every 5 seconds
+    refetchInterval: 5000,
   });
 
   const createEventTypeMutation = useMutation({
@@ -50,7 +51,7 @@ export function useEventTypes() {
       }
       return { previousData };
     },
-    onError: (err, variables, context: { previousData?: EventType[] }) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousData) {
         queryClient.setQueryData(["event-types"], context.previousData);
       }
@@ -76,14 +77,16 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onMutate: (id: string) => {
-      const previousEvents = queryClient.getQueryData(["event-types"]);
-      queryClient.setQueryData(["event-types"], (old: EventType[]) =>
-        old.filter((e) => e.id !== id),
-      );
+    onMutate: async (id: string) => {
+      const previousEvents = queryClient.getQueryData<EventType[]>(["event-types"]);
+      if (previousEvents) {
+        queryClient.setQueryData<EventType[]>(["event-types"], 
+          previousEvents.filter((e) => e.id !== id)
+        );
+      }
       return { previousEvents };
     },
-    onError: (err, variables, context: { previousEvents?: EventType[] }) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
@@ -110,7 +113,7 @@ export function useEventTypes() {
         return res.json();
       });
     },
-    onError: (err, variables, context: { previousEvents?: EventType[] }) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousEvents) {
         queryClient.setQueryData(["event-types"], context.previousEvents);
       }
